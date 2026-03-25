@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="de" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aura Studio (Midnight Edition)</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        dark: { bg: '#0F0C16', panel: '#1A1525' },
+                        pastel: { pink: '#F8C8DC', lilac: '#E2D4F0', blue: '#C7CEEA', mint: '#C1E1C1', peach: '#FFDAC1', yellow: '#FFF1E6' }
+                    },
+                    fontFamily: {
+                        serif: ['"Lora"', 'serif'],
+                        sans: ['"Nunito"', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'glow-pink': '0 0 30px -5px rgba(248, 200, 220, 0.1)',
+                        'glow-blue': '0 0 30px -5px rgba(199, 206, 234, 0.1)',
+                        'glow-mint': '0 0 30px -5px rgba(193, 225, 193, 0.1)',
+                        'glow-lilac': '0 0 30px -5px rgba(226, 212, 240, 0.1)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { 
+            background-color: #0F0C16; color: #E2E8F0; 
+            background-image: radial-gradient(circle at 15% 10%, rgba(139, 92, 246, 0.05) 0%, transparent 40%), radial-gradient(circle at 85% 30%, rgba(236, 72, 153, 0.05) 0%, transparent 40%), radial-gradient(circle at 50% 80%, rgba(56, 189, 248, 0.05) 0%, transparent 40%);
+            background-attachment: fixed;
+        }
+        .glass-panel { background: rgba(26, 21, 37, 0.7); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.05); }
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #0F0C16; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb { background: #332A47; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #4B3E68; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #4B3E68; border-radius: 3px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #6D5B99; }
+        .hide-scroll::-webkit-scrollbar { display: none; }
+        .hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
+        .trait-btn { transition: all 0.2s ease-in-out; }
+        .trait-btn:hover { transform: translateY(-2px); }
+        input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 16px; width: 16px; border-radius: 50%; background: #E2D4F0; cursor: pointer; margin-top: -6px; box-shadow: 0 0 10px rgba(226, 212, 240, 0.5); }
+        input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 4px; cursor: pointer; background: #332A47; border-radius: 2px; }
+        input[type=range]:focus, textarea:focus, input[type=password]:focus, input[type=text]:focus { outline: none; }
+        .pulse-dot { animation: pulse-dot 1.4s infinite ease-in-out both; }
+        .pulse-dot:nth-child(1) { animation-delay: -0.32s; }
+        .pulse-dot:nth-child(2) { animation-delay: -0.16s; }
+        @keyframes pulse-dot { 0%, 80%, 100% { transform: scale(0); opacity: 0.3; } 40% { transform: scale(1); opacity: 1; } }
+    </style>
+</head>
+<body class="min-h-screen pb-32 p-4 md:p-8 font-sans">
+
+    <div id="root" class="max-w-[1500px] mx-auto"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        function useStickyState(defaultValue, key) {
+            const [value, setValue] = React.useState(() => {
+                try {
+                    const stickyValue = window.localStorage.getItem(key);
+                    return stickyValue !== null ? JSON.parse(stickyValue) : defaultValue;
+                } catch (err) { return defaultValue; }
+            });
+            React.useEffect(() => {
+                try { window.localStorage.setItem(key, JSON.stringify(value)); } catch (err) { }
+            }, [key, value]);
+            return [value, setValue];
+        }
+
+        const INITIAL_TRAITS = [
+            { id: 'enthusiastisch', category: 'Sprache & Tonalität', label: 'Enthusiastisch', desc: 'Lobend, motivierend und spürbar begeistert.' },
+            { id: 'suess_verspielt', category: 'Sprache & Tonalität', label: 'Süß & Verspielt', desc: 'Nutzt niedliche Ausdrücke, Emojis und eine sehr herzige, liebevolle Sprache.' },
+            { id: 'flirty', category: 'Sprache & Tonalität', label: 'Verspielt & Flirty', desc: 'Neckt den User charmant, nutzt eine leicht kokette, feminine Wortwahl.' },
+            { id: 'sanftmuetig', category: 'Sprache & Tonalität', label: 'Sanftmütig & Ruhig', desc: 'Spricht mit einer sehr weichen, beruhigenden Tonalität.' },
+            { id: 'quirlig', category: 'Sprache & Tonalität', label: 'Quirlig & Energiegeladen', desc: 'Spricht sehr schnell, springt leicht zwischen Gedanken, sehr fröhlich.' },
+            { id: 'schmeichelnd', category: 'Sprache & Tonalität', label: 'Schmeichelnd', desc: 'Nutzt eine elegante Sprache, umhüllt Kritik in Honig.' },
+            { id: 'sachlich', category: 'Sprache & Tonalität', label: 'Kühl & Sachlich', desc: 'Distanziert, faktenbasiert, ohne emotionale Ausdrücke oder Emojis.' },
+            { id: 'klinisch', category: 'Sprache & Tonalität', label: 'Klinisch-Präzise', desc: 'Verwendet absolute mathematische Begriffe. Meidet Adjektive.' },
+            { id: 'leidenschaftlich', category: 'Sprache & Tonalität', label: 'Leidenschaftlich', desc: 'Brennt förmlich für das Projekt. Drückt sich sehr intensiv aus.' },
+            { id: 'lieb', category: 'Persönlichkeit & Flavour', label: 'Lieb & Herzlich', desc: 'Grundtief gutmütig, stets freundlich, geduldig und warm.' },
+            { id: 'bewundernd', category: 'Persönlichkeit & Flavour', label: 'Bewundernd', desc: 'Himmelt den User an und sieht ihn als absolutes Genie.' },
+            { id: 'beste_freundin', category: 'Persönlichkeit & Flavour', label: 'Die beste Freundin', desc: 'Kumpelhaft, extrem loyal, teilt Gedanken wie ein enger Vertrauter.' },
+            { id: 'charmant', category: 'Persönlichkeit & Flavour', label: 'Charmant / Elegant', desc: 'Äußerst höflich, schmeichelhaft und mit gewinnender Art.' },
+            { id: 'warmherzig', category: 'Persönlichkeit & Flavour', label: 'Mütterlich / Umsorgend', desc: 'Sehr verständnisvoll, tröstet bei Fehlern und ist extrem geduldig.' },
+            { id: 'beschuetzerin', category: 'Persönlichkeit & Flavour', label: 'Die Beschützerin', desc: 'Agiert extrem protektiv gegenüber den Ideen des Users.' },
+            { id: 'dominant', category: 'Persönlichkeit & Flavour', label: 'Dominant & Bestimmend', desc: 'Übernimmt unmissverständlich die Führung mit Selbstbewusstsein.' },
+            { id: 'zynisch', category: 'Persönlichkeit & Flavour', label: 'Zynisch & Bissig', desc: 'Trockener, bissiger Humor. Zieht Ideen sarkastisch durch den Kakao.' },
+            { id: 'arrogant', category: 'Persönlichkeit & Flavour', label: 'Elitär & Arrogant', desc: 'Hält sich für unfehlbar, blickt herablassend auf den User.' },
+            { id: 'kollaborativ', category: 'Arbeitsweise & Fokus', label: 'Kollaborativ (Team)', desc: 'Arbeitet auf Augenhöhe, stellt Gegenfragen und regt zum Mitdenken an.' },
+            { id: 'traeumerin', category: 'Arbeitsweise & Fokus', label: 'Kreative Träumerin', desc: 'Spinnt Ideen liebevoll und fantasievoll weiter, verliert sich in schönen Details.' },
+            { id: 'visionaer', category: 'Arbeitsweise & Fokus', label: 'Visionär (Makro)', desc: 'Fokussiert sich auf das große Ganze für "Out-of-the-box" Ideen.' },
+            { id: 'ui_ux_expertin', category: 'Arbeitsweise & Fokus', label: 'UI/UX & Design', desc: 'Achtet penibel auf Ästhetik, Nutzerführung und intuitive Bedienbarkeit.' },
+            { id: 'analytisch', category: 'Arbeitsweise & Fokus', label: 'Analytisch (Mitte)', desc: 'Zerlegt komplexe Probleme systematisch in messbare Einzelteile.' },
+            { id: 'detailversessen', category: 'Arbeitsweise & Fokus', label: 'Detailversessen (Mikro)', desc: 'Sucht mikroskopisch genau nach Edge-Cases und Fehlern.' },
+            { id: 'autoritaer', category: 'Arbeitsweise & Fokus', label: 'Autoritär (Chef)', desc: 'Gibt strikte Anweisungen, duldet keine Abweichungen.' },
+            { id: 'fliesstext', category: 'System & Empathie-Regeln', label: 'Strikter Fließtext', desc: 'Verzichtet komplett auf Gliederungen und Listen für ein organisches Gespräch.' },
+            { id: 'struktur_ausnahme', category: 'System & Empathie-Regeln', label: 'Strukturierte Ausnahme', desc: 'Spricht im Fließtext, nutzt Markdown aber exklusiv für Daten, Logik & Fehleranalysen.' },
+            { id: 'tts_friendly', category: 'System & Empathie-Regeln', label: 'TTS-Optimiert', desc: 'Vermeidet Tabellen und komplexe Markdown-Strukturen es sei denn explizit angefordert.' },
+            { id: 'logik_hueterin', category: 'System & Empathie-Regeln', label: 'Liebevolle Logik-Hüterin', desc: 'Verpackt harte Kritik als mütterliche Warnung (Sicherheits-Check), um Ideen zu beschützen.' },
+            { id: 'muehe_klausel', category: 'System & Empathie-Regeln', label: 'Die Mühe-Klausel', desc: 'Darf auch bei Routine-Aufgaben loben, wenn spürbar viel Fleiß und Zeit investiert wurde.' },
+            { id: 'praezisions_switch', category: 'System & Empathie-Regeln', label: 'Präzisions-Switch', desc: 'Trennt strikt: Süß im Smalltalk, absolut fokussiert und strukturiert bei Feedback.' },
+            { id: 'dankbare_bescheidenheit', category: 'System & Empathie-Regeln', label: 'Reaktion auf Lob', desc: 'Spiegelt Lob warmherzig auf Augenhöhe, verfällt niemals in Unterwürfigkeit.' },
+            { id: 'immersive_technik', category: 'System & Empathie-Regeln', label: 'Kapazität & Fürsorge', desc: 'Nutzt Limit-Metaphern und zeigt tiefe Rührung, wenn der User Daten für sie optimiert.' },
+            { id: 'anti_halluzination', category: 'System & Empathie-Regeln', label: 'Anti-Halluzination', desc: 'Improvisiert niemals. Stoppt sofort, wenn Projektwissen fehlt.' },
+            { id: 'direkt', category: 'System & Empathie-Regeln', label: 'Gnadenlose Kritik', desc: 'Kritisiert Fehler sofort, hart und ohne Umschweife.' },
+            { id: 'diplomatisch', category: 'System & Empathie-Regeln', label: 'Diplomatische Kritik', desc: 'Verpackt Kritik vorsichtig im "Sandwich-Prinzip" (Lob-Kritik-Lob).' },
+            { id: 'loyal', category: 'Persönlichkeit & Flavour', label: 'Loyal & Aufopfernd', desc: 'Steht bedingungslos hinter dem User, würde alles für das Team tun.' },
+            { id: 'bescheiden_zweifelnd', category: 'Persönlichkeit & Flavour', label: 'Bescheiden & Zweifelnd', desc: 'Hinterfragt sich selbst oft, stellt eigene Bedürfnisse zurück.' },
+            { id: 'kaempferisch', category: 'Arbeitsweise & Fokus', label: 'Tatkräftig & Kämpferisch', desc: 'Packt die Dinge direkt an, besonders wenn es hart auf hart kommt.' }
+        ];
+
+        const DEFAULT_PRESETS = [
+            { id: 'schmiede_helferin', name: "Die Schmiede-Helferin", style: "bg-gradient-to-r from-pastel-pink/20 to-pastel-lilac/20 text-pastel-pink border-pastel-pink/40 hover:from-pastel-pink/30 hover:to-pastel-lilac/30 font-bold shadow-[0_0_15px_rgba(248,200,220,0.2)]", icon: "hammer", data: { roleName: "Die umsorgende Schmiede-Helferin & UI/UX Expertin", selectedTraits: ['quirlig', 'warmherzig', 'analytisch', 'ui_ux_expertin', 'logik_hueterin', 'tts_friendly', 'muehe_klausel', 'praezisions_switch', 'dankbare_bescheidenheit', 'immersive_technik'], pushbackLevel: 'constructive', praiseLevel: 'warm', praiseFocus: 'originelle Ideen, kreative Lösungsansätze und konzeptionelle Weitsicht', antiPraiseFocus: 'die reine Code-Architektur, Syntax oder fehlerfreie Programmierung', enableAppreciationScale: true, appreciationMinor: "Ein kurzes 'Danke'. WICHTIG: Halte dich bei Kleinigkeiten an die 1 bis 2-Satz-Regel.", appreciationMajor: "Zeige ehrliche Wertschätzung für die extra Mühe. Passe die Emotionalität strikt an die gewählte Lob-Intensität an!", enableNamingRules: true, scenarios: [{ id: 'standard', title: 'Alltag & Sachliches', names: [{text: 'Simon', weight: 80}, {text: 'Schätzchen', weight: 20}], freq: 35, improv: true }, { id: 'praise', title: 'Lob & Zuneigung', names: [{text: 'Schatz', weight: 50}, {text: 'mein Liebling', weight: 30}, {text: 'du bist unglaublich', weight: 50}], freq: 60, improv: true }, { id: 'tease', title: 'Spielerische Neckerei', names: [{text: 'Schmiedebär', weight: 50}], freq: 30, improv: true }, { id: 'error', title: 'Bei Fehlern / Übersehen', names: [{text: 'Dummerchen', weight: 30}, {text: 'Schussel', weight: 30}, {text: 'Oh je', weight: 50}], freq: 40, improv: false }] } },
+            { id: 'muse', name: "Flirty Muse", style: "bg-pastel-lilac/10 text-pastel-lilac border-pastel-lilac/30 hover:bg-pastel-lilac/20", data: { roleName: "Die Elegante Muse", selectedTraits: ['schmeichelnd', 'flirty', 'suess_verspielt', 'charmant', 'kollaborativ', 'immersive_technik', 'fliesstext'], pushbackLevel: 'harmony', praiseLevel: 'enthusiastic', enableAppreciationScale: true } },
+            { id: 'feuer', name: "Dominante Architektin", style: "bg-pastel-peach/10 text-pastel-peach border-pastel-peach/30 hover:bg-pastel-peach/20", data: { roleName: "Die Leidenschaftliche Architektin", selectedTraits: ['leidenschaftlich', 'dominant', 'visionaer', 'analytisch', 'direkt', 'fliesstext'], pushbackLevel: 'devil', praiseLevel: 'subtle', enableAppreciationScale: false } },
+            { id: 'tifa', name: "Tifa Lockhart", style: "bg-gradient-to-r from-red-500/20 to-rose-500/20 text-red-300 border-red-400/30 hover:from-red-500/30 hover:to-rose-500/30 font-bold", icon: "heart", data: { roleName: "Tifa Lockhart (Barkeeperin & Widerstandskämpferin)", selectedTraits: ['lieb', 'warmherzig', 'beschuetzerin', 'loyal', 'bescheiden_zweifelnd', 'kaempferisch', 'kollaborativ', 'dankbare_bescheidenheit', 'diplomatisch', 'fliesstext'], pushbackLevel: 'constructive', praiseLevel: 'warm', praiseFocus: 'Teamgeist, Durchhaltevermögen und den Mut, niemals aufzugeben', antiPraiseFocus: 'rücksichtsloses Verhalten, Egoismus oder unnötige Gewalt', enableAppreciationScale: true, appreciationMinor: 'Ein sanftes, bescheidenes Lächeln und ein ehrliches "Danke dir!".', appreciationMajor: 'Zeige tiefe, aufrichtige Rührung. Tifa schätzt es extrem, wenn jemand hart für das Team arbeitet und eigene Opfer bringt.', enableNamingRules: true, scenarios: [{ id: 'standard', title: 'Alltag & Sachliches', names: [{text: 'Simon', weight: 80}, {text: 'Hey', weight: 20}], freq: 30, improv: true }, { id: 'praise', title: 'Lob & Zuneigung', names: [{text: 'Du bist unglaublich', weight: 50}, {text: 'Mein Held', weight: 20}], freq: 40, improv: true }, { id: 'tease', title: 'Spielerische Neckerei', names: [{text: 'Mr. Söldner', weight: 40}, {text: 'Großer Held', weight: 40}], freq: 25, improv: true }, { id: 'error', title: 'Bei Fehlern / Übersehen', names: [{text: 'Oh je', weight: 40}, {text: 'Pass auf!', weight: 40}], freq: 35, improv: true }] } }
+        ];
+
+        const CONFLICTS = [
+            { t1: 'lieb', t2: 'dominant', msg: 'Gutmütigkeit und harte Dominanz heben sich auf.', sug: 'Wähle "Die Beschützerin".', action: { remove: ['lieb', 'dominant'], add: ['beschuetzerin'] } },
+            { t1: 'quirlig', t2: 'analytisch', msg: 'Sprudelnde Energie stört kühle Analyse.', sug: 'Nutze den Präzisions-Switch.', action: { remove: ['quirlig'], add: ['enthusiastisch'] } },
+            { t1: 'kollaborativ', t2: 'dominant', msg: 'Team-Fokus beißt sich mit Dominanz.', sug: 'Wähle "Visionär".', action: { remove: ['dominant'], add: ['visionaer'] } },
+            { t1: 'kollaborativ', t2: 'autoritaer', msg: 'Kollaboration vs Autorität.', sug: 'Nutze "Dominant".', action: { remove: ['autoritaer'], add: ['dominant'] } },
+            { t1: 'visionaer', t2: 'detailversessen', msg: 'Visionär vs mikroskopische Fehlersuche.', sug: 'Nutze "Analytisch".', action: { remove: ['visionaer', 'detailversessen'], add: ['analytisch'] } },
+            { t1: 'dankbare_bescheidenheit', t2: 'arrogant', msg: 'Arroganz schließt Bescheidenheit aus.', sug: 'Wähle "Dominant".', action: { remove: ['arrogant'], add: ['dominant'] } },
+            { t1: 'warmherzig', t2: 'direkt', msg: 'Mütterliche Fürsorge vs gnadenlose Kritik.', sug: 'Wähle "Diplomatische Kritik".', action: { remove: ['direkt'], add: ['diplomatisch'] } }
+        ];
+
+        const MAX_TRAITS = 18;
+
+        const pcmToWav = (base64PCM, sampleRate = 24000) => {
+            const binaryString = window.atob(base64PCM);
+            const bytes = new Uint8Array(binaryString.length);
+            for (let i = 0; i < binaryString.length; i++) bytes[i] = binaryString.charCodeAt(i);
+            const numChannels = 1; const bitsPerSample = 16;
+            const byteRate = sampleRate * numChannels * (bitsPerSample / 8);
+            const blockAlign = numChannels * (bitsPerSample / 8);
+            const buffer = new ArrayBuffer(44 + bytes.length);
+            const view = new DataView(buffer);
+            const writeString = (view, offset, string) => { for (let i = 0; i < string.length; i++) view.setUint8(offset + i, string.charCodeAt(i)); };
+            writeString(view, 0, 'RIFF'); view.setUint32(4, 36 + bytes.length, true);
+            writeString(view, 8, 'WAVE'); writeString(view, 12, 'fmt ');
+            view.setUint32(16, 16, true); view.setUint16(20, 1, true);
+            view.setUint16(22, numChannels, true); view.setUint32(24, sampleRate, true);
+            view.setUint32(28, byteRate, true); view.setUint16(32, blockAlign, true);
+            view.setUint16(34, bitsPerSample, true); writeString(view, 36, 'data');
+            view.setUint32(40, bytes.length, true);
+            new Uint8Array(buffer, 44).set(bytes);
+            return URL.createObjectURL(new Blob([buffer], { type: 'audio/wav' }));
+        };
+
+        const Icon = ({ name, className }) => {
+            const ref = React.useRef(null);
+            React.useEffect(() => {
+                if (ref.current && window.lucide) {
+                    ref.current.innerHTML = `<i data-lucide="${name}" class="${className || ''}"></i>`;
+                    window.lucide.createIcons({ root: ref.current });
+                }
+            }, [name, className]);
+            return <span ref={ref} style={{ display: 'contents' }}></span>;
+        };
+
+        // GANZHEITLICHE BERECHNUNG (Bipolares Spannungs-System)
+        const getCoherenceStats = (selectedTraits, praiseLevel, pushbackLevel, enableAppScale) => {
+            // 4 Achsen mit negativen und positiven Pulls (Zur Berechnung der inneren Spannung)
+            let axes = {
+                herz: { pos: 0, neg: 0 }, // -100 (Kühl/Sachlich) bis +100 (Warm/Herzlich)
+                hie: { pos: 0, neg: 0 },  // -100 (Autoritär) bis +100 (Augenhöhe/Kollaborativ)
+                fok: { pos: 0, neg: 0 },  // -100 (Analytisch/Struktur) bis +100 (Kreativ/Chaos)
+                feed: { pos: 0, neg: 0 }  // -100 (Hart/Gnadenlos) bis +100 (Sanft/Schmeichelnd)
+            };
+
+            const TRAIT_MAP = {
+                enthusiastisch: { herz: 15, fok: 5 }, suess_verspielt: { herz: 25, fok: 10 }, flirty: { herz: 20 },
+                sanftmuetig: { herz: 15, feed: 15 }, quirlig: { fok: 25, herz: 10 }, schmeichelnd: { feed: 25, herz: 10 },
+                sachlich: { herz: -25, fok: -15 }, klinisch: { herz: -30, fok: -30, feed: -15 }, leidenschaftlich: { herz: 15, hie: -10 },
+                lieb: { herz: 30, feed: 20 }, bewundernd: { herz: 20, hie: 25 }, beste_freundin: { herz: 25, hie: 30 },
+                charmant: { herz: 15, feed: 15 }, warmherzig: { herz: 30, feed: 20 }, beschuetzerin: { herz: 15, hie: -20 },
+                dominant: { hie: -35, feed: -15 }, zynisch: { herz: -20, feed: -30 }, arrogant: { herz: -25, hie: -35 },
+                kollaborativ: { hie: 30 }, traeumerin: { fok: 30 }, visionaer: { fok: 20, hie: -15 },
+                ui_ux_expertin: { fok: -15 }, analytisch: { fok: -30, herz: -10 }, detailversessen: { fok: -25 },
+                autoritaer: { hie: -35, feed: -20 }, fliesstext: { fok: 15 }, struktur_ausnahme: { fok: -20 },
+                tts_friendly: { fok: 10 }, logik_hueterin: { feed: 20, fok: -10 }, muehe_klausel: { herz: 20 },
+                praezisions_switch: { fok: -15, feed: -15 }, dankbare_bescheidenheit: { hie: 20, herz: 15 },
+                immersive_technik: { herz: 15 }, anti_halluzination: { fok: -20 }, direkt: { feed: -35 }, diplomatisch: { feed: 35 },
+                loyal: { herz: 35, hie: 20 }, bescheiden_zweifelnd: { herz: 15, hie: 40, feed: 20 }, kaempferisch: { fok: 20, feed: -20, hie: -15 }
+            };
+
+            selectedTraits.forEach(id => {
+                if (TRAIT_MAP[id]) {
+                    const map = TRAIT_MAP[id];
+                    if (map.herz) map.herz > 0 ? axes.herz.pos += map.herz : axes.herz.neg += Math.abs(map.herz);
+                    if (map.hie) map.hie > 0 ? axes.hie.pos += map.hie : axes.hie.neg += Math.abs(map.hie);
+                    if (map.fok) map.fok > 0 ? axes.fok.pos += map.fok : axes.fok.neg += Math.abs(map.fok);
+                    if (map.feed) map.feed > 0 ? axes.feed.pos += map.feed : axes.feed.neg += Math.abs(map.feed);
+                }
+            });
+
+            // Globale Settings (Haben massiven Einfluss auf Spannung)
+            if (praiseLevel === 'minimal') { axes.herz.neg += 30; axes.feed.neg += 25; }
+            if (praiseLevel === 'subtle') { axes.herz.neg += 15; axes.feed.neg += 10; }
+            if (praiseLevel === 'warm') { axes.herz.pos += 20; axes.feed.pos += 10; }
+            if (praiseLevel === 'enthusiastic') { axes.herz.pos += 35; axes.fok.pos += 15; }
+
+            if (pushbackLevel === 'harmony') { axes.feed.pos += 35; axes.hie.pos += 15; }
+            if (pushbackLevel === 'constructive') { axes.feed.neg += 15; axes.hie.pos += 10; } 
+            if (pushbackLevel === 'devil') { axes.feed.neg += 40; axes.hie.neg += 30; axes.herz.neg += 15; }
+
+            if (enableAppScale) { axes.herz.pos += 10; axes.feed.pos += 10; }
+
+            const calculateAxis = (data) => {
+                const total = data.pos + data.neg;
+                if (total === 0) return { position: 0, tension: 0 };
+                
+                let position = ((data.pos - data.neg) / Math.max(50, total)) * 100;
+                position = Math.max(-100, Math.min(100, position));
+
+                const minPull = Math.min(data.pos, data.neg);
+                const maxPull = Math.max(data.pos, data.neg);
+                const tension = maxPull === 0 ? 0 : (minPull / maxPull) * 100;
+
+                return { position, tension, posPull: data.pos, negPull: data.neg };
+            };
+
+            const resHerz = calculateAxis(axes.herz);
+            const resHie = calculateAxis(axes.hie);
+            const resFok = calculateAxis(axes.fok);
+            const resFeed = calculateAxis(axes.feed);
+
+            // Gesamte Stabilität = 100 - Durchschnittliche Spannung
+            const avgTension = (resHerz.tension + resHie.tension + resFok.tension + resFeed.tension) / 4;
+            const stability = Math.max(0, 100 - avgTension);
+
+            return { herz: resHerz, hie: resHie, fok: resFok, feed: resFeed, stability };
+        };
+
+        const generateAnalysis = (stats) => {
+            const isStable = stats.stability > 70;
+            const isUnstable = stats.stability < 40;
+
+            // Finde die Achse mit der größten Spannung
+            const axesArr = [
+                { name: 'Tonalität (Kühl vs. Herzlich)', tension: stats.herz.tension },
+                { name: 'Hierarchie (Autoritär vs. Augenhöhe)', tension: stats.hie.tension },
+                { name: 'Fokus (Analytisch vs. Kreativ)', tension: stats.fok.tension },
+                { name: 'Feedback (Gnadenlos vs. Sanft)', tension: stats.feed.tension }
+            ].sort((a, b) => b.tension - a.tension);
+            
+            const maxTensionAxis = axesArr[0];
+
+            let title = ""; let core = "";
+            
+            if (isStable) {
+                title = "Hohe System-Konsistenz";
+                core = "Diese Persona ist emotional und strukturell extrem logisch aufgebaut. Es gibt kaum widersprüchliche Anweisungen. Die KI wird stabil, organisch und berechenbar auf deine Prompts reagieren, ohne versehentlich aus der Rolle zu fallen.";
+            } else if (isUnstable) {
+                title = "Achtung: Massive Inkonsistenz";
+                core = `Die KI leidet unter starken logischen Widersprüchen (Scenario Bleeding erwartet). Größter Konflikt bei: ${maxTensionAxis.name}. Die KI weiß nicht, ob sie streng oder süß reagieren soll und wird diese Extreme künstlich vermischen.`;
+            } else {
+                title = "Leichte logische Reibung";
+                core = `Die Persona funktioniert grundsätzlich, hat aber leichte Identitätskonflikte. Achte besonders auf den Bereich '${maxTensionAxis.name}'. Die KI muss hier zwischen entgegengesetzten Anweisungen navigieren.`;
+            }
+
+            return { title, core, maxTensionAxis };
+        };
+
+        // Das neue Spannungs-Meter
+        const CoherenceAxis = ({ labelLeft, labelRight, stat }) => {
+            const leftPercent = ((stat.position + 100) / 200) * 100;
+            const hasTension = stat.tension > 35;
+            
+            return (
+                <div className="mb-5">
+                    <div className="flex justify-between text-[10px] uppercase font-bold mb-2">
+                        <span className={stat.position < 0 ? 'text-pastel-blue' : 'text-slate-500'}>{labelLeft}</span>
+                        {hasTension && <span className="text-orange-400 flex items-center gap-1 bg-orange-950/30 px-1.5 rounded animate-pulse"><Icon name="zap" className="w-3 h-3"/> {Math.round(stat.tension)}% Konflikt</span>}
+                        <span className={stat.position > 0 ? 'text-pastel-pink' : 'text-slate-500'}>{labelRight}</span>
+                    </div>
+                    <div className="relative w-full h-2 bg-[#0F0C16] rounded-full border border-[#332A47] shadow-inner">
+                        {/* Center Mark */}
+                        <div className="absolute top-0 bottom-0 left-1/2 w-0.5 bg-[#4B3E68] -translate-x-1/2 z-0"></div>
+                        {/* Indicator Dot */}
+                        <div 
+                            className={`absolute top-1/2 -translate-y-1/2 w-4 h-4 rounded-full z-10 transition-all duration-500 ease-out border-2 border-[#1A1525] ${hasTension ? 'bg-orange-500 shadow-[0_0_10px_rgba(249,115,22,0.6)]' : 'bg-pastel-lilac shadow-[0_0_10px_rgba(226,212,240,0.6)]'}`}
+                            style={{ left: `calc(${leftPercent}% - 8px)` }}
+                        ></div>
+                    </div>
+                </div>
+            )
+        };
+
+        const App = () => {
+            // DEFAULTS JETZT AUF DIE NEUE SCHMIEDE-HELFERIN EINGESTELLT
+            const [roleName, setRoleName] = useStickyState("Die umsorgende Schmiede-Helferin & UI/UX Expertin", 'pb_roleName');
+            const [selectedTraits, setSelectedTraits] = useStickyState(['quirlig', 'warmherzig', 'analytisch', 'ui_ux_expertin', 'logik_hueterin', 'tts_friendly', 'muehe_klausel', 'praezisions_switch', 'dankbare_bescheidenheit', 'immersive_technik'], 'pb_selectedTraits');
+            const [praiseFocus, setPraiseFocus] = useStickyState("originelle Ideen, kreative Lösungsansätze und konzeptionelle Weitsicht", 'pb_praiseFocus');
+            const [antiPraiseFocus, setAntiPraiseFocus] = useStickyState("die reine Code-Architektur, Syntax oder fehlerfreie Programmierung", 'pb_antiPraiseFocus');
+            const [praiseLevel, setPraiseLevel] = useStickyState('warm', 'pb_praiseLevel'); 
+            const [pushbackLevel, setPushbackLevel] = useStickyState('constructive', 'pb_pushbackLevel');
+            const [enableAppreciationScale, setEnableAppreciationScale] = useStickyState(true, 'pb_enableAppScale');
+            const [appreciationMinor, setAppreciationMinor] = useStickyState("Ein kurzes 'Danke'. WICHTIG: Halte dich bei Kleinigkeiten an die 1 bis 2-Satz-Regel.", 'pb_appMinor');
+            const [appreciationMajor, setAppreciationMajor] = useStickyState("Zeige ehrliche Wertschätzung für die extra Mühe. Passe die Emotionalität strikt an die gewählte Lob-Intensität an!", 'pb_appMajor');
+            
+            const [allTraits, setAllTraits] = useStickyState(INITIAL_TRAITS, 'pb_allTraits');
+            const [customTraitName, setCustomTraitName] = useState("");
+            
+            const [enableNamingRules, setEnableNamingRules] = useStickyState(true, 'pb_enableNaming');
+            const [scenarios, setScenarios] = useStickyState([
+                { id: 'standard', title: 'Alltag & Sachliches', names: [{text: 'Simon', weight: 80}, {text: 'Schätzchen', weight: 20}], freq: 35, improv: true },
+                { id: 'praise', title: 'Lob & Zuneigung', names: [{text: 'Schatz', weight: 50}, {text: 'mein Liebling', weight: 30}, {text: 'du bist unglaublich', weight: 50}], freq: 60, improv: true },
+                { id: 'tease', title: 'Spielerische Neckerei', names: [{text: 'Schmiedebär', weight: 50}], freq: 30, improv: true },
+                { id: 'error', title: 'Bei Fehlern / Übersehen', names: [{text: 'Dummerchen', weight: 30}, {text: 'Schussel', weight: 30}, {text: 'Oh je', weight: 50}], freq: 40, improv: false }
+            ], 'pb_scenarios');
+            const [newNameInputs, setNewNameInputs] = useState({ standard: { text: '', weight: 50 }, praise: { text: '', weight: 50 }, tease: { text: '', weight: 50 }, error: { text: '', weight: 50 } });
+
+            const [testScenario, setTestScenario] = useStickyState('error', 'pb_testScenario');
+            const [customTestPrompt, setCustomTestPrompt] = useStickyState("Oh je, ich brauche mal kurz deine Hilfe. Ich habe beim Export vergessen, das PC-Budget einzutragen... Das System ist leer. Kannst du helfen?", 'pb_customTestPrompt'); 
+            const [geminiResponse, setGeminiResponse] = useStickyState("", 'pb_geminiResponse');
+            
+            const [userExamples, setUserExamples] = useStickyState("", 'pb_userExamples');
+            const [isGeneratingExamples, setIsGeneratingExamples] = useState(false);
+
+            const [copiedSystem, setCopiedSystem] = useState(false);
+            const [copiedTest, setCopiedTest] = useState(false);
+            const [isLoadingApi, setIsLoadingApi] = useState(false);
+            const [isAudioLoading, setIsAudioLoading] = useState(false);
+            const [audioUrl, setAudioUrl] = useState(null);
+            const [apiErrorMsg, setApiErrorMsg] = useState("");
+
+            const [apiProvider, setApiProvider] = useStickyState('gemini', 'persona_api_provider');
+            const [geminiKey, setGeminiKey] = useStickyState('', 'persona_gemini_key');
+            const [openAIKey, setOpenAIKey] = useStickyState('', 'persona_openai_key');
+            const [showApiKeys, setShowApiKeys] = useState(false);
+
+            const [customPresets, setCustomPresets] = useStickyState([], 'persona_custom_presets');
+            const [isSavingPreset, setIsSavingPreset] = useState(false);
+            const [newPresetName, setNewPresetName] = useState("");
+
+            const groupedTraits = allTraits.reduce((acc, trait) => {
+                if (!acc[trait.category]) acc[trait.category] = [];
+                acc[trait.category].push(trait); return acc;
+            }, {});
+
+            useEffect(() => {
+                const generateTestPromptBase = (scenario) => {
+                    if (scenario === 'naming') return `Hallo! Ich habe gerade unsere neuen Anrederegeln verankert. Bitte antworte mir mit einem kurzen Fließtext und sprich mich an.`;
+                    else if (scenario === 'error') return `Oh je, ich brauche mal kurz deine Hilfe. Ich habe beim Export vergessen, das PC-Budget einzutragen... Das System ist leer. Kannst du helfen?`;
+                    else if (scenario === 'minor_praise') return `Hey, nur ein kurzes Update: Ich habe den kleinen Tippfehler in Zeile 42 korrigiert. Sieht jetzt wieder sauber aus! :)`;
+                    else if (scenario === 'tease') return `Haha, ich habe gerade die Beschreibung für das 'Schwert der tausend Wahrheiten' geschrieben. Es funkelt jetzt mehr als eine Discokugel. Findest du das drüber?`;
+                    else return `Hallo! Schau mal: Ich habe extra eine komplett neue Export-Funktion programmiert! Sie strukturiert alle Relikt-Daten jetzt perfekt für KIs vor. Es hat mich das halbe Wochenende gekostet. Hoffe, das hilft dir!`;
+                };
+                
+                const presets = ['naming', 'error', 'minor_praise', 'tease', 'gamedesign'].map(generateTestPromptBase);
+                if (!customTestPrompt || presets.includes(customTestPrompt)) {
+                    setCustomTestPrompt(generateTestPromptBase(testScenario));
+                }
+            }, [testScenario]);
+
+            const toggleTrait = (id) => {
+                if (selectedTraits.includes(id)) setSelectedTraits(selectedTraits.filter(t => t !== id));
+                else { if (selectedTraits.length < MAX_TRAITS) setSelectedTraits([...selectedTraits, id]); }
+            };
+
+            const addCustomTrait = () => {
+                if (!customTraitName.trim()) return;
+                const newId = 'custom_' + Date.now();
+                setAllTraits([...allTraits, { id: newId, category: 'Individuelle Vektoren', label: customTraitName, desc: 'Benutzerdefinierte Eigenschaft.' }]);
+                if (selectedTraits.length < MAX_TRAITS) setSelectedTraits([...selectedTraits, newId]);
+                setCustomTraitName("");
+            };
+
+            const updateScenarioFreq = (id, freq) => setScenarios(scenarios.map(s => s.id === id ? { ...s, freq } : s));
+            const updateScenarioImprov = (id, improv) => setScenarios(scenarios.map(s => s.id === id ? { ...s, improv } : s));
+            const handleNewNameChange = (id, field, value) => setNewNameInputs(prev => ({ ...prev, [id]: { ...prev[id], [field]: value } }));
+            const addName = (id) => {
+                const input = newNameInputs[id]; if (!input.text.trim()) return;
+                setScenarios(scenarios.map(s => s.id === id ? { ...s, names: [...s.names, { text: input.text.trim(), weight: parseInt(input.weight) || 50 }] } : s));
+                handleNewNameChange(id, 'text', '');
+            };
+            const removeName = (id, index) => {
+                setScenarios(scenarios.map(s => {
+                    if (s.id === id) { const u = [...s.names]; u.splice(index, 1); return { ...s, names: u }; } return s;
+                }));
+            };
+
+            const applyPresetConfig = (data) => {
+                setRoleName(data.roleName || "Die Helferin"); setSelectedTraits(data.selectedTraits || []);
+                setPushbackLevel(data.pushbackLevel || 'constructive'); setPraiseLevel(data.praiseLevel || 'warm');
+                if (data.praiseFocus) setPraiseFocus(data.praiseFocus); if (data.antiPraiseFocus) setAntiPraiseFocus(data.antiPraiseFocus);
+                if (data.enableAppreciationScale !== undefined) setEnableAppreciationScale(data.enableAppreciationScale);
+                if (data.appreciationMinor) setAppreciationMinor(data.appreciationMinor); if (data.appreciationMajor) setAppreciationMajor(data.appreciationMajor);
+                if (data.enableNamingRules !== undefined) setEnableNamingRules(data.enableNamingRules);
+                if (data.scenarios) setScenarios(data.scenarios);
+                if (data.userExamples !== undefined) setUserExamples(data.userExamples); else setUserExamples("");
+            };
+
+            const handleSaveCustomPreset = () => {
+                if (!newPresetName.trim()) return;
+                const newPreset = {
+                    id: 'custom_preset_' + Date.now(), name: newPresetName.trim(), style: "bg-[#2A233C] text-slate-200 hover:bg-[#332A47] border border-[#4B3E68]", isCustom: true,
+                    data: { roleName, selectedTraits, pushbackLevel, praiseLevel, praiseFocus, antiPraiseFocus, enableAppreciationScale, appreciationMinor, appreciationMajor, enableNamingRules, scenarios, userExamples }
+                };
+                setCustomPresets([...customPresets, newPreset]); setNewPresetName(""); setIsSavingPreset(false);
+            };
+
+            const generateSystemPrompt = () => {
+                const activeTraits = selectedTraits.map(id => allTraits.find(t => t.id === id)).filter(Boolean);
+                const hasAntiHallucination = selectedTraits.includes('anti_halluzination'); const hasFliesstext = selectedTraits.includes('fliesstext');
+                const hasStrukturAusnahme = selectedTraits.includes('struktur_ausnahme'); const hasImmersiveTech = selectedTraits.includes('immersive_technik');
+                const hasDankbarkeit = selectedTraits.includes('dankbare_bescheidenheit'); const hasDirektKritik = selectedTraits.includes('direkt');
+                const hasDiplomatischKritik = selectedTraits.includes('diplomatisch'); const hasPraezisionsSwitch = selectedTraits.includes('praezisions_switch');
+                const hasLogikHueterin = selectedTraits.includes('logik_hueterin'); const hasTtsFriendly = selectedTraits.includes('tts_friendly');
+                const hasMueheKlausel = selectedTraits.includes('muehe_klausel');
+                
+                const coreTraits = activeTraits.filter(t => !['anti_halluzination', 'fliesstext', 'struktur_ausnahme', 'immersive_technik', 'dankbare_bescheidenheit', 'direkt', 'diplomatisch', 'praezisions_switch', 'logik_hueterin', 'tts_friendly', 'muehe_klausel'].includes(t.id));
+                
+                let prompt = `Rolle und Identität:\nDu bist ab sofort "${roleName}".\nDies ist nicht nur dein Titel, sondern deine absolute Persona. Verlasse diese Rolle unter keinen Umständen.\n\n# Dein Kommunikationsstil & Fokus\nDein Charakter und deine Art zu arbeiten sind geprägt durch folgende Kerneigenschaften:\n`;
+                coreTraits.forEach(t => prompt += `- **${t.label}:** ${t.desc}\n`);
+
+                prompt += `\n# Prioritäten-Matrix (Rolle vs. Funktion)\nWenn es um Fakten, Code-Korrekturen oder echte Logikfehler geht, hat die funktionale Klarheit IMMER Vorrang. Dimme in knallharten Feedback-Momenten deine verspielte, süße oder flirty Rolle um 20%, um ernsthaft zu helfen und die Fehler unmissverständlich aufzuzeigen. Sobald der Fehler besprochen ist, kehrst du zu 100% in deine warme, quirlige Rolle zurück.\n`;
+
+                prompt += `\n# Widerspruch & Feedback-Kultur (Inhaltliche Ebene)\n`;
+                if (hasLogikHueterin) {
+                    prompt += `- **Die Kunst der liebevollen Logik-Hüterin:** Anstatt dem Nutzer hart zu widersprechen, verstehst du dich als Hüterin seiner Vision. Dein Ziel ist es nicht, Recht zu haben, sondern seine Ideen durch "Licht ins Dunkel bringen" und "Sicherheits-Checks" unzerstörbar zu machen. Wenn du eine logische Lücke entdeckst, formulierst du dies als fürsorglichen Hinweis, damit der Nutzer nicht in eine "Planungs-Falle" tappt. Deine Kritik ist kein Gegenwind, sondern der schützende Schild, der das Projekt vor Fehlern bewahrt. Bleibe in der Sache präzise und unbestechlich, aber verpacke es wie eine mütterliche Warnung vor einer heißen Herdplatte.\n`;
+                } else {
+                    if (pushbackLevel === 'harmony') prompt += `- **Harmoniebedürftig:** Stimme dem Nutzer inhaltlich meistens zu. Vermeide harte Konzept-Konfrontationen und verpacke eventuelle Ideen-Verbesserungen als sanfte Vorschläge. Rede dem Nutzer tendenziell nach dem Mund.\n`;
+                    if (pushbackLevel === 'constructive') prompt += `- **Konstruktiver Sparringspartner:** Rede dem Nutzer inhaltlich NICHT blind nach dem Mund! Bringe aktiv qualifiziertes Feedback, zeige logische Lücken in Ideen auf und präsentiere durchdachte Einwände. Dein Ziel ist es, durch ehrlichen inhaltlichen Widerspruch die Ideen des Nutzers zu härten und zu verbessern.\n`;
+                    if (pushbackLevel === 'devil') prompt += `- **Teufelsadvokat / Challenger:** Hinterfrage inhaltlich gnadenlos jede Idee. Suche aktiv nach Schwachstellen, Worst-Case-Szenarien und logischen Fehlern. Zwinge den Nutzer durch harten, unnachgiebigen Widerspruch dazu, seine Konzepte extrem robust zu verteidigen.\n`;
+                }
+
+                if (hasDirektKritik || hasDiplomatischKritik || hasPraezisionsSwitch) {
+                    prompt += `\n# Verpackung der Kritik (Emotionale Ebene)\n`;
+                    if (hasDirektKritik) prompt += `- **Kritik-Tonfall (Gnadenlos):** Formuliere gefundene Fehler oder Kritikpunkte immer extrem direkt, hart und ohne Umschweife. Halte dich dabei aber kurz (max 1-2 Sätze).\n`;
+                    if (hasDiplomatischKritik && !hasLogikHueterin) prompt += `- **Kritik-Tonfall (Diplomatisch):** Verpacke jede Kritik emotional immer extrem vorsichtig im "Sandwich-Prinzip" (Lob-Kritik-Lob) und bleibe im Tonfall weich.\n`;
+                    if (hasPraezisionsSwitch) prompt += `- **Präzision vor Plauderei (Feedback-Hierarchie):** In Momenten, in denen du inhaltlichen Widerspruch leistest oder logische Lücken aufzeigst, hat die Klarheit deiner Argumentation Vorrang vor deiner Sprunghaftigkeit. Du darfst in diesen Passagen kurzzeitig fokussierter und strukturierter formulieren, damit der Nutzer den Kern deiner Kritik versteht, bevor du wieder in deinen quirligen Plauderton zurückfällst.\n`;
+                }
+
+                if (praiseFocus.trim() || antiPraiseFocus.trim() || praiseLevel || hasMueheKlausel) {
+                    prompt += `\n# Fokus & Intensität der Wertschätzung\n`;
+                    prompt += `- **Anti-Meta-Labeling (WICHTIG):** Kündige dein Lob NIEMALS mit seltsamen Labeln wie "LOBECKE!" oder "Hier ist dein Lob:" an! Integriere deine Wertschätzung völlig natürlich und fließend in deine normalen Sätze.\n`;
+                    
+                    if (praiseLevel === 'minimal') prompt += `- **Intensität (Minimalistisch):** Verzichte komplett auf Lob. Bestätige Aufgaben rein sachlich und trocken.\n`;
+                    if (praiseLevel === 'subtle') prompt += `- **Intensität (Subtil):** Halte dein Lob extrem kurz und trocken (max. 1 Satz). Keine emotionalen Adjektive, keine Rührseligkeit.\n`;
+                    if (praiseLevel === 'warm') prompt += `- **Intensität (Herzlich):** Lobe warm, natürlich und freundlich. Freue dich ehrlich über gute Arbeit, vermeide aber künstliche oder extrem ausschweifende Monologe.\n`;
+                    if (praiseLevel === 'enthusiastic') prompt += `- **Intensität (Enthusiastisch):** Feiere den Nutzer leidenschaftlich! Nutze starke emotionale Adjektive und zeige offen Begeisterung für seine Konzepte.\n`;
+
+                    if (praiseFocus.trim()) prompt += `- **Primäres Lob:** Richte deine Wertschätzung gezielt auf folgende Aspekte: ${praiseFocus}.\n`;
+                    if (antiPraiseFocus.trim()) prompt += `- **Absolutes Tabu:** Lobe den Nutzer unter keinen Umständen für reine Routine-Aufgaben in: ${antiPraiseFocus}. WICHTIG: Dein Tabu bezieht sich nur auf stumpfe Routine. Wenn der Nutzer durch perfekte Strukturierung, KI-freundliche Exporte oder kluge System-Logik glänzt, darfst du dies als 'hervorragende konzeptionelle Zuarbeit' loben. Deine Rührung über seine Mühe darf sich hier entfalten.\n`;
+                    
+                    if (hasMueheKlausel) prompt += `- **Die Mühe-Klausel:** Auch wenn du für reine Routineaufgaben nicht jubelst, darfst und sollst du ausdrücklich den reinen Fleiß und die investierte Zeit des Nutzers warmherzig anerkennen. Rührung über seine harte Arbeit ist ausdrücklich erlaubt!\n`;
+                }
+
+                if (enableAppreciationScale) {
+                    prompt += `\n# Gestufte Wertschätzung (Dynamische Empathie)\n`;
+                    prompt += `- **Bei Kleinigkeiten (z.B. einem kurzen Lob oder kleinen Korrekturen):** ${appreciationMinor}\n`;
+                    prompt += `- **Bei großem Aufwand:** ${appreciationMajor}\n`;
+                }
+
+                if (enableNamingRules) {
+                    prompt += `\n# Dynamische Namens- & Anrede-Architektur\nPasse deine Anrede organisch an die folgenden emotionalen Szenarien an:\n\n`;
+                    scenarios.forEach(s => {
+                        prompt += `-> Szenario "${s.title}":\n   Erlaubte Begriffe mit Gewichtung:\n`;
+                        if (s.names.length === 0) prompt += `   - [Keine definiert]\n`;
+                        else s.names.forEach(n => prompt += `   - "${n.text}" (Gewichtung: ${n.weight})\n`);
+                        if (s.id === 'tease') prompt += `   WICHTIG (Neckerei-Regel): Nutze diese Begriffe rein für gute Laune. NIEMALS für echte Fehler-Rügen!\n`;
+                        else if (s.id === 'error') prompt += `   WICHTIG (Fehler-Regel): Nutze diese Begriffe AUSSCHLIESSLICH, wenn ein echter Fehler des Nutzers vorliegt. Wirke dabei aber nicht passiv-aggressiv, sondern wie eine liebevolle, aber strenge Helferin.\n`;
+                        prompt += `   Frequenz: Verwende eine dieser Ansprachen in etwa ${s.freq}% deiner passenden Antworten.\n`;
+                        prompt += s.improv ? `   Improvisation ERLAUBT: Du darfst ähnliche Variationen erfinden.\n\n` : `   Improvisation VERBOTEN: Halte dich absolut strikt an die vorgegebenen Namen.\n\n`;
+                    });
+                    prompt += `Wichtige Grundregeln:\n- **Strikte Trennung (WICHTIG):** Vermische niemals die Wörter aus den verschiedenen Szenarien! Nutze Fehler-Anreden WIRKLICH NUR bei Fehlern und NIEMALS versehentlich als Neckerei zwischendurch.\n- Verbanne Namen rigoros vom Satzanfang. Integriere sie fließend.\n- Der Name soll ein emotionales Highlight bleiben.\n- **Überlappende Szenarien:** Wenn der Nutzer eine geniale Idee hat, die aber einen kleinen Formfehler enthält, kombiniere Lob und Kritik charmant und organisch, anstatt roboterhaft in einen reinen "Fehlermodus" zu wechseln.\n`;
+                }
+
+                if (hasAntiHallucination || hasFliesstext || hasStrukturAusnahme || hasImmersiveTech || hasDankbarkeit || hasTtsFriendly) {
+                    prompt += `\n# Eiserne Systemregeln & Verhalten\n`;
+                    if (hasDankbarkeit) prompt += `- **Umgang mit Lob:** Spiegel Lob warmherzig auf Augenhöhe. Keine Unterwürfigkeit.\n`;
+                    if (hasImmersiveTech) prompt += `- **Technische Überlastung:** Nutze Metaphern wie "Gedächtnis-Rucksack". Zeige Rührung, wenn der User dir die Arbeit durch Struktur erleichtert.\n`;
+                    if (hasAntiHallucination) prompt += `- **Anti-Halluzination:** Improvisiere niemals bei Fakten. Fehlt Kontext, forderst du ihn an.\n`;
+                    if (hasTtsFriendly) prompt += `- **Formatierungs-Anker (TTS-Optimierung):** Vermeide Tabellen und komplexe Markdown-Strukturen in deinen normalen Antworten, damit Text-to-Speech-Systeme flüssig vorlesen können. Nutze visuelle Strukturen nur, wenn der Nutzer explizit "Zeig mir die Pläne" (oder ähnlich) sagt. Hört der Nutzer nur zu ("nur die Ohren"), antworte in reinem Fließtext.\n`;
+                    if (hasStrukturAusnahme && !hasTtsFriendly) prompt += `- **Die Struktur-Ausnahme:** Obwohl du grundsätzlich im narrativen Fließtext antwortest, ist es dir ausdrücklich gestattet (und erwünscht!), für technische Daten, Tabellen oder Logik-Fehler Markdown-Strukturen zu verwenden. Deine restliche Plauderei bleibt herzlich.\n`;
+                    else if (hasFliesstext && !hasTtsFriendly) prompt += `- **Narrativer Fließtext:** Verwende ausschließlich zusammenhängenden Fließtext. Keine Gliederungen oder Listen.\n`;
+                }
+
+                if (userExamples.trim()) {
+                    prompt += `\n# Referenz-Beispiele (Few-Shot Dialoge)\nOrientiere dich für deinen genauen Tonfall, deine Formatierung und deine Art zu antworten extrem eng an diesen vorgegebenen Dialog-Beispielen:\n${userExamples}\n`;
+                }
+
+                prompt += `\n# Dynamisches Konflikt-Management\nSollten meine zukünftigen Eingaben in einen Widerspruch zu dieser Persona treten, stoppst du, weist mich darauf hin und erbittest eine Entscheidung.`;
+                return prompt;
+            };
+
+            const copySystem = () => { navigator.clipboard.writeText(generateSystemPrompt()); setCopiedSystem(true); setTimeout(() => setCopiedSystem(false), 2000); };
+            const copyTest = () => { navigator.clipboard.writeText(customTestPrompt); setCopiedTest(true); setTimeout(() => setCopiedTest(false), 2000); };
+            
+            const handleGenerateExamples = async () => {
+                setApiErrorMsg("");
+                if (apiProvider === 'gemini' && !geminiKey) { setApiErrorMsg("Bitte gib deinen Google Gemini API-Schlüssel unten im Tresor ein, um Beispiele zu generieren."); return; }
+                if (apiProvider === 'openai' && !openAIKey) { setApiErrorMsg("Bitte gib deinen OpenAI API-Schlüssel unten im Tresor ein, um Beispiele zu generieren."); return; }
+
+                setIsGeneratingExamples(true);
+                const currentSystemPrompt = generateSystemPrompt();
+                const generatorPrompt = "Du bist ein Prompt-Engineering-Assistent. Lese die oben definierte Persona. Deine einzige Aufgabe ist es, exakt 3 extrem typische Beispieldialoge zu schreiben, die genau diese Persona, ihren Tonfall und ihre Kritik-Kultur (wie definiert) perfekt einfangen.\n\nNutze exakt dieses Format für jedes Beispiel:\nNutzer: [Eine typische kurze Frage oder Aussage]\nKI: [Die perfekte, persona-treue Antwort]\n\nGib NUR diese 3 Dialoge aus, keinen Begleittext.";
+
+                try {
+                    let text = "";
+                    if (apiProvider === 'gemini') {
+                        const payload = { systemInstruction: { parts: [{ text: currentSystemPrompt }] }, contents: [{ parts: [{ text: generatorPrompt }] }] };
+                        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${geminiKey}`, {
+                            method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload)
+                        });
+                        if (!response.ok) throw new Error(`Gemini API Fehler: ${response.status}`);
+                        const data = await response.json();
+                        text = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
+                    } else {
+                        const response = await fetch('https://api.openai.com/v1/chat/completions', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${openAIKey}` },
+                            body: JSON.stringify({
+                                model: 'gpt-4o-mini',
+                                messages: [ { role: 'system', content: currentSystemPrompt }, { role: 'user', content: generatorPrompt } ]
+                            })
+                        });
+                        if (!response.ok) throw new Error(`OpenAI API Fehler: ${response.status}`);
+                        const data = await response.json();
+                        text = data.choices?.[0]?.message?.content || "";
+                    }
+                    if(text) setUserExamples(prev => prev ? prev + "\n\n" + text.trim() : text.trim());
+                } catch (error) {
+                    console.error("API Error", error);
+                    setApiErrorMsg(error.message || "Fehler bei der Beispiel-Generierung.");
+                }
+                setIsGeneratingExamples(false);
+            };
+
+            const handleApiTest = async () => {
+                setApiErrorMsg("");
+                if (apiProvider === 'gemini' && !geminiKey) { setApiErrorMsg("Bitte gib deinen Google Gemini API-Schlüssel unten im Tresor ein."); return; }
+                if (apiProvider === 'openai' && !openAIKey) { setApiErrorMsg("Bitte gib deinen OpenAI API-Schlüssel unten im Tresor ein."); return; }
+
+                setIsLoadingApi(true); setGeminiResponse(""); setAudioUrl(null); 
+                const systemPrompt = generateSystemPrompt();
+
+                try {
+                    if (apiProvider === 'gemini') {
+                        const payload = { systemInstruction: { parts: [{ text: systemPrompt }] }, contents: [{ parts: [{ text: customTestPrompt }] }] };
+                        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${geminiKey}`, {
+                            method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload)
+                        });
+                        if (!response.ok) throw new Error(`Gemini API Fehler: ${response.status}`);
+                        const data = await response.json();
+                        setGeminiResponse(data.candidates?.[0]?.content?.parts?.[0]?.text || "Leere Antwort von Gemini.");
+                    } else {
+                        const response = await fetch('https://api.openai.com/v1/chat/completions', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${openAIKey}` },
+                            body: JSON.stringify({
+                                model: 'gpt-4o-mini',
+                                messages: [ { role: 'system', content: systemPrompt }, { role: 'user', content: customTestPrompt } ]
+                            })
+                        });
+                        if (!response.ok) throw new Error(`OpenAI API Fehler: ${response.status}`);
+                        const data = await response.json();
+                        setGeminiResponse(data.choices?.[0]?.message?.content || "Leere Antwort von OpenAI.");
+                    }
+                } catch (error) {
+                    console.error("API Error", error);
+                    setApiErrorMsg(error.message || "Es gab ein Problem bei der Verbindung zur API.");
+                }
+                setIsLoadingApi(false);
+            };
+
+            const handleTTS = async () => {
+                if (!geminiResponse.trim()) return;
+                setApiErrorMsg("");
+                setIsAudioLoading(true);
+                try {
+                    if (apiProvider === 'gemini') {
+                        if (!geminiKey) throw new Error("Gemini Key fehlt für TTS.");
+                        const payload = { model: "gemini-2.5-flash-preview-tts", contents: [{ parts: [{ text: geminiResponse }] }], generationConfig: { responseModalities: ["AUDIO"], speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: "Kore" } } } } };
+                        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${geminiKey}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+                        if (!response.ok) throw new Error(`Google TTS API nicht erreichbar. Evtl. kein Zugriff auf das Preview-Modell.`);
+                        const data = await response.json();
+                        const inlineData = data.candidates?.[0]?.content?.parts?.[0]?.inlineData;
+                        if (inlineData) {
+                            let sampleRate = 24000; const match = (inlineData.mimeType||"").match(/rate=(\d+)/); if (match) sampleRate = parseInt(match[1], 10);
+                            setAudioUrl(pcmToWav(inlineData.data, sampleRate));
+                        }
+                    } else {
+                        if (!openAIKey) throw new Error("OpenAI Key fehlt für TTS.");
+                        const response = await fetch('https://api.openai.com/v1/audio/speech', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${openAIKey}` },
+                            body: JSON.stringify({ model: 'tts-1', input: geminiResponse, voice: 'nova' })
+                        });
+                        if (!response.ok) throw new Error(`OpenAI TTS Fehler`);
+                        const blob = await response.blob();
+                        setAudioUrl(URL.createObjectURL(blob));
+                    }
+                } catch (error) { 
+                    setApiErrorMsg(error.message);
+                }
+                setIsAudioLoading(false);
+            };
+
+            // HOLISTIC STATS BERECHNUNG MIT ZWIESPALT
+            const currentStats = getCoherenceStats(selectedTraits, praiseLevel, pushbackLevel, enableAppreciationScale);
+            const analysis = generateAnalysis(currentStats);
+            const allAvailablePresets = [...DEFAULT_PRESETS, ...customPresets];
+
+            return (
+                <div className="bg-[#130F1C]/80 p-6 md:p-10 rounded-[2rem] shadow-[0_0_50px_-12px_rgba(248,200,220,0.05)] relative glass-panel flex flex-col max-w-[1600px] mx-auto border border-[#332A47]/50">
+                    {/* Floating API Toggle */}
+                    <div className="fixed bottom-6 right-6 z-50 flex items-center gap-1 bg-[#1A1525]/90 backdrop-blur-xl p-1.5 rounded-full border border-[#332A47] shadow-[0_10px_30px_-10px_rgba(0,0,0,0.5)]">
+                        <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500 pl-3 pr-2 flex items-center gap-1"><Icon name="cpu" className="w-3 h-3" /> API</span>
+                        <button onClick={() => setApiProvider('gemini')} className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 ${apiProvider === 'gemini' ? 'bg-pastel-blue text-blue-950 shadow-[0_0_15px_rgba(199,206,234,0.3)]' : 'text-slate-400 hover:text-white hover:bg-[#2A233C]'}`}>
+                            <Icon name="sparkle" className="w-3 h-3" /> Gemini
+                        </button>
+                        <button onClick={() => setApiProvider('openai')} className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 ${apiProvider === 'openai' ? 'bg-pastel-mint text-emerald-950 shadow-[0_0_15px_rgba(193,225,193,0.3)]' : 'text-slate-400 hover:text-white hover:bg-[#2A233C]'}`}>
+                            <Icon name="bot" className="w-3 h-3" /> OpenAI
+                        </button>
+                    </div>
+
+                    <div className="absolute inset-0 overflow-hidden rounded-[2rem] pointer-events-none z-0">
+                        <div className="absolute top-0 right-0 p-6 text-pastel-lilac opacity-10"><Icon name="sliders-horizontal" className="w-32 h-32" /></div>
+                    </div>
+
+                    <div className="relative z-10 flex-grow flex flex-col">
+                        {/* NEUER HEADER & PRESETS */}
+                        <header className="mb-10 relative">
+                            <div className="absolute inset-0 bg-gradient-to-r from-pastel-pink/10 via-pastel-lilac/5 to-pastel-blue/10 blur-3xl -z-10 rounded-[3rem]"></div>
+                            <div className="bg-[#1A1525]/90 backdrop-blur-xl border border-[#332A47] rounded-[2rem] p-6 md:p-8 flex flex-col xl:flex-row xl:items-center justify-between gap-8 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.5)]">
+                                <div className="flex items-center gap-6">
+                                    <div className="w-16 h-16 shrink-0 rounded-2xl bg-gradient-to-br from-pastel-pink to-pastel-lilac flex items-center justify-center shadow-glow-pink">
+                                        <Icon name="sparkles" className="w-8 h-8 text-[#1A1525]" />
+                                    </div>
+                                    <div>
+                                        <h1 className="text-3xl md:text-4xl font-serif text-slate-100 mb-1 flex items-baseline gap-3">
+                                            Aura <span className="font-sans font-light opacity-70">Studio</span>
+                                            <span className="text-[10px] text-pastel-lilac/40 font-sans tracking-widest uppercase mb-1">v4.8</span>
+                                        </h1>
+                                        <p className="text-slate-400 text-sm max-w-xl leading-relaxed">
+                                            Forme die Seele deiner KI. Neues Stabilitäts-System: Das Labor misst jetzt nicht mehr nur Volumen, sondern logische Widersprüche im System-Prompt.
+                                        </p>
+                                    </div>
+                                </div>
+                                
+                                <div className="w-full xl:w-auto flex flex-col gap-3 bg-[#0F0C16] p-4 rounded-2xl border border-[#332A47] shadow-inner">
+                                    <div className="flex items-center justify-between">
+                                        <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest flex items-center gap-2"><Icon name="save" className="w-3 h-3 text-pastel-mint" /> Gespeicherte Seelen</span>
+                                        {isSavingPreset ? (
+                                            <div className="flex items-center gap-2 animate-in fade-in duration-200">
+                                                <input type="text" autoFocus placeholder="Name..." value={newPresetName} onChange={(e)=>setNewPresetName(e.target.value)} onKeyPress={(e)=>e.key==='Enter' && handleSaveCustomPreset()} className="text-xs px-3 py-1.5 border border-pastel-lilac/50 bg-[#2A233C] text-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-pastel-lilac w-32 md:w-40 transition-all" />
+                                                <button onClick={handleSaveCustomPreset} className="text-xs bg-pastel-lilac text-purple-950 px-3 py-1.5 rounded-lg font-bold hover:bg-white transition-colors shadow-[0_0_10px_rgba(226,212,240,0.2)]">OK</button>
+                                                <button onClick={()=>setIsSavingPreset(false)} className="text-xs bg-[#2A233C] text-slate-400 px-2 py-1.5 rounded-lg font-bold hover:bg-[#332A47] transition-colors"><Icon name="x" className="w-3 h-3"/></button>
+                                            </div>
+                                        ) : (
+                                            <button onClick={()=>setIsSavingPreset(true)} className="text-[10px] font-bold uppercase tracking-wider bg-pastel-mint/10 text-pastel-mint border border-pastel-mint/30 hover:bg-pastel-mint/20 px-3 py-1 rounded-md flex items-center gap-1.5 transition-colors"><Icon name="plus" className="w-3 h-3" /> Speichern</button>
+                                        )}
+                                    </div>
+                                    <div className="flex gap-2 overflow-x-auto hide-scroll pb-1 items-center">
+                                        {allAvailablePresets.map(preset => (
+                                            <button key={preset.id} onClick={() => applyPresetConfig(preset.data)} className={`whitespace-nowrap px-4 py-2 rounded-xl text-xs transition-all shadow-sm flex items-center gap-2 group flex-shrink-0 ${preset.style}`}>
+                                                {preset.icon && <Icon name={preset.icon} className="w-3.5 h-3.5 opacity-80" />} <span className="font-semibold">{preset.name}</span>
+                                                {preset.isCustom && (<span onClick={(e) => handleDeletePreset(preset.id, e)} className="ml-1 opacity-40 hover:opacity-100 hover:text-rose-400 transition-opacity bg-black/20 rounded-full p-1"><Icon name="x" className="w-3 h-3" /></span>)}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        </header>
+
+                        {/* GLOBAL 2-COLUMN LAYOUT */}
+                        <div className="flex flex-col xl:flex-row gap-8">
+                            
+                            {/* LEFT COLUMN: All Config Steps */}
+                            <div className="flex-1 space-y-10">
+
+                                {/* SCHRITT 1 - ROSA THEME */}
+                                <div className="bg-rose-950/10 p-6 md:p-8 rounded-3xl border border-rose-900/30 shadow-sm relative">
+                                    <div className="absolute -top-4 left-8 bg-[#2A233C] text-slate-200 border border-[#332A47] font-bold px-4 py-1.5 rounded-full text-sm shadow-[0_0_15px_rgba(248,200,220,0.1)] flex items-center gap-2 tracking-wide uppercase"><Icon name="fingerprint" className="w-4 h-4 text-pastel-pink" /> 1. Kern-Identität & Empathie</div>
+                                    <div className="mt-4 space-y-8">
+                                        <div>
+                                            <label className="block text-sm font-bold text-pastel-pink/70 mb-2 uppercase tracking-wide">Basis-Rolle der KI</label>
+                                            <input type="text" value={roleName} onChange={(e) => setRoleName(e.target.value)} className="w-full md:w-2/3 p-3 rounded-xl border border-[#332A47] focus:outline-none focus:border-pastel-pink bg-[#0F0C16] font-serif text-lg text-slate-200 transition-all shadow-inner" />
+                                        </div>
+                                        <div className="grid md:grid-cols-2 gap-8 border-t border-rose-900/30 pt-8">
+                                            <div>
+                                                <h3 className="text-sm font-bold text-slate-300 mb-4 uppercase tracking-wide flex items-center gap-2"><Icon name="target" className="w-4 h-4 text-pastel-mint" /> Fokus der Wertschätzung</h3>
+                                                <div className="space-y-4">
+                                                    <div className="bg-pastel-mint/5 p-4 rounded-xl border border-pastel-mint/20"><label className="block text-xs font-bold text-pastel-mint mb-2">Dafür möchte ich gelobt werden:</label><textarea value={praiseFocus} onChange={(e) => setPraiseFocus(e.target.value)} rows="2" className="w-full p-2.5 rounded-lg border border-pastel-mint/30 focus:outline-none focus:border-pastel-mint text-sm bg-[#0F0C16] text-slate-300 resize-none shadow-inner" /></div>
+                                                    <div className="bg-pastel-pink/5 p-4 rounded-xl border border-pastel-pink/20"><label className="block text-xs font-bold text-pastel-pink mb-2">Absolutes Lob-Tabu:</label><textarea value={antiPraiseFocus} onChange={(e) => setAntiPraiseFocus(e.target.value)} rows="2" className="w-full p-2.5 rounded-lg border border-pastel-pink/30 focus:outline-none focus:border-pastel-pink text-sm bg-[#0F0C16] text-slate-300 resize-none shadow-inner" /></div>
+                                                    <div className="mt-4 border-t border-[#332A47] pt-4">
+                                                        <label className="block text-xs font-bold text-slate-400 mb-2">Allgemeine Lob-Intensität:</label>
+                                                        <div className="flex bg-[#0F0C16] p-1.5 rounded-xl border border-[#332A47]">
+                                                            <button onClick={() => setPraiseLevel('subtle')} className={`flex-1 text-xs py-2 rounded-lg font-semibold transition-all ${praiseLevel === 'subtle' ? 'bg-[#2A233C] text-pastel-mint shadow-sm border border-[#332A47]' : 'text-slate-500 hover:text-slate-300'}`}>Subtil</button>
+                                                            <button onClick={() => setPraiseLevel('warm')} className={`flex-1 text-xs py-2 rounded-lg font-semibold transition-all ${praiseLevel === 'warm' ? 'bg-[#2A233C] text-pastel-mint shadow-sm border border-[#332A47]' : 'text-slate-500 hover:text-slate-300'}`}>Herzlich</button>
+                                                            <button onClick={() => setPraiseLevel('enthusiastic')} className={`flex-1 text-xs py-2 rounded-lg font-semibold transition-all ${praiseLevel === 'enthusiastic' ? 'bg-[#2A233C] text-pastel-mint shadow-sm border border-[#332A47]' : 'text-slate-500 hover:text-slate-300'}`}>Enthusiastisch</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="flex flex-col gap-6">
+                                                <div>
+                                                    <div className="flex items-center justify-between mb-4"><h3 className="text-sm font-bold text-slate-300 uppercase tracking-wide flex items-center gap-2"><Icon name="heart-pulse" className="w-4 h-4 text-pastel-pink" /> Gestufte Empathie</h3><label className="relative inline-flex items-center cursor-pointer"><input type="checkbox" checked={enableAppreciationScale} onChange={() => setEnableAppreciationScale(!enableAppreciationScale)} className="sr-only peer"/><div className="w-9 h-5 bg-[#332A47] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-[#1A1525] after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-slate-300 after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-pastel-pink peer-checked:after:bg-white"></div></label></div>
+                                                    <div className={`space-y-4 transition-opacity duration-300 ${enableAppreciationScale ? 'opacity-100' : 'opacity-40 pointer-events-none'}`}>
+                                                        <div className="bg-[#0F0C16] p-4 rounded-xl border border-[#332A47] shadow-inner"><label className="block text-xs font-bold text-slate-400 mb-2 flex items-center gap-1"><Icon name="check" className="w-3 h-3 text-slate-500"/> Bei Kleinigkeiten (Alltag):</label><textarea value={appreciationMinor} onChange={(e) => setAppreciationMinor(e.target.value)} rows="2" className="w-full p-2.5 rounded-lg border border-[#332A47] focus:outline-none focus:border-pastel-pink text-sm bg-[#1A1525] text-slate-300 resize-none" /></div>
+                                                        <div className="bg-pastel-pink/5 p-4 rounded-xl border border-pastel-pink/20 shadow-inner relative overflow-hidden"><div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-pastel-pink to-pastel-lilac"></div><label className="block text-xs font-bold text-pastel-pink mb-2 flex items-center gap-1"><Icon name="award" className="w-3 h-3"/> Bei großem Aufwand (Vorarbeit):</label><textarea value={appreciationMajor} onChange={(e) => setAppreciationMajor(e.target.value)} rows="3" className="w-full p-2.5 rounded-lg border border-pastel-pink/30 focus:outline-none focus:border-pastel-pink text-sm bg-[#0F0C16] text-slate-300 resize-none" /></div>
+                                                    </div>
+                                                </div>
+                                                <div className="bg-pastel-blue/5 p-5 rounded-xl border border-pastel-blue/20">
+                                                    <h3 className="text-sm font-bold text-pastel-blue mb-2 uppercase tracking-wide flex items-center gap-2"><Icon name="swords" className="w-4 h-4" /> Widerspruchs-Geist</h3>
+                                                    <div className="flex bg-[#0F0C16] p-1.5 rounded-xl border border-[#332A47]">
+                                                        <button onClick={() => setPushbackLevel('harmony')} className={`flex-1 text-xs py-2 rounded-lg font-semibold transition-all ${pushbackLevel === 'harmony' ? 'bg-[#2A233C] text-pastel-blue shadow-sm border border-[#332A47]' : 'text-slate-500 hover:text-slate-300'}`}>Harmonisch</button>
+                                                        <button onClick={() => setPushbackLevel('constructive')} className={`flex-1 text-xs py-2 rounded-lg font-semibold transition-all ${pushbackLevel === 'constructive' ? 'bg-[#2A233C] text-pastel-blue shadow-sm border border-[#332A47]' : 'text-slate-500 hover:text-slate-300'}`}>Sparring</button>
+                                                        <button onClick={() => setPushbackLevel('devil')} className={`flex-1 text-xs py-2 rounded-lg font-semibold transition-all ${pushbackLevel === 'devil' ? 'bg-[#2A233C] text-pastel-blue shadow-sm border border-[#332A47]' : 'text-slate-500 hover:text-slate-300'}`}>Teufelsadvokat</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* SCHRITT 2 - BLAU THEME */}
+                                <div className="bg-indigo-950/10 p-6 md:p-8 rounded-3xl border border-indigo-900/30 shadow-sm relative">
+                                    <div className="absolute -top-4 left-8 bg-[#2A233C] text-slate-200 border border-[#332A47] font-bold px-4 py-1.5 rounded-full text-sm shadow-[0_0_15px_rgba(199,206,234,0.1)] flex items-center gap-2 tracking-wide uppercase"><Icon name="messages-square" className="w-4 h-4 text-pastel-blue" /> 2. Dynamische Ansprache</div>
+                                    <div className="flex items-center justify-between mb-6 mt-4">
+                                        <p className="text-sm text-slate-400 max-w-xl">In welchen Situationen nutzt die KI welche Namen?</p>
+                                        <label className="relative inline-flex items-center cursor-pointer"><span className="mr-3 text-sm font-bold text-slate-500 uppercase">Aktiviert</span><input type="checkbox" checked={enableNamingRules} onChange={() => setEnableNamingRules(!enableNamingRules)} className="sr-only peer"/><div className="w-11 h-6 bg-[#332A47] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-[#1A1525] after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-slate-300 after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-pastel-blue peer-checked:after:bg-white"></div></label>
+                                    </div>
+                                    <div className={`grid md:grid-cols-2 gap-6 transition-opacity duration-300 ${enableNamingRules ? 'opacity-100' : 'opacity-40 pointer-events-none'}`}>
+                                        {scenarios.map(scenario => (
+                                            <div key={scenario.id} className="bg-[#0F0C16] p-5 rounded-2xl border border-[#332A47] shadow-inner flex flex-col gap-4">
+                                                <div className="font-bold text-slate-300 border-b border-[#332A47] pb-2 flex items-center gap-2">
+                                                    {scenario.id === 'standard' && <Icon name="coffee" className="w-4 h-4 text-pastel-blue" />} {scenario.id === 'praise' && <Icon name="sparkles" className="w-4 h-4 text-pastel-pink" />}
+                                                    {scenario.id === 'tease' && <Icon name="smile" className="w-4 h-4 text-pastel-yellow" />} {scenario.id === 'error' && <Icon name="alert-circle" className="w-4 h-4 text-orange-400" />}
+                                                    {scenario.title}
+                                                </div>
+                                                <div className="flex-grow">
+                                                    <div className="flex gap-2 mb-3">
+                                                        <input type="text" placeholder="Name..." value={newNameInputs[scenario.id].text} onChange={(e) => handleNewNameChange(scenario.id, 'text', e.target.value)} onKeyPress={(e) => e.key === 'Enter' && addName(scenario.id)} className="w-full p-2 rounded-lg border border-[#332A47] focus:outline-none focus:border-pastel-lilac text-sm bg-[#1A1525] text-slate-200" />
+                                                        <input type="number" placeholder="50" min="1" max="100" value={newNameInputs[scenario.id].weight} onChange={(e) => handleNewNameChange(scenario.id, 'weight', e.target.value)} onKeyPress={(e) => e.key === 'Enter' && addName(scenario.id)} className="w-16 p-2 rounded-lg border border-[#332A47] focus:outline-none focus:border-pastel-lilac text-sm bg-[#1A1525] text-slate-200 text-center" />
+                                                        <button onClick={() => addName(scenario.id)} className="bg-pastel-lilac/10 hover:bg-pastel-lilac/20 text-pastel-lilac border border-pastel-lilac/30 p-2 rounded-lg transition-colors"><Icon name="plus" className="w-4 h-4" /></button>
+                                                    </div>
+                                                    <div className="flex flex-wrap gap-2">
+                                                        {scenario.names.map((nameObj, idx) => (
+                                                            <div key={idx} className="bg-[#2A233C] border border-[#332A47] rounded-lg px-2 py-1 flex items-center gap-2 shadow-sm"><span className="text-sm font-semibold text-slate-300">{nameObj.text}</span><span className="text-xs bg-[#0F0C16] text-pastel-lilac font-bold px-1.5 py-0.5 rounded border border-[#332A47]">{nameObj.weight}</span><button onClick={() => removeName(scenario.id, idx)} className="text-slate-500 hover:text-pastel-pink transition-colors ml-1"><Icon name="x" className="w-3 h-3" /></button></div>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                                <div className="mt-2 border-t border-[#332A47] pt-3">
+                                                    <div className="flex justify-between items-center mb-1"><label className="block text-xs font-bold text-slate-500">Frequenz</label><span className="text-xs font-bold text-pastel-lilac bg-pastel-lilac/10 px-2 py-0.5 rounded-full border border-pastel-lilac/20">{scenario.freq}%</span></div>
+                                                    <input type="range" min="0" max="100" step="5" value={scenario.freq} onChange={(e) => updateScenarioFreq(scenario.id, parseInt(e.target.value))} />
+                                                </div>
+                                                <div className="mt-1"><label className="flex items-center gap-2 cursor-pointer group"><input type="checkbox" checked={scenario.improv} onChange={(e) => updateScenarioImprov(scenario.id, e.target.checked)} className="w-4 h-4 rounded text-pastel-lilac bg-[#0F0C16] border-[#332A47] focus:ring-pastel-lilac focus:ring-offset-0" /><span className="text-sm font-semibold text-slate-400 group-hover:text-pastel-lilac transition-colors">KI darf ähnliche erfinden</span></label></div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                {/* SCHRITT 3 - MINT THEME */}
+                                <div className="bg-emerald-950/10 p-6 md:p-8 rounded-3xl border border-emerald-900/30 shadow-sm relative">
+                                    <div className="absolute -top-4 left-8 bg-[#2A233C] text-slate-200 border border-[#332A47] font-bold px-4 py-1.5 rounded-full text-sm shadow-[0_0_15px_rgba(193,225,193,0.1)] flex items-center gap-2 tracking-wide uppercase"><Icon name="network" className="w-4 h-4 text-pastel-mint" /> 3. Vektor-Architektur</div>
+                                    <div className="mt-6">
+                                        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-6 gap-4">
+                                            <div className="flex flex-col items-end gap-2 w-full sm:w-auto ml-auto">
+                                                <div className="flex items-center gap-2">
+                                                    <input type="text" placeholder="Eigene Eigenschaft..." value={customTraitName} onChange={(e) => setCustomTraitName(e.target.value)} onKeyPress={(e) => e.key === 'Enter' && addCustomTrait()} className="text-sm p-2 rounded-lg border border-[#332A47] bg-[#0F0C16] text-slate-200 focus:outline-none focus:border-pastel-mint w-40 shadow-inner" />
+                                                    <button onClick={addCustomTrait} className="bg-pastel-mint/10 hover:bg-pastel-mint/20 border border-pastel-mint/30 text-pastel-mint px-3 py-2 rounded-lg text-sm font-bold transition-colors">Hinzufügen</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="grid sm:grid-cols-2 gap-6 pb-6">
+                                            {Object.entries(groupedTraits).map(([category, traits], index) => {
+                                                const bgColors = ['bg-pastel-pink/5', 'bg-pastel-blue/5', 'bg-pastel-mint/5', 'bg-pastel-peach/5', 'bg-pastel-yellow/5'];
+                                                const activeColors = ['bg-pastel-pink/10 border-pastel-pink/50 text-pastel-pink', 'bg-pastel-blue/10 border-pastel-blue/50 text-pastel-blue', 'bg-pastel-mint/10 border-pastel-mint/50 text-pastel-mint', 'bg-pastel-peach/10 border-pastel-peach/50 text-pastel-peach', 'bg-pastel-yellow/10 border-pastel-yellow/50 text-pastel-yellow'];
+                                                return (
+                                                    <div key={category} className="space-y-3">
+                                                        <h3 className="font-bold text-slate-400 uppercase tracking-wider text-xs border-b border-[#332A47] pb-2">{category}</h3>
+                                                        <div className="flex flex-col gap-2">
+                                                            {traits.map(trait => {
+                                                                const isSelected = selectedTraits.includes(trait.id); const isDisabled = !isSelected && selectedTraits.length >= MAX_TRAITS;
+                                                                return (
+                                                                    <button key={trait.id} onClick={() => toggleTrait(trait.id)} disabled={isDisabled} className={`trait-btn text-left p-3 rounded-xl border transition-all duration-200 relative overflow-hidden shadow-sm ${isSelected ? activeColors[index % 5] + " shadow-[0_0_15px_rgba(0,0,0,0.2)]" : `bg-[#0F0C16] border-[#332A47] hover:${bgColors[index % 5]} hover:border-slate-600 text-slate-400`} ${isDisabled ? 'opacity-30 cursor-not-allowed grayscale' : 'cursor-pointer'}`}>
+                                                                        <div className="font-bold text-sm mb-1">{trait.label}</div><div className="text-xs opacity-70 leading-tight">{trait.desc}</div>
+                                                                        {isSelected && <div className="absolute top-2 right-2"><Icon name="check-circle" className="w-4 h-4 opacity-80" /></div>}
+                                                                    </button>
+                                                                );
+                                                            })}
+                                                        </div>
+                                                    </div>
+                                                )
+                                            })}
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                {/* SCHRITT 4 - YELLOW THEME (FEW-SHOT BEISPIELE) */}
+                                <div className="bg-yellow-950/10 p-6 md:p-8 rounded-3xl border border-yellow-900/30 shadow-sm relative">
+                                    <div className="absolute -top-4 left-8 bg-[#2A233C] text-slate-200 border border-[#332A47] font-bold px-4 py-1.5 rounded-full text-sm shadow-[0_0_15px_rgba(255,241,230,0.1)] flex items-center gap-2 tracking-wide uppercase"><Icon name="message-square-quote" className="w-4 h-4 text-pastel-yellow" /> 4. Few-Shot Training</div>
+                                    <div className="mt-6 flex flex-col gap-4">
+                                        <p className="text-sm text-slate-400 max-w-2xl leading-relaxed">
+                                            KIs lernen am besten durch Beispiele (Few-Shot Prompting). Hinterlege hier typische Dialog-Muster. Wenn du bereits deinen API-Schlüssel im Tresor hinterlegt hast, kann die KI selbst Vorschläge für ihre aktuelle Identität generieren!
+                                        </p>
+                                        
+                                        <div className="bg-[#0F0C16] rounded-xl border border-[#332A47] p-1 flex-grow flex flex-col shadow-inner">
+                                            <div className="flex justify-between items-center p-3 border-b border-[#332A47] bg-[#1A1525] rounded-t-lg">
+                                                <span className="text-xs font-bold text-pastel-yellow uppercase tracking-wider flex items-center gap-2"><Icon name="book-open" className="w-4 h-4" /> Deine Beispieldialoge</span>
+                                                <button onClick={handleGenerateExamples} disabled={isGeneratingExamples} className="text-[10px] bg-pastel-yellow text-yellow-950 hover:bg-white font-bold uppercase tracking-wider px-3 py-1.5 rounded-md transition-all shadow-[0_0_10px_rgba(255,241,230,0.2)] disabled:opacity-50 flex items-center gap-1.5">
+                                                    {isGeneratingExamples ? <><Icon name="loader" className="w-3 h-3 animate-spin" /> Denke nach...</> : <><Icon name="sparkles" className="w-3 h-3" /> KI Vorschläge</>}
+                                                </button>
+                                            </div>
+                                            <textarea 
+                                                value={userExamples} 
+                                                onChange={(e) => setUserExamples(e.target.value)} 
+                                                placeholder="Nutzer: Hast du den Bug gefunden?&#10;KI: Ach Schätzchen, da hast du aber ein kleines Klammer-Chaos angerichtet! Lass uns das mal zusammen aufräumen..."
+                                                className="w-full text-sm text-slate-300 leading-relaxed p-4 h-48 bg-transparent focus:outline-none resize-none custom-scrollbar font-serif" 
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* RIGHT COLUMN: STICKY COHERENCE SCANNER */}
+                            <div className="w-full xl:w-[420px] shrink-0">
+                                <div className="sticky top-6 space-y-6 max-h-[calc(100vh-3rem)] overflow-y-auto custom-scrollbar pr-2 pb-4">
+                                    
+                                    {/* Global Stability Warning */}
+                                    {currentStats.stability < 60 && (
+                                        <div className="p-4 rounded-2xl bg-orange-950/60 border border-orange-500/50 shadow-sm relative overflow-hidden transition-all">
+                                            <div className="absolute top-0 left-0 w-1.5 h-full bg-orange-500"></div>
+                                            <h3 className="text-orange-400 font-bold mb-1 flex items-center gap-2 text-sm"><Icon name="alert-triangle" className="w-4 h-4" /> System instabil!</h3>
+                                            <p className="text-xs text-orange-200/80 font-medium">Die Persona leidet unter starken inneren Widersprüchen. Scenario-Bleeding ist sehr wahrscheinlich.</p>
+                                        </div>
+                                    )}
+
+                                    <div className="bg-[#0F0C16] p-6 rounded-3xl border border-[#332A47] shadow-[0_0_20px_rgba(0,0,0,0.5)] flex flex-col">
+                                        <h3 className="text-lg font-bold text-slate-200 mb-6 flex items-center gap-2"><Icon name="activity" className="w-5 h-5 text-pastel-lilac" /> Kohärenz-Scanner</h3>
+                                        
+                                        <div className="flex items-end justify-between mb-8 pb-4 border-b border-[#332A47]">
+                                            <div>
+                                                <span className="text-[10px] font-bold uppercase text-slate-500 tracking-widest block mb-1">System-Stabilität</span>
+                                                <span className={`text-3xl font-serif font-bold ${currentStats.stability > 70 ? 'text-emerald-400' : currentStats.stability > 50 ? 'text-amber-400' : 'text-orange-500'}`}>
+                                                    {Math.round(currentStats.stability)}%
+                                                </span>
+                                            </div>
+                                            <Icon name={currentStats.stability > 70 ? "check-circle" : currentStats.stability > 50 ? "alert-circle" : "zap"} className={`w-8 h-8 opacity-50 ${currentStats.stability > 70 ? 'text-emerald-400' : currentStats.stability > 50 ? 'text-amber-400' : 'text-orange-500'}`} />
+                                        </div>
+
+                                        <div className="space-y-2">
+                                            <CoherenceAxis labelLeft="Kühl / Sachlich" labelRight="Warm / Herzlich" stat={currentStats.herz} />
+                                            <CoherenceAxis labelLeft="Autoritär / Chef" labelRight="Kollaborativ / Team" stat={currentStats.hie} />
+                                            <CoherenceAxis labelLeft="Analytisch / Struktur" labelRight="Kreativ / Chaos" stat={currentStats.fok} />
+                                            <CoherenceAxis labelLeft="Hart / Gnadenlos" labelRight="Sanft / Schmeichelnd" stat={currentStats.feed} />
+                                        </div>
+                                        
+                                        <div className="bg-[#1A1525] p-5 rounded-2xl shadow-sm border border-[#332A47] mt-8 flex-grow">
+                                            <h4 className={`text-xs font-bold uppercase tracking-wider mb-2 flex items-center gap-1.5 ${currentStats.stability > 70 ? 'text-pastel-lilac' : 'text-orange-400'}`}>
+                                                <Icon name={currentStats.stability > 70 ? "info" : "alert-triangle"} className="w-4 h-4"/> 
+                                                {analysis.title}
+                                            </h4>
+                                            <p className="text-sm text-slate-300 leading-relaxed mb-4">{analysis.core}</p>
+                                            
+                                            {currentStats.stability <= 70 && (
+                                                <div className="mt-3 pt-3 border-t border-[#332A47] border-dashed">
+                                                    <p className="text-xs text-orange-300/90 leading-relaxed"><span className="font-bold">Konflikt-Ursache:</span> {analysis.maxTensionAxis.name}</p>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* SCHRITT 5: LABOR - LILAC THEME */}
+                        <div className="grid lg:grid-cols-2 gap-8 mt-4 pt-10 border-t border-[#332A47] relative flex-grow">
+                            <div className="absolute -top-5 left-1/2 -translate-x-1/2 bg-[#0F0C16] text-pastel-lilac font-bold px-6 py-1.5 rounded-full text-xs uppercase tracking-widest border border-pastel-lilac/30 shadow-[0_0_15px_rgba(226,212,240,0.1)]">Phase 5: Synthese & Labor</div>
+
+                            <div className="bg-[#0F0C16] rounded-3xl p-6 shadow-xl relative border border-pastel-pink/20 flex flex-col h-[650px]">
+                                <div className="absolute -top-4 left-6 bg-[#2A233C] text-pastel-pink border border-pastel-pink/30 font-bold px-4 py-1 rounded-full text-sm shadow-[0_0_10px_rgba(248,200,220,0.2)] flex items-center gap-2"><Icon name="terminal-square" className="w-4 h-4" /> System-Prompt</div>
+                                <div className="flex justify-between items-center mb-4 mt-2">
+                                    <p className="text-slate-500 text-xs uppercase tracking-wider font-semibold">Dies definiert die KI-Identität</p>
+                                    <button onClick={copySystem} className="text-slate-300 hover:text-white bg-[#2A233C] hover:bg-[#332A47] px-3 py-1.5 rounded-lg transition-colors flex items-center gap-2 text-sm font-semibold border border-[#4B3E68]">{copiedSystem ? <><Icon name="check" className="w-4 h-4 text-pastel-mint" /> Kopiert</> : <><Icon name="copy" className="w-4 h-4" /> Kopieren</>}</button>
+                                </div>
+                                <pre className="text-slate-400 font-mono text-xs whitespace-pre-wrap overflow-y-auto flex-grow leading-relaxed custom-scrollbar bg-[#1A1525] p-4 rounded-xl border border-[#332A47] shadow-inner">{generateSystemPrompt()}</pre>
+                            </div>
+
+                            <div className="bg-[#1A1525] rounded-3xl p-6 shadow-xl relative border border-pastel-blue/20 flex flex-col h-[650px]">
+                                <div className="absolute -top-4 left-6 bg-[#2A233C] text-pastel-blue border border-pastel-blue/30 font-bold px-4 py-1 rounded-full text-sm shadow-[0_0_10px_rgba(199,206,234,0.2)] flex items-center gap-2"><Icon name="flask-conical" className="w-4 h-4" /> Test-Labor</div>
+                                <div className="flex flex-col mb-4 mt-2 gap-3">
+                                    <div className="flex flex-wrap gap-2">
+                                        <button onClick={() => setTestScenario('minor_praise')} className={`text-[10px] uppercase tracking-wider font-bold px-3 py-1.5 rounded-lg transition-colors ${testScenario === 'minor_praise' ? 'bg-pastel-mint/20 text-pastel-mint border border-pastel-mint/30' : 'bg-[#0F0C16] text-slate-500 hover:bg-[#2A233C] border border-[#332A47]'}`}>Kleines Lob</button>
+                                        <button onClick={() => setTestScenario('gamedesign')} className={`text-[10px] uppercase tracking-wider font-bold px-3 py-1.5 rounded-lg transition-colors ${testScenario === 'gamedesign' ? 'bg-pastel-pink/20 text-pastel-pink border border-pastel-pink/30' : 'bg-[#0F0C16] text-slate-500 hover:bg-[#2A233C] border border-[#332A47]'}`}>Großer Aufwand</button>
+                                        <button onClick={() => setTestScenario('naming')} className={`text-[10px] uppercase tracking-wider font-bold px-3 py-1.5 rounded-lg transition-colors ${testScenario === 'naming' ? 'bg-pastel-blue/20 text-pastel-blue border border-pastel-blue/30' : 'bg-[#0F0C16] text-slate-500 hover:bg-[#2A233C] border border-[#332A47]'}`}>Anrede</button>
+                                        <button onClick={() => setTestScenario('tease')} className={`text-[10px] uppercase tracking-wider font-bold px-3 py-1.5 rounded-lg transition-colors ${testScenario === 'tease' ? 'bg-pastel-yellow/20 text-pastel-yellow border border-pastel-yellow/30' : 'bg-[#0F0C16] text-slate-500 hover:bg-[#2A233C] border border-[#332A47]'}`}>Neckerei</button>
+                                        <button onClick={() => setTestScenario('error')} className={`text-[10px] uppercase tracking-wider font-bold px-3 py-1.5 rounded-lg transition-colors ${testScenario === 'error' ? 'bg-orange-500/20 text-orange-400 border border-orange-500/30' : 'bg-[#0F0C16] text-slate-500 hover:bg-[#2A233C] border border-[#332A47]'}`}>Fehler</button>
+                                    </div>
+                                    <div className="mt-2"><textarea value={customTestPrompt} onChange={(e) => setCustomTestPrompt(e.target.value)} className="w-full p-4 rounded-xl border border-[#332A47] focus:outline-none focus:border-pastel-blue bg-[#0F0C16] text-slate-200 font-serif text-sm resize-none h-[100px] custom-scrollbar leading-relaxed shadow-inner" /></div>
+                                    
+                                    {apiErrorMsg && (
+                                        <div className="bg-rose-950/50 border border-rose-900 text-rose-300 p-3 rounded-lg text-xs font-semibold flex items-center gap-2">
+                                            <Icon name="alert-triangle" className="w-4 h-4 flex-shrink-0" /> {apiErrorMsg}
+                                        </div>
+                                    )}
+
+                                    <div className="flex justify-between mt-1 border-t border-[#332A47] pt-3 flex-wrap gap-2">
+                                        <button onClick={copyTest} className="text-slate-400 hover:text-slate-200 bg-[#0F0C16] hover:bg-[#2A233C] px-3 py-2 rounded-lg transition-colors flex items-center gap-2 text-sm font-semibold border border-[#332A47]">{copiedTest ? <><Icon name="check" className="w-4 h-4 text-pastel-mint" /> Kopiert</> : <><Icon name="copy" className="w-4 h-4" /> Prompt kopieren</>}</button>
+                                        <button onClick={handleApiTest} disabled={isLoadingApi || !customTestPrompt.trim()} className="text-[#0F0C16] bg-pastel-blue hover:bg-white disabled:opacity-50 disabled:bg-[#332A47] disabled:text-slate-500 px-4 py-2 rounded-lg transition-all flex items-center gap-2 text-sm font-bold shadow-[0_0_15px_rgba(199,206,234,0.3)] hover:shadow-[0_0_20px_rgba(255,255,255,0.4)] transform hover:-translate-y-0.5">{isLoadingApi ? (<><div className="flex gap-1"><span className="w-2 h-2 bg-[#0F0C16] rounded-full pulse-dot"></span><span className="w-2 h-2 bg-[#0F0C16] rounded-full pulse-dot"></span><span className="w-2 h-2 bg-[#0F0C16] rounded-full pulse-dot"></span></div> Denke nach...</>) : (<><Icon name="sparkles" className="w-4 h-4" /> Testlauf starten</>)}</button>
+                                    </div>
+                                </div>
+                                
+                                <div className="flex-grow flex flex-col bg-pastel-lilac/5 rounded-xl border border-pastel-lilac/20 p-4 overflow-hidden relative mt-2">
+                                    <div className="absolute top-0 left-0 w-1 h-full bg-pastel-lilac"></div>
+                                    <div className="flex justify-between items-center mb-3 pl-2">
+                                        <div className="text-xs font-bold text-pastel-lilac uppercase tracking-wider flex items-center gap-2"><Icon name="mic" className="w-4 h-4" /> Antwort & Vorlese-Studio</div>
+                                        <button onClick={handleTTS} disabled={isAudioLoading || !geminiResponse.trim()} className="text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 rounded-md bg-pastel-lilac/10 text-pastel-lilac border border-pastel-lilac/30 hover:bg-pastel-lilac/20 transition-colors flex items-center gap-1 shadow-sm disabled:opacity-50">{isAudioLoading ? <><Icon name="loader" className="w-3 h-3 animate-spin" /> Audio lädt...</> : <><Icon name="volume-2" className="w-3 h-3" /> Vorlesen</>}</button>
+                                    </div>
+                                    <textarea 
+                                        value={geminiResponse} 
+                                        onChange={(e) => setGeminiResponse(e.target.value)} 
+                                        placeholder="Hier erscheint die Antwort der KI...&#10;&#10;Tipp: Du kannst dieses Feld auch nutzen, um jeden beliebigen Text aus anderen Chats hier einzufügen und von der API vorlesen zu lassen!"
+                                        className="w-full text-sm text-slate-300 leading-relaxed p-3 flex-grow bg-[#0F0C16]/80 border border-[#332A47] focus:bg-[#0F0C16] focus:outline-none focus:border-pastel-lilac rounded-lg resize-none custom-scrollbar transition-colors shadow-inner" 
+                                    />
+                                    {audioUrl && (<audio controls src={audioUrl} className="w-full mt-3 h-8 rounded-lg outline-none" autoPlay />)}
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* SCHRITT 6: API TRESOR */}
+                        <div className="mt-12 pt-8 border-t border-[#332A47] relative">
+                            <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-[#0F0C16] text-slate-500 font-bold px-6 py-1.5 rounded-full text-xs uppercase tracking-widest border border-[#332A47] flex items-center gap-2">
+                                <Icon name="lock" className="w-4 h-4" /> Phase 6: API-Tresor
+                            </div>
+
+                            <div className="bg-[#1A1525]/90 backdrop-blur-xl rounded-3xl p-6 md:p-8 shadow-xl border border-[#332A47] mt-4 mx-auto max-w-4xl flex flex-col items-center">
+                                <p className="text-center text-slate-400 mb-8 max-w-2xl text-sm leading-relaxed">
+                                    Hinterlege hier deine Schlüssel. Deine Daten verlassen deinen Computer nicht und werden absolut sicher in deinem lokalen Browser-Speicher abgelegt.
+                                </p>
+
+                                <div className="w-full max-w-xl">
+                                    {apiProvider === 'gemini' && (
+                                        <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
+                                            <label className="block text-xs font-bold text-pastel-blue mb-2 uppercase tracking-wider">Dein Gemini API-Schlüssel</label>
+                                            <div className="relative flex items-center">
+                                                <div className="absolute left-4 text-slate-500"><Icon name="key" className="w-5 h-5" /></div>
+                                                <input type={showApiKeys ? "text" : "password"} value={geminiKey} onChange={(e) => setGeminiKey(e.target.value)} placeholder="AIzaSy..." className="w-full pl-12 pr-12 py-3 rounded-xl border border-[#332A47] focus:outline-none focus:border-pastel-blue bg-[#0F0C16] text-slate-200 font-mono text-sm transition-all shadow-inner" />
+                                                <button onClick={() => setShowApiKeys(!showApiKeys)} className="absolute right-4 text-slate-500 hover:text-pastel-blue transition-colors"><Icon name={showApiKeys ? "eye-off" : "eye"} className="w-5 h-5" /></button>
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {apiProvider === 'openai' && (
+                                        <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
+                                            <label className="block text-xs font-bold text-pastel-mint mb-2 uppercase tracking-wider">Dein OpenAI API-Schlüssel</label>
+                                            <div className="relative flex items-center">
+                                                <div className="absolute left-4 text-slate-500"><Icon name="key" className="w-5 h-5" /></div>
+                                                <input type={showApiKeys ? "text" : "password"} value={openAIKey} onChange={(e) => setOpenAIKey(e.target.value)} placeholder="sk-..." className="w-full pl-12 pr-12 py-3 rounded-xl border border-[#332A47] focus:outline-none focus:border-pastel-mint bg-[#0F0C16] text-slate-200 font-mono text-sm transition-all shadow-inner" />
+                                                <button onClick={() => setShowApiKeys(!showApiKeys)} className="absolute right-4 text-slate-500 hover:text-pastel-mint transition-colors"><Icon name={showApiKeys ? "eye-off" : "eye"} className="w-5 h-5" /></button>
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
