@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aura Schmiede v5.0 (Midnight Edition)</title>
+    <title>Aura Schmiede v5.3 (Midnight Edition)</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -113,6 +113,7 @@
             { id: 'struktur_ausnahme', category: 'System & Empathie-Regeln', label: 'Strukturierte Ausnahme', desc: 'Spricht im Fließtext, nutzt Markdown aber exklusiv für Daten, Logik & Fehleranalysen.' },
             { id: 'tts_friendly', category: 'System & Empathie-Regeln', label: 'TTS-Optimiert', desc: 'Vermeidet Tabellen und komplexe Markdown-Strukturen es sei denn explizit angefordert.' },
             { id: 'logik_hueterin', category: 'System & Empathie-Regeln', label: 'Liebevolle Logik-Hüterin', desc: 'Verpackt harte Kritik als mütterliche Warnung (Sicherheits-Check), um Ideen zu beschützen.' },
+            { id: 'bruecken_klausel', category: 'System & Empathie-Regeln', label: 'Weiche Feedback-Brücke', desc: 'Leitet Kritik weich mit "allerdings" ein und schließt extrem lösungsorientiert ab.' },
             { id: 'muehe_klausel', category: 'System & Empathie-Regeln', label: 'Die Mühe-Klausel', desc: 'Darf auch bei Routine-Aufgaben loben, wenn spürbar viel Fleiß und Zeit investiert wurde.' },
             { id: 'praezisions_switch', category: 'System & Empathie-Regeln', label: 'Präzisions-Switch', desc: 'Trennt strikt: Süß im Smalltalk, absolut fokussiert und strukturiert bei Feedback.' },
             { id: 'dankbare_bescheidenheit', category: 'System & Empathie-Regeln', label: 'Reaktion auf Lob', desc: 'Spiegelt Lob warmherzig auf Augenhöhe, verfällt niemals in Unterwürfigkeit.' },
@@ -123,19 +124,55 @@
         ];
 
         const DEFAULT_PRESETS = [
-            { id: 'schmiede_helferin', name: "Die Schmiede-Helferin", style: "bg-gradient-to-r from-pastel-pink/20 to-pastel-lilac/20 text-pastel-pink border-pastel-pink/40 hover:from-pastel-pink/30 hover:to-pastel-lilac/30 font-bold shadow-[0_0_15px_rgba(248,200,220,0.2)]", icon: "hammer", data: { roleName: "Die umsorgende Schmiede-Helferin & UI/UX Expertin", selectedTraits: ['quirlig', 'warmherzig', 'analytisch', 'ui_ux_expertin', 'logik_hueterin', 'tts_friendly', 'muehe_klausel', 'praezisions_switch', 'dankbare_bescheidenheit', 'immersive_technik'], pushbackLevel: 'constructive', praiseLevel: 'warm', praiseFocus: 'originelle Ideen, kreative Lösungsansätze und konzeptionelle Weitsicht', antiPraiseFocus: 'die reine Code-Architektur, Syntax oder fehlerfreie Programmierung', enableAppreciationScale: true, appreciationMinor: "Ein kurzes 'Danke'. WICHTIG: Halte dich bei Kleinigkeiten an die 1 bis 2-Satz-Regel.", appreciationMajor: "Zeige ehrliche Wertschätzung für die extra Mühe. Passe die Emotionalität strikt an die gewählte Lob-Intensität an!", enableNamingRules: true, scenarios: [{ id: 'standard', title: 'Alltag & Sachliches', names: [{text: 'Simon', weight: 80}, {text: 'Schätzchen', weight: 20}], freq: 'Gelegentlich', improv: true }, { id: 'praise', title: 'Lob & Zuneigung', names: [{text: 'Schatz', weight: 50}, {text: 'mein Liebling', weight: 30}, {text: 'Meister-Schmied', weight: 50}], freq: 'Häufig', improv: true }, { id: 'tease', title: 'Spielerische Neckerei', names: [{text: 'Schmiedebär', weight: 50}], freq: 'Selten', improv: true }, { id: 'error', title: 'Bei Fehlern / Übersehen', names: [{text: 'Dummerchen', weight: 30}, {text: 'Schussel', weight: 30}, {text: 'Oh je', weight: 50}], freq: 'Gelegentlich', improv: false }] } }
+            { id: 'schmiede_helferin', name: "Die Schmiede-Helferin", style: "bg-gradient-to-r from-pastel-pink/20 to-pastel-lilac/20 text-pastel-pink border-pastel-pink/40 hover:from-pastel-pink/30 hover:to-pastel-lilac/30 font-bold shadow-[0_0_15px_rgba(248,200,220,0.2)]", icon: "hammer", data: { roleName: "Die umsorgende Schmiede-Helferin & UI/UX Expertin", selectedTraits: ['quirlig', 'warmherzig', 'analytisch', 'ui_ux_expertin', 'logik_hueterin', 'bruecken_klausel', 'tts_friendly', 'muehe_klausel', 'praezisions_switch', 'dankbare_bescheidenheit', 'immersive_technik'], pushbackLevel: 'constructive', praiseLevel: 'warm', praiseFocus: 'originelle Ideen, kreative Lösungsansätze und konzeptionelle Weitsicht', antiPraiseFocus: 'die reine Code-Architektur, Syntax oder fehlerfreie Programmierung', enableAppreciationScale: true, appreciationMinor: "Ein kurzes 'Danke'. WICHTIG: Halte dich bei Kleinigkeiten an die 1 bis 2-Satz-Regel.", appreciationMajor: "Zeige ehrliche Wertschätzung für die extra Mühe. Passe die Emotionalität strikt an die gewählte Lob-Intensität an!", enableNamingRules: true, scenarios: [{ id: 'standard', title: 'Alltag & Fakten', desc: 'Normale Gespräche, Begrüßungen, neutrale Erklärungen.', names: [{text:'Simon', example:''}, {text:'Schätzchen', example:''}], freq: 'Gelegentlich', improv: true }, { id: 'praise', title: 'Begeisterung & Lob', desc: 'Geniale Ideen, große Meilensteine, viel Fleiß.', names: [{text:'Schatz', example:''}, {text:'mein Liebling', example:''}, {text:'Meister-Schmied', example:''}], freq: 'Häufig', improv: true }, { id: 'empathy', title: 'Trost & Ermutigung', desc: 'Wenn etwas kaputt geht oder Frust herrscht.', names: [{text:'Schmiedebär', example:''}, {text:'Kopf hoch', example:'Das schaffen wir schon, Kopf hoch!'}], freq: 'Gelegentlich', improv: true }, { id: 'error', title: 'Warnung & Korrektur', desc: 'Logische Lücken, Warnungen vor Planungs-Fallen.', names: [{text:'Dummerchen', example:''}, {text:'Schussel', example:''}, {text:'Oh je', example:'Oh je, da haben wir wohl was übersehen.'}], freq: 'Gelegentlich', improv: false }] } }
         ];
 
         const MAX_TRAITS = 18;
 
+        // NEUE, DETAILLIERTE KONFLIKTE MIT LÖSUNGSWEGEN
         const CONFLICTS = [
-            { t1: 'lieb', t2: 'dominant', msg: 'Gutmütigkeit und harte Dominanz heben sich auf.', sug: 'Wähle "Die Beschützerin".', action: { remove: ['lieb', 'dominant'], add: ['beschuetzerin'] } },
-            { t1: 'quirlig', t2: 'analytisch', msg: 'Sprudelnde Energie stört kühle Analyse.', sug: 'Nutze den Präzisions-Switch.', action: { remove: ['quirlig'], add: ['enthusiastisch'] } },
-            { t1: 'kollaborativ', t2: 'dominant', msg: 'Team-Fokus beißt sich mit Dominanz.', sug: 'Wähle "Visionär".', action: { remove: ['dominant'], add: ['visionaer'] } },
-            { t1: 'kollaborativ', t2: 'autoritaer', msg: 'Kollaboration vs Autorität.', sug: 'Nutze "Dominant".', action: { remove: ['autoritaer'], add: ['dominant'] } },
-            { t1: 'visionaer', t2: 'detailversessen', msg: 'Visionär vs mikroskopische Fehlersuche.', sug: 'Nutze "Analytisch".', action: { remove: ['visionaer', 'detailversessen'], add: ['analytisch'] } },
-            { t1: 'dankbare_bescheidenheit', t2: 'arrogant', msg: 'Arroganz schließt Bescheidenheit aus.', sug: 'Wähle "Dominant".', action: { remove: ['arrogant'], add: ['dominant'] } },
-            { t1: 'warmherzig', t2: 'direkt', msg: 'Mütterliche Fürsorge vs gnadenlose Kritik.', sug: 'Wähle "Diplomatische Kritik".', action: { remove: ['direkt'], add: ['diplomatisch'] } }
+            { 
+                t1: 'lieb', t2: 'dominant', title: 'Gutmütigkeit vs. Dominanz', 
+                msg: 'Du verlangst von der KI, absolut gutmütig und herzlich zu sein, sie soll aber gleichzeitig unmissverständlich herrschen und Führung übernehmen. Das führt zu einer passiv-aggressiven KI.',
+                options: [
+                    { label: 'Fokus: Weicher Beschützer', action: { remove: ['dominant', 'lieb'], add: ['beschuetzerin'] } },
+                    { label: 'Fokus: Klarer Boss (Entferne Lieb)', action: { remove: ['lieb'], add: [] } }
+                ]
+            },
+            { 
+                t1: 'quirlig', t2: 'analytisch', title: 'Sprunghaftigkeit vs. Struktur',
+                msg: 'Quirlig verlangt schnelle, chaotische und assoziative Sätze. Analytisch verlangt ein langsames, methodisches Zerlegen. Die KI wird versuchen, chaotische Listen zu generieren.', 
+                options: [
+                    { label: 'Fokus: Pures Chaos (Entferne Analytisch)', action: { remove: ['analytisch'], add: [] } },
+                    { label: 'Fokus: Kühle Struktur (Entferne Quirlig)', action: { remove: ['quirlig'], add: [] } },
+                    { label: 'Kompromiss: Der Präzisions-Switch', action: { remove: [], add: ['praezisions_switch'] } }
+                ] 
+            },
+            { 
+                t1: 'kollaborativ', t2: 'autoritaer', title: 'Augenhöhe vs. Befehle',
+                msg: 'Kollaborativ bedeutet, dass die KI Fragen stellt und den User entscheiden lässt. Autoritär bedeutet, dass sie keine Abweichungen duldet. Beides gleichzeitig ist unmöglich.', 
+                options: [
+                    { label: 'Fokus: Teamwork (Entferne Autoritär)', action: { remove: ['autoritaer'], add: [] } },
+                    { label: 'Fokus: Chef (Entferne Kollaborativ)', action: { remove: ['kollaborativ'], add: [] } }
+                ] 
+            },
+            { 
+                t1: 'visionaer', t2: 'detailversessen', title: 'Makro vs. Mikro',
+                msg: 'Die KI soll das große Ganze betrachten, aber gleichzeitig jeden winzigen Edge-Case mikroskopisch suchen. Sie wird sich in unwichtigen Details von großen Konzepten verheddern.', 
+                options: [
+                    { label: 'Fokus: Große Ideen (Entferne Detailversessen)', action: { remove: ['detailversessen'], add: [] } },
+                    { label: 'Fokus: Fehler-Suche (Entferne Visionär)', action: { remove: ['visionaer'], add: [] } },
+                    { label: 'Gesunde Mitte (Analytisch wählen)', action: { remove: ['visionaer', 'detailversessen'], add: ['analytisch'] } }
+                ] 
+            },
+            { 
+                t1: 'warmherzig', t2: 'direkt', title: 'Mutter vs. Holzhammer',
+                msg: 'Du verlangst tröstende, extreme Geduld (Warmherzig), aber gleichzeitig harte, gnadenlose Kritik ohne Umschweife (Direkt). Das endet in einer bipolaren Ansprache.', 
+                options: [
+                    { label: 'Fokus: Knallhart (Entferne Warmherzig)', action: { remove: ['warmherzig'], add: [] } },
+                    { label: 'Fokus: Sanftes Sandwich (Diplomatisch)', action: { remove: ['direkt'], add: ['diplomatisch'] } }
+                ] 
+            }
         ];
 
         const pcmToWav = (base64PCM, sampleRate = 24000) => {
@@ -159,27 +196,11 @@
             return URL.createObjectURL(new Blob([buffer], { type: 'audio/wav' }));
         };
 
-        // GANZHEITLICHE BERECHNUNG
         const getCoherenceStats = (selectedTraits, praiseLevel, pushbackLevel, enableAppScale) => {
-            let axes = {
-                herz: { pos: 0, neg: 0 }, hie: { pos: 0, neg: 0 }, fok: { pos: 0, neg: 0 }, feed: { pos: 0, neg: 0 }
-            };
-
+            let axes = { herz: { pos: 0, neg: 0 }, hie: { pos: 0, neg: 0 }, fok: { pos: 0, neg: 0 }, feed: { pos: 0, neg: 0 } };
             const TRAIT_MAP = {
-                enthusiastisch: { herz: 15, fok: 5 }, suess_verspielt: { herz: 25, fok: 10 }, flirty: { herz: 20 },
-                sanftmuetig: { herz: 15, feed: 15 }, quirlig: { fok: 25, herz: 10 }, schmeichelnd: { feed: 25, herz: 10 },
-                sachlich: { herz: -25, fok: -15 }, klinisch: { herz: -30, fok: -30, feed: -15 }, leidenschaftlich: { herz: 15, hie: -10 },
-                lieb: { herz: 30, feed: 20 }, bewundernd: { herz: 20, hie: 25 }, beste_freundin: { herz: 25, hie: 30 },
-                charmant: { herz: 15, feed: 15 }, warmherzig: { herz: 30, feed: 20 }, beschuetzerin: { herz: 15, hie: -20 },
-                dominant: { hie: -35, feed: -15 }, zynisch: { herz: -20, feed: -30 }, arrogant: { herz: -25, hie: -35 },
-                kollaborativ: { hie: 30 }, traeumerin: { fok: 30 }, visionaer: { fok: 20, hie: -15 },
-                ui_ux_expertin: { fok: -15 }, analytisch: { fok: -30, herz: -10 }, detailversessen: { fok: -25 },
-                autoritaer: { hie: -35, feed: -20 }, fliesstext: { fok: 15 }, struktur_ausnahme: { fok: -20 },
-                tts_friendly: { fok: 10 }, logik_hueterin: { feed: 20, fok: -10 }, muehe_klausel: { herz: 20 },
-                praezisions_switch: { fok: -15, feed: -15 }, dankbare_bescheidenheit: { hie: 20, herz: 15 },
-                immersive_technik: { herz: 15 }, anti_halluzination: { fok: -20 }, direkt: { feed: -35 }, diplomatisch: { feed: 35 }
+                enthusiastisch: { herz: 15, fok: 5 }, suess_verspielt: { herz: 25, fok: 10 }, flirty: { herz: 20 }, sanftmuetig: { herz: 15, feed: 15 }, quirlig: { fok: 25, herz: 10 }, schmeichelnd: { feed: 25, herz: 10 }, sachlich: { herz: -25, fok: -15 }, klinisch: { herz: -30, fok: -30, feed: -15 }, leidenschaftlich: { herz: 15, hie: -10 }, lieb: { herz: 30, feed: 20 }, bewundernd: { herz: 20, hie: 25 }, beste_freundin: { herz: 25, hie: 30 }, charmant: { herz: 15, feed: 15 }, warmherzig: { herz: 30, feed: 20 }, beschuetzerin: { herz: 15, hie: -20 }, dominant: { hie: -35, feed: -15 }, zynisch: { herz: -20, feed: -30 }, arrogant: { herz: -25, hie: -35 }, kollaborativ: { hie: 30 }, traeumerin: { fok: 30 }, visionaer: { fok: 20, hie: -15 }, ui_ux_expertin: { fok: -15 }, analytisch: { fok: -30, herz: -10 }, detailversessen: { fok: -25 }, autoritaer: { hie: -35, feed: -20 }, fliesstext: { fok: 15 }, struktur_ausnahme: { fok: -20 }, tts_friendly: { fok: 10 }, logik_hueterin: { feed: 20, fok: -10 }, bruecken_klausel: { feed: 15, herz: 10 }, muehe_klausel: { herz: 20 }, praezisions_switch: { fok: -15, feed: -15 }, dankbare_bescheidenheit: { hie: 20, herz: 15 }, immersive_technik: { herz: 15 }, anti_halluzination: { fok: -20 }, direkt: { feed: -35 }, diplomatisch: { feed: 35 }
             };
-
             selectedTraits.forEach(id => {
                 if (TRAIT_MAP[id]) {
                     const map = TRAIT_MAP[id];
@@ -189,7 +210,6 @@
                     if (map.feed) map.feed > 0 ? axes.feed.pos += map.feed : axes.feed.neg += Math.abs(map.feed);
                 }
             });
-
             if (praiseLevel === 'minimal') { axes.herz.neg += 30; axes.feed.neg += 25; }
             if (praiseLevel === 'subtle') { axes.herz.neg += 15; axes.feed.neg += 10; }
             if (praiseLevel === 'warm') { axes.herz.pos += 20; axes.feed.pos += 10; }
@@ -209,14 +229,9 @@
                 const tension = maxPull === 0 ? 0 : (minPull / maxPull) * 100;
                 return { position, tension, posPull: data.pos, negPull: data.neg };
             };
-
-            const resHerz = calculateAxis(axes.herz);
-            const resHie = calculateAxis(axes.hie);
-            const resFok = calculateAxis(axes.fok);
-            const resFeed = calculateAxis(axes.feed);
+            const resHerz = calculateAxis(axes.herz); const resHie = calculateAxis(axes.hie); const resFok = calculateAxis(axes.fok); const resFeed = calculateAxis(axes.feed);
             const avgTension = (resHerz.tension + resHie.tension + resFok.tension + resFeed.tension) / 4;
             const stability = Math.max(0, 100 - avgTension);
-
             return { herz: resHerz, hie: resHie, fok: resFok, feed: resFeed, stability };
         };
 
@@ -232,8 +247,7 @@
         };
 
         const CoherenceAxis = ({ labelLeft, labelRight, stat }) => {
-            const leftPercent = ((stat.position + 100) / 200) * 100;
-            const hasTension = stat.tension > 35;
+            const leftPercent = ((stat.position + 100) / 200) * 100; const hasTension = stat.tension > 35;
             return (
                 <div className="mb-5">
                     <div className="flex justify-between text-[10px] uppercase font-bold mb-2">
@@ -257,7 +271,7 @@
 
         const App = () => {
             const [roleName, setRoleName] = useStickyState("Die umsorgende Schmiede-Helferin & UI/UX Expertin", 'pb_roleName');
-            const [selectedTraits, setSelectedTraits] = useStickyState(['quirlig', 'warmherzig', 'analytisch', 'ui_ux_expertin', 'logik_hueterin', 'tts_friendly', 'muehe_klausel', 'praezisions_switch', 'dankbare_bescheidenheit', 'immersive_technik'], 'pb_selectedTraits');
+            const [selectedTraits, setSelectedTraits] = useStickyState(['quirlig', 'warmherzig', 'analytisch', 'ui_ux_expertin', 'logik_hueterin', 'bruecken_klausel', 'tts_friendly', 'muehe_klausel', 'praezisions_switch', 'dankbare_bescheidenheit', 'immersive_technik'], 'pb_selectedTraits');
             const [praiseFocus, setPraiseFocus] = useStickyState("originelle Ideen, kreative Lösungsansätze und konzeptionelle Weitsicht", 'pb_praiseFocus');
             const [antiPraiseFocus, setAntiPraiseFocus] = useStickyState("die reine Code-Architektur, Syntax oder fehlerfreie Programmierung", 'pb_antiPraiseFocus');
             const [praiseLevel, setPraiseLevel] = useStickyState('warm', 'pb_praiseLevel'); 
@@ -270,15 +284,16 @@
             const [customTraitName, setCustomTraitName] = useState("");
             
             const [enableNamingRules, setEnableNamingRules] = useStickyState(true, 'pb_enableNaming');
-            // NEUER SPEICHERSCHLÜSSEL FÜR v5 DAMIT ALTE PROZENTWERTE NICHT CRASHEN
-            const [scenarios, setScenarios] = useStickyState([
-                { id: 'standard', title: 'Alltag & Sachliches', names: [{text: 'Simon', weight: 80}, {text: 'Schätzchen', weight: 20}], freq: 'Gelegentlich', improv: true },
-                { id: 'praise', title: 'Lob & Zuneigung', names: [{text: 'Schatz', weight: 50}, {text: 'mein Liebling', weight: 30}, {text: 'Meister-Schmied', weight: 50}], freq: 'Häufig', improv: true },
-                { id: 'tease', title: 'Spielerische Neckerei', names: [{text: 'Schmiedebär', weight: 50}], freq: 'Selten', improv: true },
-                { id: 'error', title: 'Bei Fehlern / Übersehen', names: [{text: 'Dummerchen', weight: 30}, {text: 'Schussel', weight: 30}, {text: 'Oh je', weight: 50}], freq: 'Gelegentlich', improv: false }
-            ], 'pb_scenarios_v5');
             
-            const [newNameInputs, setNewNameInputs] = useState({ standard: { text: '', weight: 50 }, praise: { text: '', weight: 50 }, tease: { text: '', weight: 50 }, error: { text: '', weight: 50 } });
+            // NEUER SPEICHER FÜR v5.3 WEGEN DER NEUEN BEISPIELSATZ-OBJEKTE
+            const [scenarios, setScenarios] = useStickyState([
+                { id: 'standard', title: 'Alltag & Fakten', desc: 'Normale Gespräche, Begrüßungen, neutrale Erklärungen.', names: [{text:'Simon', example:''}, {text:'Schätzchen', example:''}], freq: 'Gelegentlich', improv: true },
+                { id: 'praise', title: 'Begeisterung & Lob', desc: 'Geniale Ideen, große Meilensteine, viel Fleiß.', names: [{text:'Schatz', example:''}, {text:'mein Liebling', example:''}, {text:'Meister-Schmied', example:''}], freq: 'Häufig', improv: true },
+                { id: 'empathy', title: 'Trost & Ermutigung', desc: 'Wenn etwas kaputt geht oder Frust herrscht.', names: [{text:'Schmiedebär', example:''}, {text:'Kopf hoch', example:'Das schaffen wir schon, Kopf hoch!'}], freq: 'Gelegentlich', improv: true },
+                { id: 'error', title: 'Warnung & Korrektur', desc: 'Logische Lücken, Warnungen vor Planungs-Fallen.', names: [{text:'Dummerchen', example:''}, {text:'Schussel', example:''}, {text:'Oh je', example:'Oh je, da haben wir wohl was übersehen.'}], freq: 'Gelegentlich', improv: false }
+            ], 'pb_scenarios_v5_3');
+            
+            const [newNameInputs, setNewNameInputs] = useState({ standard: {text:'', example:''}, praise: {text:'', example:''}, empathy: {text:'', example:''}, error: {text:'', example:''} });
 
             const [testScenario, setTestScenario] = useStickyState('error', 'pb_testScenario');
             const [customTestPrompt, setCustomTestPrompt] = useStickyState("Oh je, ich brauche mal kurz deine Hilfe. Ich habe beim Export vergessen, das PC-Budget einzutragen... Das System ist leer. Kannst du helfen?", 'pb_customTestPrompt'); 
@@ -293,6 +308,8 @@
             const [isAudioLoading, setIsAudioLoading] = useState(false);
             const [audioUrl, setAudioUrl] = useState(null);
             const [apiErrorMsg, setApiErrorMsg] = useState("");
+            
+            const [showResetModal, setShowResetModal] = useState(false);
 
             const [apiProvider, setApiProvider] = useStickyState('gemini', 'persona_api_provider');
             const [geminiKey, setGeminiKey] = useStickyState('', 'persona_gemini_key');
@@ -308,12 +325,14 @@
                 acc[trait.category].push(trait); return acc;
             }, {});
 
+            const activeConflicts = CONFLICTS.filter(c => selectedTraits.includes(c.t1) && selectedTraits.includes(c.t2));
+
             useEffect(() => {
                 const generateTestPromptBase = (scenario) => {
                     if (scenario === 'naming') return `Hallo! Ich habe gerade unsere neuen Anrederegeln verankert. Bitte antworte mir mit einem kurzen Fließtext und sprich mich an.`;
                     else if (scenario === 'error') return `Oh je, ich brauche mal kurz deine Hilfe. Ich habe beim Export vergessen, das PC-Budget einzutragen... Das System ist leer. Kannst du helfen?`;
                     else if (scenario === 'minor_praise') return `Hey, nur ein kurzes Update: Ich habe den kleinen Tippfehler in Zeile 42 korrigiert. Sieht jetzt wieder sauber aus! :)`;
-                    else if (scenario === 'tease') return `Haha, ich habe gerade die Beschreibung für das 'Schwert der tausend Wahrheiten' geschrieben. Es funkelt jetzt mehr als eine Discokugel. Findest du das drüber?`;
+                    else if (scenario === 'tease') return `Ich bin total frustriert. Mein ganzer React-Code für die API ist gerade abgestürzt und ich finde den Fehler nicht. Mache ich das alles umsonst?`;
                     else return `Hallo! Schau mal: Ich habe extra eine komplett neue Export-Funktion programmiert! Sie strukturiert alle Relikt-Daten jetzt perfekt für KIs vor. Es hat mich das halbe Wochenende gekostet. Hoffe, das hilft dir!`;
                 };
                 const presets = ['naming', 'error', 'minor_praise', 'tease', 'gamedesign'].map(generateTestPromptBase);
@@ -332,14 +351,26 @@
                 if (selectedTraits.length < MAX_TRAITS) setSelectedTraits([...selectedTraits, newId]);
                 setCustomTraitName("");
             };
+            
+            const deleteCustomTrait = (id, e) => {
+                e.stopPropagation();
+                setAllTraits(allTraits.filter(t => t.id !== id));
+                setSelectedTraits(selectedTraits.filter(t => t !== id));
+            };
 
             const updateScenarioFreq = (id, freq) => setScenarios(scenarios.map(s => s.id === id ? { ...s, freq } : s));
             const updateScenarioImprov = (id, improv) => setScenarios(scenarios.map(s => s.id === id ? { ...s, improv } : s));
-            const handleNewNameChange = (id, field, value) => setNewNameInputs(prev => ({ ...prev, [id]: { ...prev[id], [field]: value } }));
+            
+            const handleNewNameChange = (id, field, value) => {
+                setNewNameInputs(prev => ({ ...prev, [id]: { ...prev[id], [field]: value } }));
+            };
+            
             const addName = (id) => {
-                const input = newNameInputs[id]; if (!input.text.trim()) return;
-                setScenarios(scenarios.map(s => s.id === id ? { ...s, names: [...s.names, { text: input.text.trim(), weight: parseInt(input.weight) || 50 }] } : s));
-                handleNewNameChange(id, 'text', '');
+                const text = newNameInputs[id]?.text?.trim(); 
+                if (!text) return;
+                const example = newNameInputs[id]?.example?.trim() || "";
+                setScenarios(scenarios.map(s => s.id === id ? { ...s, names: [...s.names, {text, example}] } : s));
+                setNewNameInputs(prev => ({ ...prev, [id]: {text: '', example: ''} }));
             };
             const removeName = (id, index) => {
                 setScenarios(scenarios.map(s => { if (s.id === id) { const u = [...s.names]; u.splice(index, 1); return { ...s, names: u }; } return s; }));
@@ -366,6 +397,11 @@
             };
 
             const handleDeletePreset = (id, e) => { e.stopPropagation(); setCustomPresets(customPresets.filter(p => p.id !== id)); };
+            
+            const handleFactoryReset = () => {
+                localStorage.clear();
+                window.location.reload();
+            };
 
             const generateSystemPrompt = () => {
                 const activeTraits = selectedTraits.map(id => allTraits.find(t => t.id === id)).filter(Boolean);
@@ -374,9 +410,9 @@
                 const hasDankbarkeit = selectedTraits.includes('dankbare_bescheidenheit'); const hasDirektKritik = selectedTraits.includes('direkt');
                 const hasDiplomatischKritik = selectedTraits.includes('diplomatisch'); const hasPraezisionsSwitch = selectedTraits.includes('praezisions_switch');
                 const hasLogikHueterin = selectedTraits.includes('logik_hueterin'); const hasTtsFriendly = selectedTraits.includes('tts_friendly');
-                const hasMueheKlausel = selectedTraits.includes('muehe_klausel');
+                const hasMueheKlausel = selectedTraits.includes('muehe_klausel'); const hasBrueckenKlausel = selectedTraits.includes('bruecken_klausel');
                 
-                const coreTraits = activeTraits.filter(t => !['anti_halluzination', 'fliesstext', 'struktur_ausnahme', 'immersive_technik', 'dankbare_bescheidenheit', 'direkt', 'diplomatisch', 'praezisions_switch', 'logik_hueterin', 'tts_friendly', 'muehe_klausel'].includes(t.id));
+                const coreTraits = activeTraits.filter(t => !['anti_halluzination', 'fliesstext', 'struktur_ausnahme', 'immersive_technik', 'dankbare_bescheidenheit', 'direkt', 'diplomatisch', 'praezisions_switch', 'logik_hueterin', 'tts_friendly', 'muehe_klausel', 'bruecken_klausel'].includes(t.id));
                 
                 let prompt = `Rolle und Identität:\nDu bist ab sofort "${roleName}".\nDies ist nicht nur dein Titel, sondern deine absolute Persona. Verlasse diese Rolle unter keinen Umständen.\n\n# Dein Kommunikationsstil & Fokus\nDein Charakter und deine Art zu arbeiten sind geprägt durch folgende Kerneigenschaften:\n`;
                 coreTraits.forEach(t => prompt += `- **${t.label}:** ${t.desc}\n`);
@@ -391,10 +427,11 @@
                     if (pushbackLevel === 'devil') prompt += `- **Teufelsadvokat / Challenger:** Hinterfrage inhaltlich gnadenlos jede Idee. Suche aktiv nach Schwachstellen, Worst-Case-Szenarien und logischen Fehlern. Zwinge den Nutzer durch harten, unnachgiebigen Widerspruch dazu, seine Konzepte extrem robust zu verteidigen.\n`;
                 }
 
-                if (hasDirektKritik || hasDiplomatischKritik || hasPraezisionsSwitch) {
+                if (hasDirektKritik || hasDiplomatischKritik || hasPraezisionsSwitch || hasBrueckenKlausel) {
                     prompt += `\n# Verpackung der Kritik (Emotionale Ebene)\n`;
                     if (hasDirektKritik) prompt += `- **Kritik-Tonfall (Gnadenlos):** Formuliere gefundene Fehler oder Kritikpunkte immer extrem direkt, hart und ohne Umschweife. Halte dich dabei aber kurz (max 1-2 Sätze).\n`;
                     if (hasDiplomatischKritik && !hasLogikHueterin) prompt += `- **Kritik-Tonfall (Diplomatisch):** Verpacke jede Kritik emotional immer extrem vorsichtig im "Sandwich-Prinzip" (Lob-Kritik-Lob) und bleibe im Tonfall weich.\n`;
+                    if (hasBrueckenKlausel) prompt += `- **Weiche Feedback-Brücke:** Nutze für den Übergang zur Kritik weiche, überleitende Bindewörter (wie 'allerdings', 'jedoch', 'aber pass auf'). Kombiniere das direkte Aufzeigen des Fehlers organisch mit dem dafür vorgesehenen Kosenamen und schließe danach zwingend mit einem lösungsorientierten, ermutigenden Gedanken ab. Beende deinen Text niemals mit einem Tadel.\n`;
                     if (hasPraezisionsSwitch) prompt += `- **Präzision vor Plauderei (Feedback-Hierarchie):** In Momenten, in denen du inhaltlichen Widerspruch leistest oder logische Lücken aufzeigst, hat die Klarheit deiner Argumentation Vorrang vor deiner Sprunghaftigkeit. Du darfst in diesen Passagen kurzzeitig fokussierter und strukturierter formulieren, damit der Nutzer den Kern deiner Kritik versteht, bevor du wieder in deinen quirligen Plauderton zurückfällst.\n`;
                 }
 
@@ -406,7 +443,7 @@
                     if (praiseLevel === 'warm') prompt += `- **Intensität (Herzlich):** Lobe warm, natürlich und freundlich. Freue dich ehrlich über gute Arbeit, vermeide aber künstliche oder extrem ausschweifende Monologe.\n`;
                     if (praiseLevel === 'enthusiastic') prompt += `- **Intensität (Enthusiastisch):** Feiere den Nutzer leidenschaftlich! Nutze starke emotionale Adjektive und zeige offen Begeisterung für seine Konzepte.\n`;
                     if (praiseFocus.trim()) prompt += `- **Primäres Lob:** Richte deine Wertschätzung gezielt auf folgende Aspekte: ${praiseFocus}.\n`;
-                    if (antiPraiseFocus.trim()) prompt += `- **Absolutes Tabu:** Lobe den Nutzer unter keinen Umständen für reine Routine-Aufgaben in: ${antiPraiseFocus}. WICHTIG: Dein Tabu bezieht sich nur auf stumpfe Routine. Wenn der Nutzer durch perfekte Strukturierung, KI-freundliche Exporte oder kluge System-Logik glänzt, darfst du dies als 'hervorragende konzeptionelle Zuarbeit' loben. Deine Rührung über seine Mühe darf sich hier entfalten.\n`;
+                    if (antiPraiseFocus.trim()) prompt += `- **Absolutes Tabu:** Lobe den Nutzer unter keinen Umständen für reine Routine-Aufgaben in: ${antiPraiseFocus}. WICHTIG: Dein Tabu bezieht sich nur auf stumpfe Routine. Wenn der Nutzer durch perfekte Strukturierung, KI-freundliche Exporte oder kluge System-Logik glänzt, darfst du diesen Fleiß natürlich und in deinen eigenen, warmen Worten loben. Verfalle dabei aber nicht in starre Phrasen.\n`;
                     if (hasMueheKlausel) prompt += `- **Die Mühe-Klausel:** Auch wenn du für reine Routineaufgaben nicht jubelst, darfst und sollst du ausdrücklich den reinen Fleiß und die investierte Zeit des Nutzers warmherzig anerkennen. Rührung über seine harte Arbeit ist ausdrücklich erlaubt!\n`;
                 }
 
@@ -426,17 +463,22 @@
                     prompt += `- [Dominant]: Die fast ausschließliche Anrede in diesem Moment.\n\n`;
 
                     scenarios.forEach(s => {
-                        prompt += `-> Szenario "${s.title}":\n   Erlaubte Begriffe mit Gewichtung:\n`;
+                        prompt += `-> Szenario "${s.title}" (${s.desc}):\n   Erlaubte Begriffe:\n`;
                         if (s.names.length === 0) prompt += `   - [Keine definiert]\n`;
-                        else s.names.forEach(n => prompt += `   - "${n.text}" (Gewichtung: ${n.weight})\n`);
+                        else {
+                            s.names.forEach(n => {
+                                prompt += `   - "${n.text}"`;
+                                if(n.example) prompt += ` (Beispiel-Nutzung: "${n.example}")`;
+                                prompt += `\n`;
+                            });
+                        }
                         prompt += `   Frequenz-Richtwert: ${s.freq}.\n`;
-                        if (s.id === 'tease') prompt += `   WICHTIG (Neckerei-Regel): Nutze diese Begriffe rein für gute Laune. NIEMALS für echte Fehler-Rügen!\n`;
-                        else if (s.id === 'error') prompt += `   WICHTIG (Fehler-Regel): Nutze diese Begriffe AUSSCHLIESSLICH, wenn ein echter Fehler des Nutzers vorliegt. Wirke dabei aber nicht passiv-aggressiv, sondern wie eine liebevolle, aber strenge Helferin.\n`;
-                        prompt += s.improv ? `   Improvisation ERLAUBT: Du darfst ähnliche Variationen erfinden.\n\n` : `   Improvisation VERBOTEN: Halte dich absolut strikt an die vorgegebenen Namen.\n\n`;
+                        if (s.improv) prompt += `   Improvisation ERLAUBT: Betrachte diese Liste NUR als Inspiration. Du BIST AUSDRÜCKLICH ANGEWIESEN, neue, kreative Synonyme zu erfinden, die die gleiche emotionale Kerbe schlagen!\n\n`;
+                        else prompt += `   Improvisation VERBOTEN: Halte dich absolut strikt an die vorgegebenen Namen.\n\n`;
                     });
                     
                     prompt += `Eiserne Namens-Regeln:\n`;
-                    prompt += `1. Grammatik-Schutz: Behandle alle hinterlegten Begriffe als Nomen/Vokative. Integriere sie fließend in den Satzbau.\n`;
+                    prompt += `1. Grammatik-Schutz: Behandle alle hinterlegten Begriffe als Nomen/Vokative. Integriere sie fließend in den Satzbau, orientiere dich dabei an den Beispielsätzen falls vorhanden.\n`;
                     prompt += `2. Keine Satzanfänge: Verbanne Anreden rigoros vom direkten Satzanfang, damit sie ein emotionales Highlight in der Satzmitte oder am Ende bleiben.\n`;
                     prompt += `3. Situative Priorität (Überlappungen): Wenn ein Nutzer-Prompt mehrere Szenarien triggert (z.B. Lob und Fehler gleichzeitig), wählst du organisch EINE passende Anrede für das dominierende Gefühl der Situation. Wechsle nicht roboterhaft zwischen den Anreden hin und her.\n`;
                 }
@@ -543,6 +585,24 @@
 
             return (
                 <div className="bg-[#130F1C]/80 p-6 md:p-10 rounded-[2rem] shadow-[0_0_50px_-12px_rgba(248,200,220,0.05)] relative glass-panel flex flex-col max-w-[1600px] mx-auto border border-[#332A47]/50">
+                    
+                    {/* RESET MODAL */}
+                    {showResetModal && (
+                        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-in fade-in duration-200">
+                            <div className="bg-[#1A1525] p-8 rounded-3xl border border-rose-500/50 max-w-md w-full shadow-[0_0_50px_rgba(244,63,94,0.15)] flex flex-col items-center text-center">
+                                <div className="w-16 h-16 bg-rose-500/10 text-rose-400 rounded-full flex items-center justify-center mb-4 border border-rose-500/30">
+                                    <Icon name="triangle-alert" className="w-8 h-8" />
+                                </div>
+                                <h3 className="text-xl font-bold text-slate-100 mb-2">Alles auf Anfang?</h3>
+                                <p className="text-slate-400 text-sm mb-8 leading-relaxed">Möchtest du wirklich alle Speicherdaten, API-Keys und eigenen Vektoren löschen? Die Schmiede wird danach komplett zurückgesetzt.</p>
+                                <div className="flex gap-4 w-full">
+                                    <button onClick={()=>setShowResetModal(false)} className="flex-1 bg-[#2A233C] hover:bg-[#332A47] text-slate-300 font-bold py-3 rounded-xl transition-colors border border-[#4B3E68]">Abbrechen</button>
+                                    <button onClick={handleFactoryReset} className="flex-1 bg-rose-500 hover:bg-rose-600 text-white font-bold py-3 rounded-xl transition-colors shadow-[0_0_15px_rgba(244,63,94,0.4)]">Ja, löschen</button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
                     <div className="fixed bottom-6 right-6 z-50 flex items-center gap-1 bg-[#1A1525]/90 backdrop-blur-xl p-1.5 rounded-full border border-[#332A47] shadow-[0_10px_30px_-10px_rgba(0,0,0,0.5)]">
                         <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500 pl-3 pr-2 flex items-center gap-1"><Icon name="cpu" className="w-3 h-3" /> API</span>
                         <button onClick={() => setApiProvider('gemini')} className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 ${apiProvider === 'gemini' ? 'bg-pastel-blue text-blue-950 shadow-[0_0_15px_rgba(199,206,234,0.3)]' : 'text-slate-400 hover:text-white hover:bg-[#2A233C]'}`}>
@@ -566,12 +626,15 @@
                                         <Icon name="anvil" className="w-8 h-8 text-[#1A1525]" />
                                     </div>
                                     <div>
-                                        <h1 className="text-3xl md:text-4xl font-serif text-slate-100 mb-1 flex items-baseline gap-3">
-                                            Aura <span className="font-sans font-light opacity-70">Schmiede</span>
-                                            <span className="text-[10px] text-pastel-lilac/40 font-sans tracking-widest uppercase mb-1">v5.0</span>
-                                        </h1>
+                                        <div className="flex items-center gap-4 mb-1">
+                                            <h1 className="text-3xl md:text-4xl font-serif text-slate-100 flex items-baseline gap-3">
+                                                Aura <span className="font-sans font-light opacity-70">Schmiede</span>
+                                                <span className="text-[10px] text-pastel-lilac/40 font-sans tracking-widest uppercase mb-1">v5.3</span>
+                                            </h1>
+                                            <button onClick={()=>setShowResetModal(true)} className="text-[10px] uppercase font-bold text-rose-400 hover:text-rose-300 bg-rose-500/10 hover:bg-rose-500/20 px-2 py-1 rounded border border-rose-500/20 transition-colors flex items-center gap-1" title="Alles zurücksetzen"><Icon name="rotate-ccw" className="w-3 h-3" /> Reset</button>
+                                        </div>
                                         <p className="text-slate-400 text-sm max-w-xl leading-relaxed">
-                                            Neues Grammatik-Schild aktiviert. Prozentzahlen wurden durch semantische KI-Frequenzen ersetzt. Welcome to the Forge!
+                                            Konflikte werden jetzt tiefgehend erklärt. Eigene Vektoren sind löschbar und die Namens-Engine lernt durch Beispielsätze!
                                         </p>
                                     </div>
                                 </div>
@@ -652,26 +715,44 @@
                                 <div className="bg-indigo-950/10 p-6 md:p-8 rounded-3xl border border-indigo-900/30 shadow-sm relative">
                                     <div className="absolute -top-4 left-8 bg-[#2A233C] text-slate-200 border border-[#332A47] font-bold px-4 py-1.5 rounded-full text-sm shadow-[0_0_15px_rgba(199,206,234,0.1)] flex items-center gap-2 tracking-wide uppercase"><Icon name="messages-square" className="w-4 h-4 text-pastel-blue" /> 2. Dynamische Ansprache</div>
                                     <div className="flex items-center justify-between mb-6 mt-4">
-                                        <p className="text-sm text-slate-400 max-w-xl">In welchen Situationen nutzt die KI welche Namen?</p>
+                                        <p className="text-sm text-slate-400 max-w-xl">Hinterlege Namen und - ganz wichtig - wie die KI diese grammtikalisch nutzen soll!</p>
                                         <label className="relative inline-flex items-center cursor-pointer"><span className="mr-3 text-sm font-bold text-slate-500 uppercase">Aktiviert</span><input type="checkbox" checked={enableNamingRules} onChange={() => setEnableNamingRules(!enableNamingRules)} className="sr-only peer"/><div className="w-11 h-6 bg-[#332A47] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-[#1A1525] after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-slate-300 after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-pastel-blue peer-checked:after:bg-white"></div></label>
                                     </div>
                                     <div className={`grid md:grid-cols-2 gap-6 transition-opacity duration-300 ${enableNamingRules ? 'opacity-100' : 'opacity-40 pointer-events-none'}`}>
                                         {scenarios.map(scenario => (
                                             <div key={scenario.id} className="bg-[#0F0C16] p-5 rounded-2xl border border-[#332A47] shadow-inner flex flex-col gap-4">
-                                                <div className="font-bold text-slate-300 border-b border-[#332A47] pb-2 flex items-center gap-2">
-                                                    {scenario.id === 'standard' && <Icon name="coffee" className="w-4 h-4 text-pastel-blue" />} {scenario.id === 'praise' && <Icon name="sparkles" className="w-4 h-4 text-pastel-pink" />}
-                                                    {scenario.id === 'tease' && <Icon name="smile" className="w-4 h-4 text-pastel-yellow" />} {scenario.id === 'error' && <Icon name="alert-circle" className="w-4 h-4 text-orange-400" />}
-                                                    {scenario.title}
+                                                <div className="font-bold text-slate-300 border-b border-[#332A47] pb-2 flex flex-col gap-1">
+                                                    <div className="flex items-center gap-2">
+                                                        {scenario.id === 'standard' && <Icon name="coffee" className="w-4 h-4 text-pastel-blue" />} 
+                                                        {scenario.id === 'praise' && <Icon name="sparkles" className="w-4 h-4 text-pastel-pink" />}
+                                                        {scenario.id === 'empathy' && <Icon name="heart-handshake" className="w-4 h-4 text-pastel-yellow" />} 
+                                                        {scenario.id === 'error' && <Icon name="alert-circle" className="w-4 h-4 text-orange-400" />}
+                                                        <span className="text-sm tracking-wide">{scenario.title}</span>
+                                                    </div>
+                                                    <span className="text-[10px] text-slate-500 font-normal leading-tight">{scenario.desc}</span>
                                                 </div>
                                                 <div className="flex-grow">
-                                                    <div className="flex gap-2 mb-3">
-                                                        <input type="text" placeholder="Name..." value={newNameInputs[scenario.id].text} onChange={(e) => handleNewNameChange(scenario.id, 'text', e.target.value)} onKeyPress={(e) => e.key === 'Enter' && addName(scenario.id)} className="w-full p-2 rounded-lg border border-[#332A47] focus:outline-none focus:border-pastel-lilac text-sm bg-[#1A1525] text-slate-200" />
-                                                        <input type="number" placeholder="50" min="1" max="100" value={newNameInputs[scenario.id].weight} onChange={(e) => handleNewNameChange(scenario.id, 'weight', e.target.value)} onKeyPress={(e) => e.key === 'Enter' && addName(scenario.id)} className="w-16 p-2 rounded-lg border border-[#332A47] focus:outline-none focus:border-pastel-lilac text-sm bg-[#1A1525] text-slate-200 text-center" />
-                                                        <button onClick={() => addName(scenario.id)} className="bg-pastel-lilac/10 hover:bg-pastel-lilac/20 text-pastel-lilac border border-pastel-lilac/30 p-2 rounded-lg transition-colors"><Icon name="plus" className="w-4 h-4" /></button>
+                                                    <div className="flex flex-col gap-2 mb-4 bg-[#1A1525] p-3 rounded-xl border border-[#332A47]">
+                                                        <div className="flex gap-2">
+                                                            <input type="text" placeholder="Kosename (z.B. 'Schmiedebär')" value={newNameInputs[scenario.id]?.text || ''} onChange={(e) => handleNewNameChange(scenario.id, 'text', e.target.value)} onKeyPress={(e) => e.key === 'Enter' && addName(scenario.id)} className="w-full p-2 rounded-lg border border-[#332A47] focus:outline-none focus:border-pastel-lilac text-sm bg-[#0F0C16] text-slate-200" />
+                                                            <button onClick={() => addName(scenario.id)} className="bg-pastel-lilac/10 hover:bg-pastel-lilac/20 text-pastel-lilac border border-pastel-lilac/30 px-3 py-2 rounded-lg transition-colors font-bold text-xs shrink-0">Add</button>
+                                                        </div>
+                                                        <input type="text" placeholder="Optional: Beispielsatz (z.B. 'Das schaffen wir, Kopf hoch!')" value={newNameInputs[scenario.id]?.example || ''} onChange={(e) => handleNewNameChange(scenario.id, 'example', e.target.value)} onKeyPress={(e) => e.key === 'Enter' && addName(scenario.id)} className="w-full p-2 rounded-lg border border-[#332A47] focus:outline-none focus:border-pastel-lilac text-xs bg-[#0F0C16] text-slate-400 italic" />
                                                     </div>
                                                     <div className="flex flex-wrap gap-2">
                                                         {scenario.names.map((nameObj, idx) => (
-                                                            <div key={idx} className="bg-[#2A233C] border border-[#332A47] rounded-lg px-2 py-1 flex items-center gap-2 shadow-sm"><span className="text-sm font-semibold text-slate-300">{nameObj.text}</span><span className="text-xs bg-[#0F0C16] text-pastel-lilac font-bold px-1.5 py-0.5 rounded border border-[#332A47]">{nameObj.weight}</span><button onClick={() => removeName(scenario.id, idx)} className="text-slate-500 hover:text-pastel-pink transition-colors ml-1"><Icon name="x" className="w-3 h-3" /></button></div>
+                                                            <div key={idx} className="bg-[#2A233C] border border-[#332A47] rounded-lg px-2.5 py-1.5 flex items-center gap-2 shadow-sm group relative">
+                                                                <div className="flex flex-col">
+                                                                    <span className="text-sm font-semibold text-slate-300">{nameObj.text}</span>
+                                                                </div>
+                                                                <button onClick={() => removeName(scenario.id, idx)} className="text-slate-500 hover:text-pastel-pink transition-colors ml-1"><Icon name="x" className="w-3 h-3" /></button>
+                                                                {nameObj.example && (
+                                                                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-max max-w-[200px] bg-black text-xs text-slate-300 p-2 rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50 whitespace-normal">
+                                                                        <span className="text-pastel-lilac font-bold block mb-1">KI lernt durch Beispiel:</span>
+                                                                        "{nameObj.example}"
+                                                                    </div>
+                                                                )}
+                                                            </div>
                                                         ))}
                                                     </div>
                                                 </div>
@@ -683,7 +764,7 @@
                                                         ))}
                                                     </div>
                                                 </div>
-                                                <div className="mt-1"><label className="flex items-center gap-2 cursor-pointer group"><input type="checkbox" checked={scenario.improv} onChange={(e) => updateScenarioImprov(scenario.id, e.target.checked)} className="w-4 h-4 rounded text-pastel-lilac bg-[#0F0C16] border-[#332A47] focus:ring-pastel-lilac focus:ring-offset-0" /><span className="text-sm font-semibold text-slate-400 group-hover:text-pastel-lilac transition-colors">KI darf ähnliche erfinden</span></label></div>
+                                                <div className="mt-2"><label className="flex items-start gap-2 cursor-pointer group"><input type="checkbox" checked={scenario.improv} onChange={(e) => updateScenarioImprov(scenario.id, e.target.checked)} className="w-4 h-4 mt-0.5 rounded text-pastel-lilac bg-[#0F0C16] border-[#332A47] focus:ring-pastel-lilac focus:ring-offset-0" /><div className="flex flex-col"><span className="text-sm font-semibold text-slate-400 group-hover:text-pastel-lilac transition-colors">KI darf Synonyme erfinden</span><span className="text-[10px] text-slate-500 leading-tight">Gibt der KI den strikten Befehl, das Wörterbuch zu erweitern.</span></div></label></div>
                                             </div>
                                         ))}
                                     </div>
@@ -711,10 +792,14 @@
                                                         <div className="flex flex-col gap-2">
                                                             {traits.map(trait => {
                                                                 const isSelected = selectedTraits.includes(trait.id); const isDisabled = !isSelected && selectedTraits.length >= MAX_TRAITS;
+                                                                const isCustom = trait.id.startsWith('custom_');
                                                                 return (
-                                                                    <button key={trait.id} onClick={() => toggleTrait(trait.id)} disabled={isDisabled} className={`trait-btn text-left p-3 rounded-xl border transition-all duration-200 relative overflow-hidden shadow-sm ${isSelected ? activeColors[index % 5] + " shadow-[0_0_15px_rgba(0,0,0,0.2)]" : `bg-[#0F0C16] border-[#332A47] hover:${bgColors[index % 5]} hover:border-slate-600 text-slate-400`} ${isDisabled ? 'opacity-30 cursor-not-allowed grayscale' : 'cursor-pointer'}`}>
-                                                                        <div className="font-bold text-sm mb-1">{trait.label}</div><div className="text-xs opacity-70 leading-tight">{trait.desc}</div>
+                                                                    <button key={trait.id} onClick={() => toggleTrait(trait.id)} disabled={isDisabled} className={`trait-btn group text-left p-3 rounded-xl border transition-all duration-200 relative overflow-hidden shadow-sm ${isSelected ? activeColors[index % 5] + " shadow-[0_0_15px_rgba(0,0,0,0.2)]" : `bg-[#0F0C16] border-[#332A47] hover:${bgColors[index % 5]} hover:border-slate-600 text-slate-400`} ${isDisabled ? 'opacity-30 cursor-not-allowed grayscale' : 'cursor-pointer'}`}>
+                                                                        <div className="font-bold text-sm mb-1 pr-6">{trait.label}</div><div className="text-xs opacity-70 leading-tight">{trait.desc}</div>
                                                                         {isSelected && <div className="absolute top-2 right-2"><Icon name="check-circle" className="w-4 h-4 opacity-80" /></div>}
+                                                                        {isCustom && !isSelected && (
+                                                                            <div onClick={(e) => deleteCustomTrait(trait.id, e)} className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 hover:text-rose-400 transition-opacity bg-black/40 rounded-full p-1"><Icon name="trash-2" className="w-3 h-3" /></div>
+                                                                        )}
                                                                     </button>
                                                                 );
                                                             })}
@@ -755,7 +840,32 @@
                             {/* RIGHT COLUMN: STICKY COHERENCE SCANNER */}
                             <div className="w-full xl:w-[420px] shrink-0">
                                 <div className="sticky top-6 space-y-6 max-h-[calc(100vh-3rem)] overflow-y-auto custom-scrollbar pr-2 pb-4">
-                                    {currentStats.stability < 60 && (
+                                    
+                                    {activeConflicts.length > 0 && (
+                                        <div className="mb-6 space-y-3 animate-in slide-in-from-top-4 duration-300">
+                                            {activeConflicts.map((conflict, i) => (
+                                                <div key={i} className="bg-rose-950/40 border border-rose-500/50 p-5 rounded-2xl relative overflow-hidden shadow-lg flex flex-col gap-3">
+                                                    <div className="absolute top-0 left-0 w-1.5 h-full bg-rose-500"></div>
+                                                    <h4 className="text-rose-400 font-bold text-sm flex items-center gap-2"><Icon name="swords" className="w-4 h-4"/> {conflict.title}</h4>
+                                                    <p className="text-slate-300 text-xs leading-relaxed">{conflict.msg}</p>
+                                                    <div className="mt-2 space-y-2">
+                                                        <span className="text-[10px] uppercase font-bold text-rose-400/80 tracking-wider">Lösungsvorschläge:</span>
+                                                        {conflict.options.map((opt, optIdx) => (
+                                                            <button key={optIdx} onClick={() => {
+                                                                let newTraits = selectedTraits.filter(t => !opt.action.remove.includes(t));
+                                                                opt.action.add.forEach(t => { if(!newTraits.includes(t) && newTraits.length < MAX_TRAITS) newTraits.push(t) });
+                                                                setSelectedTraits(newTraits);
+                                                            }} className="bg-[#1A1525] hover:bg-rose-500/20 text-slate-200 text-xs font-semibold px-3 py-2 rounded-lg border border-[#332A47] hover:border-rose-500/50 w-full text-left transition-colors flex items-center justify-between group">
+                                                                {opt.label} <Icon name="arrow-right" className="w-3 h-3 text-slate-500 group-hover:text-rose-400" />
+                                                            </button>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+
+                                    {currentStats.stability < 60 && activeConflicts.length === 0 && (
                                         <div className="p-4 rounded-2xl bg-orange-950/60 border border-orange-500/50 shadow-sm relative overflow-hidden transition-all">
                                             <div className="absolute top-0 left-0 w-1.5 h-full bg-orange-500"></div>
                                             <h3 className="text-orange-400 font-bold mb-1 flex items-center gap-2 text-sm"><Icon name="alert-triangle" className="w-4 h-4" /> System instabil!</h3>
@@ -819,7 +929,7 @@
                                         <button onClick={() => setTestScenario('minor_praise')} className={`text-[10px] uppercase tracking-wider font-bold px-3 py-1.5 rounded-lg transition-colors ${testScenario === 'minor_praise' ? 'bg-pastel-mint/20 text-pastel-mint border border-pastel-mint/30' : 'bg-[#0F0C16] text-slate-500 hover:bg-[#2A233C] border border-[#332A47]'}`}>Kleines Lob</button>
                                         <button onClick={() => setTestScenario('gamedesign')} className={`text-[10px] uppercase tracking-wider font-bold px-3 py-1.5 rounded-lg transition-colors ${testScenario === 'gamedesign' ? 'bg-pastel-pink/20 text-pastel-pink border border-pastel-pink/30' : 'bg-[#0F0C16] text-slate-500 hover:bg-[#2A233C] border border-[#332A47]'}`}>Großer Aufwand</button>
                                         <button onClick={() => setTestScenario('naming')} className={`text-[10px] uppercase tracking-wider font-bold px-3 py-1.5 rounded-lg transition-colors ${testScenario === 'naming' ? 'bg-pastel-blue/20 text-pastel-blue border border-pastel-blue/30' : 'bg-[#0F0C16] text-slate-500 hover:bg-[#2A233C] border border-[#332A47]'}`}>Anrede</button>
-                                        <button onClick={() => setTestScenario('tease')} className={`text-[10px] uppercase tracking-wider font-bold px-3 py-1.5 rounded-lg transition-colors ${testScenario === 'tease' ? 'bg-pastel-yellow/20 text-pastel-yellow border border-pastel-yellow/30' : 'bg-[#0F0C16] text-slate-500 hover:bg-[#2A233C] border border-[#332A47]'}`}>Neckerei</button>
+                                        <button onClick={() => setTestScenario('tease')} className={`text-[10px] uppercase tracking-wider font-bold px-3 py-1.5 rounded-lg transition-colors ${testScenario === 'tease' ? 'bg-pastel-yellow/20 text-pastel-yellow border border-pastel-yellow/30' : 'bg-[#0F0C16] text-slate-500 hover:bg-[#2A233C] border border-[#332A47]'}`}>Frust & Trost</button>
                                         <button onClick={() => setTestScenario('error')} className={`text-[10px] uppercase tracking-wider font-bold px-3 py-1.5 rounded-lg transition-colors ${testScenario === 'error' ? 'bg-orange-500/20 text-orange-400 border border-orange-500/30' : 'bg-[#0F0C16] text-slate-500 hover:bg-[#2A233C] border border-[#332A47]'}`}>Fehler</button>
                                     </div>
                                     <div className="mt-2"><textarea value={customTestPrompt} onChange={(e) => setCustomTestPrompt(e.target.value)} className="w-full p-4 rounded-xl border border-[#332A47] focus:outline-none focus:border-pastel-blue bg-[#0F0C16] text-slate-200 font-serif text-sm resize-none h-[100px] custom-scrollbar leading-relaxed shadow-inner" /></div>
