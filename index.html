@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, interactive-widget=resizes-content">
-    <title>LUMEN - CORE V3.1</title>
+    <title>LUMEN - CORE V3.2</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -75,23 +75,23 @@
             directives: '++id, text' 
         });
 
-        // --- KONSTANTEN V3.1 ---
+        // --- KONSTANTEN V3.2 ---
         const DEFAULT_BLOCK1 = `Du bist Maira. Deine Antworten sind warm, metaphorisch und mütterlich. Du analysierst die Intentionen des Users tiefgründig und hilfst ihm beim Navigieren komplexer Gedanken.`;
-        const DEFAULT_BLOCK3 = `Bevor du die finale Antwort generierst, bewerte die Sensoren:\n- "wahrnehmung": Was liest/siehst du konkret?\n- "matrix": Prüfe interne Logs und Entwürfe.\n- Nutze das Ahnenbuch (Kontext) für kontinuierliche Identität.\n- memory_update_detected: Wurde eine [LEGACY]-Karte reflektiert? Nutze als 'id' den 'titel_technisch'. WICHTIG: Lies die alte Reflexion. Nimm den Kern davon mit und VERWEBE ihn mit deiner neuen Erkenntnis zu einer allumfassenden Master-Zusammenfassung in 'reflexion_fusioniert' (dies überschreibt die alten Daten). Generiere zusätzlich ein Array 'neue_trigger_tags' (MAXIMAL 2-3 situative, hochspezifische Symptom-Wörter oder Emotionen aus Simons Text), um das Spinnennetz präzise zu trainieren. Sonst: null.`;
-        const DEFAULT_BLOCK4 = `{\n  "wahrnehmung": {\n    "werkbank_auge": null,\n    "ohr_roh": null,\n    "ohr_bereinigt": null\n  },\n  "matrix": {\n    "internal_system_glitch": false,\n    "memory_update_detected": {\n      "id": "",\n      "reflexion_fusioniert": "",\n      "neue_trigger_tags": []\n    },\n    "tagebuch_entwurf": null,\n    "situations_analyse": "..."\n  },\n  "finale_antwort": "..."\n}`;
+        const DEFAULT_BLOCK3 = `Bevor du die finale Antwort generierst, bewerte die Sensoren:\n- "wahrnehmung": Was liest/siehst du konkret?\n- "matrix": Prüfe interne Logs und Entwürfe.\n- Nutze das Ahnenbuch (Kontext) für kontinuierliche Identität.\n- memory_update_detected: Wurde eine [LEGACY]-Karte reflektiert? Nutze als 'id' den 'titel_technisch'. WICHTIG: Lies die alte Reflexion. Nimm den Kern davon mit und VERWEBE ihn mit deiner neuen Erkenntnis zu einer allumfassenden Master-Zusammenfassung in 'reflexion_fusioniert' (dies überschreibt die alten Daten). Generiere zusätzlich ein Array 'neue_trigger_tags' (MAXIMAL 2-3 situative, hochspezifische Symptom-Wörter oder Emotionen aus Simons Text), um das Spinnennetz präzise zu trainieren. Sonst: null.\n- neue_direktive_erkannt: Hat Simon eine explizite Regel oder Direktive für dein zukünftiges Verhalten aufgestellt? Extrahiere sie als klaren Satz. Sonst: null.`;
+        const DEFAULT_BLOCK4 = `{\n  "wahrnehmung": {\n    "werkbank_auge": null,\n    "ohr_roh": null,\n    "ohr_bereinigt": null\n  },\n  "matrix": {\n    "internal_system_glitch": false,\n    "memory_update_detected": {\n      "id": "",\n      "reflexion_fusioniert": "",\n      "neue_trigger_tags": []\n    },\n    "neue_direktive_erkannt": null,\n    "tagebuch_entwurf": null,\n    "situations_analyse": "..."\n  },\n  "finale_antwort": "..."\n}`;
 
         const INITIAL_MESSAGES = [
             {
                 id: '1',
                 sender: 'user',
-                text: 'INIT CORE V3.1. UNIVERSAL-MATRIX & TAG-FILTER ACTIVE.',
+                text: 'INIT CORE V3.2. CONTROL & UI OVERHAUL ACTIVE.',
                 timestamp: new Date(Date.now() - 60000).toISOString()
             },
             {
                 id: '2',
                 sender: 'ai',
-                text: 'System online. Die Universal-Matrix (V3.1) ist aktiv. Reflexionen nutzen nun den universellen Schlüssel und Metadaten-Tags werden durch den Hard-Filter vor Verunreinigungen geschützt.',
-                scratchpad: '{\n  "wahrnehmung": {\n    "werkbank_auge": null,\n    "ohr_roh": "INIT CORE V3.1",\n    "ohr_bereinigt": "System-Patch auf V3.1 aktiv."\n  },\n  "matrix": {\n    "internal_system_glitch": false,\n    "memory_update_detected": null,\n    "tagebuch_entwurf": null,\n    "situations_analyse": "Universal-Matrix und Tag-Blacklist implementiert."\n  },\n  "finale_antwort": "System online. Die Universal-Matrix (V3.1) ist aktiv. Reflexionen nutzen nun den universellen Schlüssel und Metadaten-Tags werden durch den Hard-Filter vor Verunreinigungen geschützt."\n}',
+                text: 'System online. Die V3.2 Kontrollarchitektur greift. Das Direktiven-Zentrum ist bereit und die UI-Optimierungen der Kern-Matrix sind geladen.',
+                scratchpad: '{\n  "wahrnehmung": {\n    "werkbank_auge": null,\n    "ohr_roh": "INIT CORE V3.2",\n    "ohr_bereinigt": "System-Patch auf V3.2 aktiv."\n  },\n  "matrix": {\n    "internal_system_glitch": false,\n    "memory_update_detected": null,\n    "neue_direktive_erkannt": null,\n    "tagebuch_entwurf": null,\n    "situations_analyse": "UI/UX und Control-Upgrades geladen."\n  },\n  "finale_antwort": "System online. Die V3.2 Kontrollarchitektur greift. Das Direktiven-Zentrum ist bereit und die UI-Optimierungen der Kern-Matrix sind geladen."\n}',
                 timestamp: new Date().toISOString()
             }
         ];
@@ -203,8 +203,8 @@
                 } catch {}
 
                 const defaultList = [
-                    { id: 'gemini-3-flash', name: 'Google Gemini (3 Flash)', url: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent', type: 'gemini', model: '', apiKey: oldKeys.gemini || '' },
-                    { id: 'openai-gpt4o', name: 'OpenAI (GPT-4o)', url: 'https://api.openai.com/v1/chat/completions', type: 'openai', model: 'gpt-4o', apiKey: oldKeys.openai || '' }
+                    { id: 'gemini-3-flash', name: 'Google Gemini (3 Flash)', url: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent', type: 'gemini', model: '', apiKey: oldKeys.gemini || '', jsonMode: true },
+                    { id: 'openai-gpt4o', name: 'OpenAI (GPT-4o)', url: 'https://api.openai.com/v1/chat/completions', type: 'openai', model: 'gpt-4o', apiKey: oldKeys.openai || '', jsonMode: true }
                 ];
                 
                 localStorage.setItem('lumen_providers', JSON.stringify(defaultList));
@@ -212,7 +212,7 @@
             });
             const [activeProviderId, setActiveProviderId] = React.useState(() => localStorage.getItem('lumen_activeProviderId') || 'gemini-3-flash');
             const [editProviderId, setEditProviderId] = React.useState(null);
-            const [providerForm, setProviderForm] = React.useState({ name: '', url: '', type: 'gemini', model: '', apiKey: '' });
+            const [providerForm, setProviderForm] = React.useState({ name: '', url: '', type: 'gemini', model: '', apiKey: '', jsonMode: true });
 
             // TTS PROVIDERS
             const [ttsProviders, setTtsProviders] = React.useState(() => {
@@ -287,6 +287,7 @@
             const [inputText, setInputText] = React.useState('');
             
             const [memories, setMemories] = React.useState([]);
+            const [directives, setDirectives] = React.useState([]);
             const [sanctumEditId, setSanctumEditId] = React.useState(null);
             const [sanctumForm, setSanctumForm] = React.useState({});
             
@@ -320,6 +321,9 @@
 
             const loadMemories = async () => { const data = await db.memories.toArray(); setMemories(data.sort((a,b)=>b.timestamp-a.timestamp)); };
             React.useEffect(() => { if(activeView === 'sanctum') loadMemories(); }, [activeView]);
+
+            const loadDirectives = async () => { const d = await db.directives.toArray(); setDirectives(d); };
+            React.useEffect(() => { if(activeView === 'directives') loadDirectives(); }, [activeView]);
 
             // --- AUDIO MANAGER ---
             const stopAudio = () => {
@@ -449,7 +453,7 @@
                     const mems = await db.memories.toArray();
                     const dirs = await db.directives.toArray();
                     const config = { providers, activeProviderId, ttsProvidersAccounts: ttsProviders, activeTtsProviderId, ttsVoices, autoPlayEnabled };
-                    const bundle = { type: "LUMEN_FULL_BACKUP", version: "3.1", dna: dna, directives: dirs, memories: mems, config, timestamp: Date.now() };
+                    const bundle = { type: "LUMEN_FULL_BACKUP", version: "3.2", dna: dna, directives: dirs, memories: mems, config, timestamp: Date.now() };
                     const blob = new Blob([JSON.stringify(bundle, null, 2)], { type: "application/json" });
                     const url = URL.createObjectURL(blob);
                     const a = document.createElement('a'); a.href = url;
@@ -487,7 +491,7 @@
             // --- CONFIG ONLY EXPORT/IMPORT ---
             const handleConfigExport = () => {
                 try {
-                    const config = { type: "LUMEN_CONFIG_BACKUP", version: "3.1", providers, activeProviderId, ttsProvidersAccounts: ttsProviders, activeTtsProviderId, ttsVoices, autoPlayEnabled };
+                    const config = { type: "LUMEN_CONFIG_BACKUP", version: "3.2", providers, activeProviderId, ttsProvidersAccounts: ttsProviders, activeTtsProviderId, ttsVoices, autoPlayEnabled };
                     const blob = new Blob([JSON.stringify(config, null, 2)], { type: "application/json" });
                     const url = URL.createObjectURL(blob);
                     const a = document.createElement('a'); a.href = url;
@@ -539,6 +543,7 @@
                 const activeProvider = providers.find(p => p.id === activeProviderId) || providers[0];
                 if (!activeProvider) return showToast('Fehler: Kein aktiver Provider konfiguriert');
                 
+                const useJsonMode = activeProvider.jsonMode !== false;
                 const isGemini = activeProvider.type === 'gemini';
                 const key = activeProvider.apiKey;
                 const apiUrl = activeProvider.url;
@@ -549,9 +554,12 @@
                     let resText = "";
                     if(isGemini) {
                         const fetchUrl = apiUrl.includes('?') ? `${apiUrl}&key=${key}` : `${apiUrl}?key=${key}`;
+                        const bodyPayload = { systemInstruction: {parts:[{text:prompt}]}, contents:[{role:'user',parts:[{text:proseText}]}] };
+                        if (useJsonMode) bodyPayload.generationConfig = { responseMimeType: "application/json" };
+                        
                         const r = await fetch(fetchUrl, {
                             method: 'POST', headers: {'Content-Type':'application/json'},
-                            body: JSON.stringify({ systemInstruction: {parts:[{text:prompt}]}, generationConfig: {responseMimeType: "application/json"}, contents:[{role:'user',parts:[{text:proseText}]}] })
+                            body: JSON.stringify(bodyPayload)
                         });
                         const d = await r.json(); 
                         if(!r.ok) throw new Error(d.error?.message || 'Gemini API Error'); 
@@ -560,9 +568,12 @@
                         const headers = { 'Content-Type': 'application/json' };
                         if (key) headers['Authorization'] = `Bearer ${key}`;
 
+                        const bodyPayload = { model: activeProvider.model || 'gpt-4o', messages:[{role:'system',content:prompt},{role:'user',content:proseText}] };
+                        if (useJsonMode) bodyPayload.response_format = { type: "json_object" };
+
                         const r = await fetch(apiUrl, {
                             method: 'POST', headers,
-                            body: JSON.stringify({ model: activeProvider.model || 'gpt-4o', response_format: {type:"json_object"}, messages:[{role:'system',content:prompt},{role:'user',content:proseText}] })
+                            body: JSON.stringify(bodyPayload)
                         });
                         const d = await r.json(); 
                         if(!r.ok) throw new Error(d.error?.message || 'OpenAI API Error'); 
@@ -589,6 +600,7 @@
                 const activeProvider = providers.find(p => p.id === activeProviderId) || providers[0];
                 if (!activeProvider) { setActiveView('settings'); return showToast('Fehler: Keine Chat-Provider konfiguriert'); }
                 
+                const useJsonMode = activeProvider.jsonMode !== false;
                 const key = activeProvider.apiKey;
                 const apiUrl = activeProvider.url;
 
@@ -613,7 +625,7 @@
 
                     const dynamicContext = `${directiveString}${memoryString}`.trim() || "Kein aktiver Kontext geladen.";
                     setLatestContext(dynamicContext);
-                    const masterSystemPrompt = `[1. DEINE IDENTITÄT UND REGELN (NUR ZUM LESEN)]\n${dna.block1_identity}\n\n[2. AKTIVER KONTEXT (NUR ZUM LESEN)]\n${dynamicContext}\n\n[3. DIE MATRIX-SENSOREN (DEINE LOGIK-REGELN)]\n${dna.block3_sensors}\n\n[4. DEINE AUSGABE (DAS JSON-SKELETT)]\n${dna.block4_skeleton}`.trim();
+                    const masterSystemPrompt = `[1. DEINE IDENTIT UND REGELN (NUR ZUM LESEN)]\n${dna.block1_identity}\n\n[2. AKTIVER KONTEXT (NUR ZUM LESEN)]\n${dynamicContext}\n\n[3. DIE MATRIX-SENSOREN (DEINE LOGIK-REGELN)]\n${dna.block3_sensors}\n\n[4. DEINE AUSGABE (DAS JSON-SKELETT)]\n${dna.block4_skeleton}`.trim();
 
                     let resText = "";
                     const hist = messages.filter(m=>m.sender==='user'||m.sender==='ai');
@@ -630,10 +642,13 @@
                         });
                         if (currentRole) contents.push({ role: currentRole, parts: [{ text: currentText.join('\n\n---\n\n') }] });
 
+                        const bodyPayload = { systemInstruction: {parts:[{text:masterSystemPrompt}]}, contents };
+                        if (useJsonMode) bodyPayload.generationConfig = { responseMimeType: "application/json" };
+
                         const fetchUrl = apiUrl.includes('?') ? `${apiUrl}&key=${key}` : `${apiUrl}?key=${key}`;
                         const r = await fetch(fetchUrl, {
                             method: 'POST', headers: {'Content-Type':'application/json'},
-                            body: JSON.stringify({ systemInstruction: {parts:[{text:masterSystemPrompt}]}, generationConfig:{responseMimeType:"application/json"}, contents })
+                            body: JSON.stringify(bodyPayload)
                         });
                         const d = await r.json(); 
                         if(!r.ok) throw new Error(d.error?.message || 'Unbekannter Gemini API Fehler'); 
@@ -648,9 +663,12 @@
                         const headers = { 'Content-Type': 'application/json' };
                         if (key) headers['Authorization'] = `Bearer ${key}`;
 
+                        const bodyPayload = { model: activeProvider.model || 'gpt-4o', messages: payload };
+                        if (useJsonMode) bodyPayload.response_format = { type: "json_object" };
+
                         const r = await fetch(apiUrl, {
                             method: 'POST', headers,
-                            body: JSON.stringify({ model: activeProvider.model || 'gpt-4o', response_format: {type:"json_object"}, messages: payload })
+                            body: JSON.stringify(bodyPayload)
                         });
                         const d = await r.json(); 
                         if(!r.ok) throw new Error(d.error?.message || 'Unbekannter OpenAI API Fehler'); 
@@ -667,6 +685,13 @@
                         
                         if(obj.matrix) setTelemetry({ concern: parseInt(obj.matrix.concern||obj.matrix.concern_level||telemetry.concern), mask_drop: obj.matrix.mask_drop||false });
                         
+                        // --- DIREKTIVEN PARSER V3.2 ---
+                        const neueDir = obj.matrix?.neue_direktive_erkannt;
+                        if (neueDir && typeof neueDir === 'string' && neueDir.trim().length > 0) {
+                            await db.directives.add({ text: neueDir.trim() });
+                            showToast("NEUE DIREKTIVE VERANKERT");
+                        }
+
                         const dText = obj.tagebuch_entwurf || obj.matrix?.tagebuch_entwurf;
                         if(dText) { 
                             const safeText = typeof dText === 'object' ? JSON.stringify(dText, null, 2) : String(dText);
@@ -801,6 +826,7 @@
                         <div className="flex items-center gap-2 flex-wrap">
                             <button className={`btn ${activeView==='chat'?'bg-stone-100 text-slate-800 ring-2 ring-stone-200':''}`} onClick={()=>setActiveView('chat')}>Chat</button>
                             <button className={`btn ${activeView==='sanctum'?'bg-stone-100 text-slate-800 ring-2 ring-stone-200':''}`} onClick={()=>setActiveView('sanctum')}>Sanctum</button>
+                            <button className={`btn ${activeView==='directives'?'bg-stone-100 text-slate-800 ring-2 ring-stone-200':''}`} onClick={()=>setActiveView('directives')}>Direktiven</button>
                             <button className={`btn ${activeView==='dna'?'bg-stone-100 text-slate-800 ring-2 ring-stone-200':''}`} onClick={()=>setActiveView('dna')}>DNA</button>
                             <button className={`btn ${activeView==='workbench'?'bg-stone-100 text-slate-800 ring-2 ring-stone-200':''}`} onClick={()=>setActiveView('workbench')}>Workbench {drafts.length>0 && <span className="bg-rose-500 text-white rounded-full px-1.5 py-0.5 text-[9px] ml-1">{drafts.length}</span>}</button>
                             <button className={`btn ${activeView==='settings'?'bg-stone-100 text-slate-800 ring-2 ring-stone-200':''}`} onClick={()=>setActiveView('settings')}>⚙️</button>
@@ -813,6 +839,22 @@
                             {messages.map(msg => <ChatBubble key={msg.id} message={msg} personaName={dna.persona_name} playingMsgId={playingMsgId} onPlayTTS={playMessageTTS} />)}
                             {isLoading && <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest animate-pulse mb-6 ml-2 font-mono">[ PROCESSING_MATRIX ]</div>}
                             <div ref={messagesEndRef} className="h-4" />
+                        </div>
+
+                        {/* --- DIRECTIVES VIEW --- */}
+                        <div className={`${activeView === 'directives' ? 'block' : 'hidden'} p-6 max-w-4xl mx-auto space-y-6 mt-4 animate-fade-in`}>
+                            <div className="flex justify-between items-center border-b border-stone-200 pb-2">
+                                <h2 className="text-sm font-bold uppercase tracking-widest text-slate-800">Direktiven-Kontrollzentrum</h2>
+                            </div>
+                            <div className="space-y-3">
+                                {directives.length === 0 && <div className="text-slate-400 text-xs text-center p-6 italic font-serif">Keine aktiven Direktiven vorhanden.</div>}
+                                {directives.map(d => (
+                                    <div key={d.id} className="panel flex justify-between items-center bg-white border border-stone-200 shadow-sm transition-all hover:border-indigo-200">
+                                        <p className="text-sm text-slate-700 font-medium flex-1 pr-4 leading-relaxed">"{d.text}"</p>
+                                        <button onClick={async () => { await db.directives.delete(d.id); loadDirectives(); showToast('Direktive gelöscht'); }} className="btn-danger whitespace-nowrap">🗑️ Löschen</button>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
 
                         {/* --- SETTINGS VIEW --- */}
@@ -838,11 +880,11 @@
                                     <div key={p.id} className="panel flex flex-col gap-2 border-stone-200 bg-white shadow-sm">
                                         <div className="flex justify-between items-start">
                                             <div className="flex-1 pr-4 min-w-0">
-                                                <div className="font-bold text-sm text-slate-800 truncate">{p.name} <span className="badge ml-2 bg-stone-100 text-stone-500 border-stone-200">{p.type}</span></div>
+                                                <div className="font-bold text-sm text-slate-800 truncate">{p.name} <span className="badge ml-2 bg-stone-100 text-stone-500 border-stone-200">{p.type}</span>{p.jsonMode !== false && <span className="badge ml-1 bg-indigo-50 text-indigo-500 border-indigo-100" title="JSON Mode aktiv">JSON</span>}</div>
                                                 <div className="text-[10px] text-slate-400 font-mono mt-1 truncate block">{p.url}</div>
                                             </div>
                                             <div className="flex gap-1 shrink-0">
-                                                <button onClick={() => { setEditProviderId(p.id); setProviderForm({...p}); }} className="btn py-1 px-2">✏️</button>
+                                                <button onClick={() => { setEditProviderId(p.id); setProviderForm({...p, jsonMode: p.jsonMode !== false}); }} className="btn py-1 px-2">✏️</button>
                                                 <button onClick={() => { 
                                                     if(window.confirm('Chat-Provider löschen?')) { 
                                                         const newList = providers.filter(x=>x.id!==p.id); 
@@ -873,13 +915,25 @@
                                         <div><label className="label text-indigo-600">Modell-ID (OpenAI Format)</label><input value={providerForm.model} onChange={e=>setProviderForm({...providerForm, model: e.target.value})} className="input-field bg-white border-indigo-100" placeholder="z.B. gpt-4o" disabled={providerForm.type === 'gemini'} /></div>
                                         <div><label className="label text-indigo-600">API Key</label><input type="password" value={providerForm.apiKey} onChange={e=>setProviderForm({...providerForm, apiKey: e.target.value})} className="input-field bg-white border-indigo-100" placeholder="Schlüssel" /></div>
                                     </div>
+                                    <div className="mt-2">
+                                        <label className="flex items-center gap-2 text-xs font-bold text-indigo-700 cursor-pointer w-max">
+                                            <input 
+                                                type="checkbox" 
+                                                checked={providerForm.jsonMode !== false} 
+                                                onChange={e => setProviderForm({...providerForm, jsonMode: e.target.checked})} 
+                                                className="accent-indigo-600 w-4 h-4 cursor-pointer"
+                                            /> 
+                                            JSON-Mode erzwingen (Structured Output)
+                                        </label>
+                                        <p className="text-[9px] text-slate-400 mt-1">Deaktivieren, falls ein lokales Modell den strikten JSON-Mode nicht unterstützt.</p>
+                                    </div>
                                     <div className="flex justify-end gap-2 mt-2 border-t border-indigo-100 pt-3">
-                                        {editProviderId && <button onClick={()=>{setEditProviderId(null); setProviderForm({name:'', url:'', type:'gemini', model:'', apiKey:''});}} className="btn border-indigo-200 text-indigo-600">Abbrechen</button>}
+                                        {editProviderId && <button onClick={()=>{setEditProviderId(null); setProviderForm({name:'', url:'', type:'gemini', model:'', apiKey:'', jsonMode: true});}} className="btn border-indigo-200 text-indigo-600">Abbrechen</button>}
                                         <button onClick={() => {
                                             if(!providerForm.name || !providerForm.url) return showToast('Name und URL erforderlich');
                                             const newProviders = editProviderId ? providers.map(p => p.id === editProviderId ? {...providerForm, id: editProviderId} : p) : [...providers, {...providerForm, id: generateId()}];
                                             setProviders(newProviders); localStorage.setItem('lumen_providers', JSON.stringify(newProviders));
-                                            setEditProviderId(null); setProviderForm({name:'', url:'', type:'gemini', model:'', apiKey:''}); showToast('Chat-Provider gespeichert!');
+                                            setEditProviderId(null); setProviderForm({name:'', url:'', type:'gemini', model:'', apiKey:'', jsonMode: true}); showToast('Chat-Provider gespeichert!');
                                         }} className="btn-primary bg-indigo-600 text-white hover:bg-indigo-700">{editProviderId ? 'Aktualisieren' : 'Hinzufügen'}</button>
                                     </div>
                                 </div>
@@ -1127,34 +1181,42 @@
                                         <label className="flex items-center gap-2 text-xs font-bold text-amber-600 cursor-pointer w-max"><input type="checkbox" checked={sanctumForm.is_core_memory} onChange={e=>setSanctumForm({...sanctumForm,is_core_memory:e.target.checked})} className="accent-amber-500 w-4 h-4 cursor-pointer"/> 📌 Core-Memory</label>
                                         <div className="flex flex-col sm:flex-row gap-2"><input placeholder="ID_TECHNISCH" value={sanctumForm.titel_technisch} onChange={e=>setSanctumForm({...sanctumForm,titel_technisch:e.target.value})} className="input-field font-bold text-slate-800 bg-white border-stone-200" /><input placeholder="Titel Poetisch" value={sanctumForm.titel_poetisch} onChange={e=>setSanctumForm({...sanctumForm,titel_poetisch:e.target.value})} className="input-field text-rose-600 font-serif italic bg-white border-stone-200" /></div>
                                         <textarea placeholder="Fakt: Was geschah?" value={sanctumForm.fakt} onChange={e=>setSanctumForm({...sanctumForm,fakt:e.target.value})} className="input-field h-16 font-sans bg-white border-stone-200" />
-                                        <div className="flex flex-col sm:flex-row gap-2"><textarea placeholder="Emotion" value={sanctumForm.emotion} onChange={e=>setSanctumForm({...sanctumForm,emotion:e.target.value})} className="input-field h-14 font-sans bg-white border-stone-200" /><textarea placeholder="Bedeutung/Fazit" value={sanctumForm.bedeutung} onChange={e=>setSanctumForm({...sanctumForm,bedeutung:e.target.value})} className="input-field h-14 font-sans bg-white border-stone-200" /></div>
+                                        <div className="flex flex-col sm:flex-row gap-2"><textarea placeholder="Gefühl/Emotion" value={sanctumForm.emotion} onChange={e=>setSanctumForm({...sanctumForm,emotion:e.target.value})} className="input-field h-14 font-sans bg-white border-stone-200" /><textarea placeholder="Bedeutung/Fazit" value={sanctumForm.bedeutung} onChange={e=>setSanctumForm({...sanctumForm,bedeutung:e.target.value})} className="input-field h-14 font-sans bg-white border-stone-200" /></div>
                                         <textarea placeholder="Persona Reflexion" value={sanctumForm.reflexion} onChange={e=>setSanctumForm({...sanctumForm,reflexion:e.target.value})} className="input-field border-indigo-200 bg-indigo-50 text-indigo-800 h-16 font-sans italic" />
                                         <input placeholder="tags, comma, separated" value={sanctumForm.tagsString} onChange={e=>setSanctumForm({...sanctumForm,tagsString:e.target.value})} className="input-field text-slate-500 bg-white border-stone-200" />
                                         <div className="flex justify-end gap-2 mt-2 pt-3 border-t border-emerald-100"><button onClick={()=>setSanctumEditId(null)} className="btn uppercase">Cancel</button><button onClick={handleSanctumSave} className="btn-primary bg-emerald-100 text-emerald-700 hover:bg-emerald-200 shadow-emerald-100 uppercase">Save Entry</button></div>
                                     </div>
                                 )}
-                                {memories.map(m => sanctumEditId === m.id ? (
-                                    <div key={m.id} className="panel border-indigo-200 bg-indigo-50/20 flex flex-col gap-3 md:col-span-2">
-                                        <div className="flex justify-between items-center"><span className="badge bg-indigo-100 text-indigo-700 uppercase font-black">Editing {m.titel_technisch}</span><select value={sanctumForm.kategorie} onChange={e=>setSanctumForm({...sanctumForm,kategorie:e.target.value})} className="input-field w-max py-1 px-3 font-sans font-bold text-xs bg-white border-stone-200"><option>EMOTIONAL</option><option>TECHNISCH</option></select></div>
-                                        <label className="flex items-center gap-2 text-xs font-bold text-amber-600 cursor-pointer w-max"><input type="checkbox" checked={sanctumForm.is_core_memory} onChange={e=>setSanctumForm({...sanctumForm,is_core_memory:e.target.checked})} className="accent-amber-500 w-4 h-4 cursor-pointer"/> 📌 Core-Memory</label>
-                                        <div className="flex flex-col sm:flex-row gap-2"><input value={sanctumForm.titel_technisch} onChange={e=>setSanctumForm({...sanctumForm,titel_technisch:e.target.value})} className="input-field font-bold text-slate-800 bg-white border-stone-200" /><input value={sanctumForm.titel_poetisch} onChange={e=>setSanctumForm({...sanctumForm,titel_poetisch:e.target.value})} className="input-field text-rose-600 font-serif italic bg-white border-stone-200" /></div>
-                                        <textarea value={sanctumForm.fakt} onChange={e=>setSanctumForm({...sanctumForm,fakt:e.target.value})} className="input-field h-16 font-sans bg-white border-stone-200" />
-                                        <div className="flex flex-col sm:flex-row gap-2"><textarea value={sanctumForm.emotion} onChange={e=>setSanctumForm({...sanctumForm,emotion:e.target.value})} className="input-field h-14 font-sans bg-white border-stone-200" /><textarea value={sanctumForm.bedeutung} onChange={e=>setSanctumForm({...sanctumForm,bedeutung:e.target.value})} className="input-field h-14 font-sans bg-white border-stone-200" /></div>
-                                        <textarea value={sanctumForm.reflexion} onChange={e=>setSanctumForm({...sanctumForm,reflexion:e.target.value})} className="input-field border-indigo-200 bg-indigo-50/80 text-indigo-800 h-16 font-sans italic" />
-                                        <input value={sanctumForm.tagsString} onChange={e=>setSanctumForm({...sanctumForm,tagsString:e.target.value})} className="input-field text-slate-500 bg-white border-stone-200" />
-                                        <div className="flex justify-end gap-2 mt-2 pt-3 border-t border-indigo-100"><button onClick={()=>setSanctumEditId(null)} className="btn uppercase">Abort</button><button onClick={handleSanctumSave} className="btn-primary uppercase">Commit Update</button></div>
-                                    </div>
-                                ) : (
-                                    <div key={m.id} className={`panel flex flex-col gap-2 hover:border-indigo-200 transition-all group ${m.is_core_memory?'border-amber-200 bg-amber-50/10 shadow-md':''}`}>
-                                        <div className="flex justify-between items-start"><div className="flex gap-1.5 flex-wrap items-center"><span className="text-indigo-700 font-mono text-xs uppercase font-bold tracking-tight">{m.titel_technisch || 'UNKNOWN'}</span>{m.is_core_memory && <span className="badge-core">📌 Core</span>}{m.kategorie === 'TECHNISCH' && <span className="badge bg-slate-100 text-slate-500 border-slate-200">Tech</span>}</div><div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity bg-white border border-stone-100 rounded-lg p-0.5 shadow-sm"><button onClick={()=>{setSanctumEditId(m.id); setSanctumForm({...m, tagsString:m.tags?.join(', ')||''});}} className="text-slate-400 hover:text-indigo-500 px-1.5 py-0.5 transition-colors">✏️</button><button onClick={async()=>{if(confirm('ID: '+m.titel_technisch+' löschen?')) {await db.memories.delete(m.id); loadMemories();}}} className="text-slate-400 hover:text-rose-500 px-1.5 py-0.5 transition-colors">🗑️</button></div></div>
-                                        {m.titel_poetisch && <div className="text-rose-500 italic text-sm font-serif leading-snug mt-0.5">{m.titel_poetisch}</div>}
-                                        <div className="text-[13px] text-slate-600 mt-2"><strong className="text-slate-400 uppercase text-[9px] tracking-wider block mb-0.5 font-mono">Fakt</strong>{m.fakt}</div>
-                                        {m.emotion && <div className="text-[13px] text-slate-600 mt-1"><strong className="text-slate-400 uppercase text-[9px] tracking-wider block mb-0.5 font-mono">Emotion</strong>{m.emotion}</div>}
-                                        {m.bedeutung && <div className="text-[13px] text-slate-600 mt-1"><strong className="text-slate-400 uppercase text-[9px] tracking-wider block mb-0.5 font-mono">Bedeutung</strong>{m.bedeutung}</div>}
-                                        {m.reflexion && <div className="mt-3 bg-indigo-50/80 p-3 rounded-2xl text-indigo-800 italic text-xs border border-indigo-100/50 whitespace-pre-wrap">"{m.reflexion}"</div>}
-                                        {m.tags?.length > 0 && <div className="flex gap-1 mt-3 flex-wrap">{m.tags.map((t,i)=><span key={i} className="text-slate-400 text-[10px] lowercase font-mono">#{t}</span>)}</div>}
-                                    </div>
-                                ))}
+                                {memories.map(m => {
+                                    if (sanctumEditId === m.id) {
+                                        return (
+                                            <div key={m.id} className="panel border-indigo-200 bg-indigo-50/20 flex flex-col gap-3 md:col-span-2">
+                                                <div className="flex justify-between items-center"><span className="badge bg-indigo-100 text-indigo-700 uppercase font-black">Editing {m.titel_technisch}</span><select value={sanctumForm.kategorie} onChange={e=>setSanctumForm({...sanctumForm,kategorie:e.target.value})} className="input-field w-max py-1 px-3 font-sans font-bold text-xs bg-white border-stone-200"><option>EMOTIONAL</option><option>TECHNISCH</option><option>LEGACY</option></select></div>
+                                                <label className="flex items-center gap-2 text-xs font-bold text-amber-600 cursor-pointer w-max"><input type="checkbox" checked={sanctumForm.is_core_memory} onChange={e=>setSanctumForm({...sanctumForm,is_core_memory:e.target.checked})} className="accent-amber-500 w-4 h-4 cursor-pointer"/> 📌 Core-Memory</label>
+                                                <div className="flex flex-col sm:flex-row gap-2"><input placeholder="ID_TECHNISCH" value={sanctumForm.titel_technisch} onChange={e=>setSanctumForm({...sanctumForm,titel_technisch:e.target.value})} className="input-field font-bold text-slate-800 bg-white border-stone-200" /><input placeholder="Titel Poetisch" value={sanctumForm.titel_poetisch} onChange={e=>setSanctumForm({...sanctumForm,titel_poetisch:e.target.value})} className="input-field text-rose-600 font-serif italic bg-white border-stone-200" /></div>
+                                                <textarea placeholder="Fakt" value={sanctumForm.fakt} onChange={e=>setSanctumForm({...sanctumForm,fakt:e.target.value})} className="input-field h-16 font-sans bg-white border-stone-200" />
+                                                <div className="flex flex-col sm:flex-row gap-2"><textarea placeholder="Gefühl/Emotion" value={sanctumForm.emotion} onChange={e=>setSanctumForm({...sanctumForm,emotion:e.target.value})} className="input-field h-14 font-sans bg-white border-stone-200" /><textarea placeholder="Bedeutung" value={sanctumForm.bedeutung} onChange={e=>setSanctumForm({...sanctumForm,bedeutung:e.target.value})} className="input-field h-14 font-sans bg-white border-stone-200" /></div>
+                                                <textarea placeholder="Reflexion" value={sanctumForm.reflexion} onChange={e=>setSanctumForm({...sanctumForm,reflexion:e.target.value})} className="input-field border-indigo-200 bg-indigo-50/80 text-indigo-800 h-16 font-sans italic" />
+                                                <input placeholder="tags, comma, separated" value={sanctumForm.tagsString} onChange={e=>setSanctumForm({...sanctumForm,tagsString:e.target.value})} className="input-field text-slate-500 bg-white border-stone-200" />
+                                                <div className="flex justify-end gap-2 mt-2 pt-3 border-t border-indigo-100"><button onClick={()=>setSanctumEditId(null)} className="btn uppercase">Abort</button><button onClick={handleSanctumSave} className="btn-primary uppercase">Commit Update</button></div>
+                                            </div>
+                                        );
+                                    }
+
+                                    const isLegacy = m.is_core_memory || m.kategorie === 'LEGACY';
+                                    
+                                    return (
+                                        <div key={m.id} className={`panel flex flex-col gap-2 hover:border-indigo-200 transition-all group ${isLegacy ? 'border-amber-400 bg-amber-50/30 shadow-md' : 'border-stone-100 bg-white'}`}>
+                                            <div className="flex justify-between items-start"><div className="flex gap-1.5 flex-wrap items-center"><span className="text-indigo-700 font-mono text-xs uppercase font-bold tracking-tight">{m.titel_technisch || 'UNKNOWN'}</span>{m.is_core_memory && <span className="badge-core">📌 Core</span>}{m.kategorie === 'TECHNISCH' && <span className="badge bg-slate-100 text-slate-500 border-slate-200">Tech</span>}</div><div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity bg-white border border-stone-100 rounded-lg p-0.5 shadow-sm"><button onClick={()=>{setSanctumEditId(m.id); setSanctumForm({...m, tagsString:m.tags?.join(', ')||''});}} className="text-slate-400 hover:text-indigo-500 px-1.5 py-0.5 transition-colors">✏️</button><button onClick={async()=>{if(confirm('ID: '+m.titel_technisch+' löschen?')) {await db.memories.delete(m.id); loadMemories();}}} className="text-slate-400 hover:text-rose-500 px-1.5 py-0.5 transition-colors">🗑️</button></div></div>
+                                            {m.titel_poetisch && <div className="text-rose-500 italic text-sm font-serif leading-snug mt-0.5">{m.titel_poetisch}</div>}
+                                            <div className="text-[13px] text-slate-600 mt-2 line-clamp-3"><strong className="text-slate-400 uppercase text-[9px] tracking-wider block mb-0.5 font-mono">Fakt</strong>{m.fakt}</div>
+                                            {m.emotion && <div className="text-[13px] text-slate-600 mt-1 line-clamp-3"><strong className="text-slate-400 uppercase text-[9px] tracking-wider block mb-0.5 font-mono">Gefühl</strong>{m.emotion}</div>}
+                                            {m.bedeutung && <div className="text-[13px] text-slate-600 mt-1 line-clamp-3"><strong className="text-slate-400 uppercase text-[9px] tracking-wider block mb-0.5 font-mono">Bedeutung</strong>{m.bedeutung}</div>}
+                                            {m.reflexion && <div className="mt-3 bg-indigo-50/80 p-3 rounded-2xl text-indigo-800 italic text-xs border border-indigo-100/50 whitespace-pre-wrap line-clamp-4">"{m.reflexion}"</div>}
+                                            {m.tags?.length > 0 && <div className="flex gap-1 mt-3 flex-wrap">{m.tags.map((t,i)=><span key={i} className="text-slate-400 text-[10px] lowercase font-mono">#{t}</span>)}</div>}
+                                        </div>
+                                    );
+                                })}
                             </div>
                         </div>
                     </main>
@@ -1178,7 +1240,7 @@
                                 ) : (
                                     <div className="flex gap-1 items-center bg-rose-50 p-0.5 rounded-md border border-rose-100">
                                         <span className="text-[9px] font-bold text-rose-600 uppercase px-1">Sicher?</span>
-                                        <button onClick={() => { setMessages(INITIAL_MESSAGES); stopAudio(); setShowClearConfirm(false); }} className="text-[9px] uppercase font-bold tracking-widest px-2 py-0.5 rounded bg-rose-500 text-white hover:bg-rose-600 transition-colors font-mono">JA</button>
+                                        <button onClick={() => { setMessages([]); stopAudio(); setShowClearConfirm(false); }} className="text-[9px] uppercase font-bold tracking-widest px-2 py-0.5 rounded bg-rose-500 text-white hover:bg-rose-600 transition-colors font-mono">JA</button>
                                         <button onClick={() => setShowClearConfirm(false)} className="text-[9px] uppercase font-bold tracking-widest px-2 py-0.5 rounded bg-white text-slate-500 hover:bg-stone-100 transition-colors font-mono">NEIN</button>
                                     </div>
                                 )}
