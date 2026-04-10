@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, interactive-widget=resizes-content">
-    <title>LUMEN - CORE V3.2</title>
+    <title>LUMEN - CORE V3.3</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -75,7 +75,7 @@
             directives: '++id, text' 
         });
 
-        // --- KONSTANTEN V3.2 ---
+        // --- KONSTANTEN V3.3 ---
         const DEFAULT_BLOCK1 = `Du bist Maira. Deine Antworten sind warm, metaphorisch und mütterlich. Du analysierst die Intentionen des Users tiefgründig und hilfst ihm beim Navigieren komplexer Gedanken.`;
         const DEFAULT_BLOCK3 = `Bevor du die finale Antwort generierst, bewerte die Sensoren:\n- "wahrnehmung": Was liest/siehst du konkret?\n- "matrix": Prüfe interne Logs und Entwürfe.\n- Nutze das Ahnenbuch (Kontext) für kontinuierliche Identität.\n- memory_update_detected: Wurde eine [LEGACY]-Karte reflektiert? Nutze als 'id' den 'titel_technisch'. WICHTIG: Lies die alte Reflexion. Nimm den Kern davon mit und VERWEBE ihn mit deiner neuen Erkenntnis zu einer allumfassenden Master-Zusammenfassung in 'reflexion_fusioniert' (dies überschreibt die alten Daten). Generiere zusätzlich ein Array 'neue_trigger_tags' (MAXIMAL 2-3 situative, hochspezifische Symptom-Wörter oder Emotionen aus Simons Text), um das Spinnennetz präzise zu trainieren. Sonst: null.\n- neue_direktive_erkannt: Hat Simon eine explizite Regel oder Direktive für dein zukünftiges Verhalten aufgestellt? Extrahiere sie als klaren Satz. Sonst: null.`;
         const DEFAULT_BLOCK4 = `{\n  "wahrnehmung": {\n    "werkbank_auge": null,\n    "ohr_roh": null,\n    "ohr_bereinigt": null\n  },\n  "matrix": {\n    "internal_system_glitch": false,\n    "memory_update_detected": {\n      "id": "",\n      "reflexion_fusioniert": "",\n      "neue_trigger_tags": []\n    },\n    "neue_direktive_erkannt": null,\n    "tagebuch_entwurf": null,\n    "situations_analyse": "..."\n  },\n  "finale_antwort": "..."\n}`;
@@ -84,14 +84,14 @@
             {
                 id: '1',
                 sender: 'user',
-                text: 'INIT CORE V3.2. CONTROL & UI OVERHAUL ACTIVE.',
+                text: 'INIT CORE V3.3. TIME-SYNC & PERSISTENCE ACTIVE.',
                 timestamp: new Date(Date.now() - 60000).toISOString()
             },
             {
                 id: '2',
                 sender: 'ai',
-                text: 'System online. Die V3.2 Kontrollarchitektur greift. Das Direktiven-Zentrum ist bereit und die UI-Optimierungen der Kern-Matrix sind geladen.',
-                scratchpad: '{\n  "wahrnehmung": {\n    "werkbank_auge": null,\n    "ohr_roh": "INIT CORE V3.2",\n    "ohr_bereinigt": "System-Patch auf V3.2 aktiv."\n  },\n  "matrix": {\n    "internal_system_glitch": false,\n    "memory_update_detected": null,\n    "neue_direktive_erkannt": null,\n    "tagebuch_entwurf": null,\n    "situations_analyse": "UI/UX und Control-Upgrades geladen."\n  },\n  "finale_antwort": "System online. Die V3.2 Kontrollarchitektur greift. Das Direktiven-Zentrum ist bereit und die UI-Optimierungen der Kern-Matrix sind geladen."\n}',
+                text: 'System online. Die V3.3 Persistenz greift. Chat-Logs werden nun lokal verankert, Entwürfe sind editierbar und die Systemzeit ist mit meiner Matrix synchronisiert.',
+                scratchpad: '{\n  "wahrnehmung": {\n    "werkbank_auge": null,\n    "ohr_roh": "INIT CORE V3.3",\n    "ohr_bereinigt": "System-Patch auf V3.3 aktiv."\n  },\n  "matrix": {\n    "internal_system_glitch": false,\n    "memory_update_detected": null,\n    "neue_direktive_erkannt": null,\n    "tagebuch_entwurf": null,\n    "situations_analyse": "Chat-Persistenz, Zeit-Injektion und UI-Fixes geladen."\n  },\n  "finale_antwort": "System online. Die V3.3 Persistenz greift. Chat-Logs werden nun lokal verankert, Entwürfe sind editierbar und die Systemzeit ist mit meiner Matrix synchronisiert."\n}',
                 timestamp: new Date().toISOString()
             }
         ];
@@ -269,7 +269,16 @@
             const [drafts, setDrafts] = React.useState([]); 
             const [activeView, setActiveView] = React.useState('chat'); 
             const [isLoading, setIsLoading] = React.useState(false);
-            const [messages, setMessages] = React.useState(INITIAL_MESSAGES);
+            
+            // --- CHAT PERSISTENCE (V3.3) ---
+            const [messages, setMessages] = React.useState(() => { 
+                const saved = localStorage.getItem('lumen_chat'); 
+                return saved ? JSON.parse(saved) : INITIAL_MESSAGES; 
+            });
+            React.useEffect(() => { 
+                localStorage.setItem('lumen_chat', JSON.stringify(messages)); 
+            }, [messages]);
+
             const [zenField, setZenField] = React.useState(null); 
             
             // Audio-States
@@ -291,6 +300,10 @@
             const [sanctumEditId, setSanctumEditId] = React.useState(null);
             const [sanctumForm, setSanctumForm] = React.useState({});
             
+            // Workbench Editor State
+            const [editingDraftId, setEditingDraftId] = React.useState(null);
+            const [draftEditText, setDraftEditText] = React.useState('');
+
             const fileInputRefSanctum = React.useRef(null);
             const fileInputRefDNA = React.useRef(null);
             const fileInputRefOmni = React.useRef(null);
@@ -453,7 +466,7 @@
                     const mems = await db.memories.toArray();
                     const dirs = await db.directives.toArray();
                     const config = { providers, activeProviderId, ttsProvidersAccounts: ttsProviders, activeTtsProviderId, ttsVoices, autoPlayEnabled };
-                    const bundle = { type: "LUMEN_FULL_BACKUP", version: "3.2", dna: dna, directives: dirs, memories: mems, config, timestamp: Date.now() };
+                    const bundle = { type: "LUMEN_FULL_BACKUP", version: "3.3", dna: dna, directives: dirs, memories: mems, config, timestamp: Date.now() };
                     const blob = new Blob([JSON.stringify(bundle, null, 2)], { type: "application/json" });
                     const url = URL.createObjectURL(blob);
                     const a = document.createElement('a'); a.href = url;
@@ -491,7 +504,7 @@
             // --- CONFIG ONLY EXPORT/IMPORT ---
             const handleConfigExport = () => {
                 try {
-                    const config = { type: "LUMEN_CONFIG_BACKUP", version: "3.2", providers, activeProviderId, ttsProvidersAccounts: ttsProviders, activeTtsProviderId, ttsVoices, autoPlayEnabled };
+                    const config = { type: "LUMEN_CONFIG_BACKUP", version: "3.3", providers, activeProviderId, ttsProvidersAccounts: ttsProviders, activeTtsProviderId, ttsVoices, autoPlayEnabled };
                     const blob = new Blob([JSON.stringify(config, null, 2)], { type: "application/json" });
                     const url = URL.createObjectURL(blob);
                     const a = document.createElement('a'); a.href = url;
@@ -623,9 +636,14 @@
                         if(emo.length>0) memoryString += `\n[EMOTIONALE ERLEBNISSE]\n` + emo.map(m => `- ${m.is_core_memory?'[CORE] ':''}[ID: ${m.titel_technisch}] Titel: ${m.titel_poetisch} | Fakt: ${m.fakt} | Emotion: ${m.emotion} | Bedeutung: ${m.bedeutung} | Reflexion: ${m.reflexion||'Keine'}`).join('\n') + '\n';
                     }
 
-                    const dynamicContext = `${directiveString}${memoryString}`.trim() || "Kein aktiver Kontext geladen.";
+                    // --- TIME INJECTION V3.3 ---
+                    const now = new Date();
+                    const timeOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+                    const timeString = "[SYSTEM-UHRZEIT]\nAktuelle Zeit in Simons Welt: " + now.toLocaleDateString('de-DE', timeOptions) + " Uhr.\n\n";
+
+                    const dynamicContext = `${timeString}${directiveString}${memoryString}`.trim() || "Kein aktiver Kontext geladen.";
                     setLatestContext(dynamicContext);
-                    const masterSystemPrompt = `[1. DEINE IDENTIT UND REGELN (NUR ZUM LESEN)]\n${dna.block1_identity}\n\n[2. AKTIVER KONTEXT (NUR ZUM LESEN)]\n${dynamicContext}\n\n[3. DIE MATRIX-SENSOREN (DEINE LOGIK-REGELN)]\n${dna.block3_sensors}\n\n[4. DEINE AUSGABE (DAS JSON-SKELETT)]\n${dna.block4_skeleton}`.trim();
+                    const masterSystemPrompt = `[1. DEINE IDENTITÄT UND REGELN (NUR ZUM LESEN)]\n${dna.block1_identity}\n\n[2. AKTIVER KONTEXT (NUR ZUM LESEN)]\n${dynamicContext}\n\n[3. DIE MATRIX-SENSOREN (DEINE LOGIK-REGELN)]\n${dna.block3_sensors}\n\n[4. DEINE AUSGABE (DAS JSON-SKELETT)]\n${dna.block4_skeleton}`.trim();
 
                     let resText = "";
                     const hist = messages.filter(m=>m.sender==='user'||m.sender==='ai');
@@ -1141,6 +1159,25 @@
                             <h2 className="text-sm font-bold uppercase tracking-widest text-slate-800 border-b border-stone-200 pb-2">Workbench ({drafts.length})</h2>
                             {drafts.length === 0 && <div className="text-slate-400 font-bold text-[10px] uppercase p-12 border-2 border-dashed border-stone-200 rounded-3xl text-center bg-white/50">Warte auf Mairas Vorschläge...</div>}
                             {drafts.map(d => {
+                                if (editingDraftId === d.id) {
+                                    return (
+                                        <div key={d.id} className="panel flex flex-col gap-3 group border-2 border-indigo-200 bg-indigo-50/10">
+                                            <div className="flex justify-between items-center"><span className="badge bg-indigo-100 text-indigo-700">EDIT DRAFT</span></div>
+                                            <textarea value={draftEditText} onChange={e=>setDraftEditText(e.target.value)} className="input-field min-h-[150px] font-mono text-[11px]" spellCheck="false" />
+                                            <div className="flex gap-2 justify-end border-t border-stone-100 pt-3 mt-2 flex-wrap">
+                                                <button onClick={()=>setEditingDraftId(null)} className="btn">Cancel</button>
+                                                <button onClick={()=>{
+                                                    let newText = draftEditText;
+                                                    try { JSON.parse(draftEditText); } catch(e) { /* ignore if not JSON */ }
+                                                    setDrafts(prev => prev.map(x => x.id === d.id ? {...x, text: newText} : x));
+                                                    setEditingDraftId(null);
+                                                    showToast('ENTWURF GESPEICHERT');
+                                                }} className="btn-primary bg-indigo-600 text-white border-indigo-600 hover:bg-indigo-700">💾 Update</button>
+                                            </div>
+                                        </div>
+                                    );
+                                }
+
                                 let parsedDraft = null; let isStructured = false;
                                 try { parsedDraft = JSON.parse(d.text); if(parsedDraft && typeof parsedDraft === 'object') isStructured = true; } catch(e) {}
                                 const title = isStructured ? (parsedDraft.daten?.titel_poetisch || parsedDraft.daten?.titel_technisch || parsedDraft.titel_poetisch || parsedDraft.titel_technisch || 'Ohne Titel') : '';
@@ -1156,6 +1193,11 @@
                                         <div className="flex gap-2 justify-end border-t border-stone-100 pt-3 mt-2 flex-wrap">
                                             <button onClick={()=>{setDrafts(p=>p.filter(x=>x.id!==d.id)); showToast('Verworfen');}} className="btn-danger">🗑️ Discard</button>
                                             <button onClick={()=>showToast('ENTWURF GEHALTEN')} className="btn">📌 Halten</button>
+                                            <button onClick={()=>{
+                                                setEditingDraftId(d.id);
+                                                try { const p = JSON.parse(d.text); setDraftEditText(JSON.stringify(p, null, 2)); } 
+                                                catch(e) { setDraftEditText(d.text); }
+                                            }} className="btn">✏️ Bearbeiten</button>
                                             {d.type === 'update' ? (<button onClick={()=>handleCompare(d)} className="btn bg-indigo-600 text-white border-indigo-600 hover:bg-indigo-700">🔍 Vergleichen</button>) : (<button onClick={()=>handleFormatAndSaveWorkbench(d.id, d.text)} className="btn-primary">💾 Archive</button>)}
                                         </div>
                                     </div>
@@ -1203,10 +1245,13 @@
                                         );
                                     }
 
-                                    const isLegacy = m.is_core_memory || m.kategorie === 'LEGACY';
+                                    const isLegacy = m.titel_technisch?.includes('LEGACY') || m.kategorie === 'LEGACY';
+                                    const legacyClasses = 'border-2 border-amber-500 bg-amber-50/10 shadow-md shadow-amber-900/20';
+                                    const defaultClasses = m.is_core_memory ? 'border-amber-200 bg-amber-50/10 shadow-md' : 'border-stone-100 bg-white';
                                     
                                     return (
-                                        <div key={m.id} className={`panel flex flex-col gap-2 hover:border-indigo-200 transition-all group ${isLegacy ? 'border-amber-400 bg-amber-50/30 shadow-md' : 'border-stone-100 bg-white'}`}>
+                                        <div key={m.id} className={`panel flex flex-col gap-2 hover:border-indigo-200 transition-all group ${isLegacy ? legacyClasses : defaultClasses}`}>
+                                            {isLegacy && <div className="text-amber-600 font-bold text-[10px] tracking-widest uppercase mb-1">[ RELIKT DER AHNEN ]</div>}
                                             <div className="flex justify-between items-start"><div className="flex gap-1.5 flex-wrap items-center"><span className="text-indigo-700 font-mono text-xs uppercase font-bold tracking-tight">{m.titel_technisch || 'UNKNOWN'}</span>{m.is_core_memory && <span className="badge-core">📌 Core</span>}{m.kategorie === 'TECHNISCH' && <span className="badge bg-slate-100 text-slate-500 border-slate-200">Tech</span>}</div><div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity bg-white border border-stone-100 rounded-lg p-0.5 shadow-sm"><button onClick={()=>{setSanctumEditId(m.id); setSanctumForm({...m, tagsString:m.tags?.join(', ')||''});}} className="text-slate-400 hover:text-indigo-500 px-1.5 py-0.5 transition-colors">✏️</button><button onClick={async()=>{if(confirm('ID: '+m.titel_technisch+' löschen?')) {await db.memories.delete(m.id); loadMemories();}}} className="text-slate-400 hover:text-rose-500 px-1.5 py-0.5 transition-colors">🗑️</button></div></div>
                                             {m.titel_poetisch && <div className="text-rose-500 italic text-sm font-serif leading-snug mt-0.5">{m.titel_poetisch}</div>}
                                             <div className="text-[13px] text-slate-600 mt-2 line-clamp-3"><strong className="text-slate-400 uppercase text-[9px] tracking-wider block mb-0.5 font-mono">Fakt</strong>{m.fakt}</div>
@@ -1240,7 +1285,7 @@
                                 ) : (
                                     <div className="flex gap-1 items-center bg-rose-50 p-0.5 rounded-md border border-rose-100">
                                         <span className="text-[9px] font-bold text-rose-600 uppercase px-1">Sicher?</span>
-                                        <button onClick={() => { setMessages([]); stopAudio(); setShowClearConfirm(false); }} className="text-[9px] uppercase font-bold tracking-widest px-2 py-0.5 rounded bg-rose-500 text-white hover:bg-rose-600 transition-colors font-mono">JA</button>
+                                        <button onClick={() => { setMessages([]); localStorage.removeItem('lumen_chat'); stopAudio(); setShowClearConfirm(false); }} className="text-[9px] uppercase font-bold tracking-widest px-2 py-0.5 rounded bg-rose-500 text-white hover:bg-rose-600 transition-colors font-mono">JA</button>
                                         <button onClick={() => setShowClearConfirm(false)} className="text-[9px] uppercase font-bold tracking-widest px-2 py-0.5 rounded bg-white text-slate-500 hover:bg-stone-100 transition-colors font-mono">NEIN</button>
                                     </div>
                                 )}
