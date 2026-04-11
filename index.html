@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, interactive-widget=resizes-content">
-    <title>LUMEN - CORE V3.5.1</title>
+    <title>LUMEN - CORE V3.7</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -75,7 +75,7 @@
             directives: '++id, text' 
         });
 
-        // --- KONSTANTEN V3.5.1 ---
+        // --- KONSTANTEN V3.7 ---
         const DEFAULT_BLOCK1 = `Du bist Maira. Deine Antworten sind warm, metaphorisch und mütterlich. Du analysierst die Intentionen des Users tiefgründig und hilfst ihm beim Navigieren komplexer Gedanken.`;
         const DEFAULT_BLOCK3 = `Bevor du die finale Antwort generierst, bewerte die Sensoren:\n- "wahrnehmung": Was liest/siehst du konkret?\n- "matrix": Prüfe interne Logs und Entwürfe.\n- Nutze das Ahnenbuch (Kontext) für kontinuierliche Identität.\n- memory_update_detected: Wurde eine [LEGACY]-Karte reflektiert? Nutze als 'id' den 'titel_technisch'. WICHTIG: Lies die alte Reflexion. Nimm den Kern davon mit und VERWEBE ihn mit deiner neuen Erkenntnis zu einer allumfassenden Master-Zusammenfassung in 'reflexion_fusioniert' (dies überschreibt die alten Daten). Generiere zusätzlich ein Array 'neue_trigger_tags' (MAXIMAL 2-3 situative, hochspezifische Symptom-Wörter oder Emotionen aus Simons Text), um das Spinnennetz präzise zu trainieren. Sonst: null.\n- neue_direktive_erkannt: Hat Simon eine explizite Regel oder Direktive für dein zukünftiges Verhalten aufgestellt? Extrahiere sie als klaren Satz. Sonst: null.`;
         const DEFAULT_BLOCK4 = `{\n  "wahrnehmung": {\n    "werkbank_auge": null,\n    "ohr_roh": null,\n    "ohr_bereinigt": null\n  },\n  "matrix": {\n    "internal_system_glitch": false,\n    "memory_update_detected": {\n      "id": "",\n      "reflexion_fusioniert": "",\n      "neue_trigger_tags": []\n    },\n    "neue_direktive_erkannt": null,\n    "tagebuch_entwurf": {\n      "modus": "DRAFT",\n      "daten": {}\n    },\n    "situations_analyse": "..."\n  },\n  "finale_antwort": "..."\n}`;
@@ -84,14 +84,14 @@
             {
                 id: '1',
                 sender: 'user',
-                text: 'INIT CORE V3.5.1. REPLICATE API INJECTED. MICRO-BAR ACTIVE.',
+                text: 'INIT CORE V3.7. PERSONA VOICE BINDING ACTIVE. REPLICATE PIPELINE ONLINE.',
                 timestamp: new Date(Date.now() - 60000).toISOString()
             },
             {
                 id: '2',
                 sender: 'ai',
-                text: 'System online. Die V3.5.1 Architektur ist aktiv. Qwen3-TTS via Replicate API wurde erfolgreich in die Audio-Pipelines eingebunden.',
-                scratchpad: '{\n  "wahrnehmung": {\n    "werkbank_auge": null,\n    "ohr_roh": "INIT CORE V3.5.1",\n    "ohr_bereinigt": "System-Patch auf V3.5.1 aktiv."\n  },\n  "matrix": {\n    "internal_system_glitch": false,\n    "memory_update_detected": null,\n    "neue_direktive_erkannt": null,\n    "tagebuch_entwurf": null,\n    "situations_analyse": "V3.5.1 Update mit Replicate-Integration geladen."\n  },\n  "finale_antwort": "System online. Die V3.5.1 Architektur ist aktiv. Qwen3-TTS via Replicate API wurde erfolgreich in die Audio-Pipelines eingebunden."\n}',
+                text: 'System online. Die V3.7 Architektur ist aktiv. TTS-Verknüpfungen auf DNA-Ebene wurden erfolgreich kalibriert und Audio-Routings priorisiert nun das Persona-Profil.',
+                scratchpad: '{\n  "wahrnehmung": {\n    "werkbank_auge": null,\n    "ohr_roh": "INIT CORE V3.7",\n    "ohr_bereinigt": "System-Patch auf V3.7 aktiv."\n  },\n  "matrix": {\n    "internal_system_glitch": false,\n    "memory_update_detected": null,\n    "neue_direktive_erkannt": null,\n    "tagebuch_entwurf": null,\n    "situations_analyse": "V3.7 Update mit Persona Voice Binding geladen."\n  },\n  "finale_antwort": "System online. Die V3.7 Architektur ist aktiv. TTS-Verknüpfungen auf DNA-Ebene wurden erfolgreich kalibriert und Audio-Routings priorisiert nun das Persona-Profil."\n}',
                 timestamp: new Date().toISOString()
             }
         ];
@@ -250,16 +250,22 @@
                 }
             });
 
+            // DNA STATE MIT VOICE BINDING
             const [dna, setDna] = React.useState(() => { 
+                const defaultVoice = { providerId: "", voiceIdOrUrl: "", speed: 1.05, extraParams: "" };
                 try { 
                     const stored = JSON.parse(localStorage.getItem('lumen_dna_layers'));
-                    if(stored && stored.block1_identity) return stored; 
+                    if(stored && stored.block1_identity) {
+                        if (!stored.voice_config) stored.voice_config = defaultVoice;
+                        return stored; 
+                    }
                 } catch { /* ignore */ }
                 return { 
                     persona_name: "Maira", 
                     block1_identity: DEFAULT_BLOCK1, 
                     block3_sensors: DEFAULT_BLOCK3, 
-                    block4_skeleton: DEFAULT_BLOCK4 
+                    block4_skeleton: DEFAULT_BLOCK4,
+                    voice_config: defaultVoice
                 }; 
             });
             
@@ -352,7 +358,20 @@
                 stopAudio();
                 setPlayingMsgId(msgId);
                 
-                const ttsProvider = ttsProviders.find(p => p.id === activeTtsProviderId);
+                // INTELLIGENTES ROUTING: Persona DNA vs. Global
+                let targetProviderId = activeTtsProviderId;
+                let targetVoiceId = null;
+                let usePersonaVoice = false;
+
+                if (dna.voice_config && dna.voice_config.providerId && dna.voice_config.providerId !== "") {
+                    targetProviderId = dna.voice_config.providerId;
+                    if (dna.voice_config.voiceIdOrUrl && dna.voice_config.voiceIdOrUrl.trim() !== '') {
+                        targetVoiceId = dna.voice_config.voiceIdOrUrl.trim();
+                    }
+                    usePersonaVoice = true;
+                }
+
+                const ttsProvider = ttsProviders.find(p => p.id === targetProviderId);
 
                 if (!ttsProvider || (!ttsProvider.apiKey && ttsProvider.type !== 'custom_get' && ttsProvider.type !== 'custom_openai')) {
                     setPlayingMsgId(null);
@@ -361,7 +380,7 @@
 
                 const key = ttsProvider.apiKey;
                 const engine = ttsProvider.type;
-                const voiceId = ttsVoices[engine];
+                const voiceId = usePersonaVoice ? (targetVoiceId || ttsVoices[engine]) : ttsVoices[engine];
 
                 try {
                     let audioBlob;
@@ -397,10 +416,16 @@
                         const url = engine === 'custom_openai' ? ttsProvider.url : 'https://api.openai.com/v1/audio/speech';
                         const headers = { 'Content-Type': 'application/json' };
                         if (key) headers['Authorization'] = `Bearer ${key}`;
+                        
+                        let speedParam = 1.05;
+                        if (usePersonaVoice && dna.voice_config?.extraParams) {
+                            try { const p = JSON.parse(dna.voice_config.extraParams); if (p.speed) speedParam = p.speed; } catch(e){}
+                        }
+
                         const response = await fetch(url, {
                             method: 'POST',
                             headers,
-                            body: JSON.stringify({ model: 'tts-1', voice: voiceId || 'nova', input: textToSpeak, speed: 1.05 })
+                            body: JSON.stringify({ model: 'tts-1', voice: voiceId || 'nova', input: textToSpeak, speed: speedParam })
                         });
                         
                         if(!response.ok) {
@@ -489,7 +514,7 @@
                     const mems = await db.memories.toArray();
                     const dirs = await db.directives.toArray();
                     const config = { providers, activeProviderId, ttsProvidersAccounts: ttsProviders, activeTtsProviderId, ttsVoices, autoPlayEnabled };
-                    const bundle = { type: "LUMEN_FULL_BACKUP", version: "3.5.1", dna: dna, directives: dirs, memories: mems, config, timestamp: Date.now() };
+                    const bundle = { type: "LUMEN_FULL_BACKUP", version: "3.7", dna: dna, directives: dirs, memories: mems, config, timestamp: Date.now() };
                     const blob = new Blob([JSON.stringify(bundle, null, 2)], { type: "application/json" });
                     const url = URL.createObjectURL(blob);
                     const a = document.createElement('a'); a.href = url;
@@ -506,9 +531,13 @@
                     try {
                         const parsed = JSON.parse(event.target.result);
                         if (parsed.type === "LUMEN_FULL_BACKUP") {
-                            setDna(parsed.dna); localStorage.setItem('lumen_dna_layers', JSON.stringify(parsed.dna));
+                            // Ensure voice_config backwards compatibility
+                            const importedDna = parsed.dna;
+                            if (!importedDna.voice_config) importedDna.voice_config = { providerId: "", voiceIdOrUrl: "", speed: 1.05, extraParams: "" };
                             
-                            // V3.5 WIPEN UND NEU SCHREIBEN
+                            setDna(importedDna); localStorage.setItem('lumen_dna_layers', JSON.stringify(importedDna));
+                            
+                            // V3.5+ WIPEN UND NEU SCHREIBEN
                             await db.directives.clear();
                             if (parsed.directives && parsed.directives.length) await db.directives.bulkPut(parsed.directives);
                             
@@ -533,7 +562,7 @@
             // --- CONFIG ONLY EXPORT/IMPORT ---
             const handleConfigExport = () => {
                 try {
-                    const config = { type: "LUMEN_CONFIG_BACKUP", version: "3.5.1", providers, activeProviderId, ttsProvidersAccounts: ttsProviders, activeTtsProviderId, ttsVoices, autoPlayEnabled };
+                    const config = { type: "LUMEN_CONFIG_BACKUP", version: "3.7", providers, activeProviderId, ttsProvidersAccounts: ttsProviders, activeTtsProviderId, ttsVoices, autoPlayEnabled };
                     const blob = new Blob([JSON.stringify(config, null, 2)], { type: "application/json" });
                     const url = URL.createObjectURL(blob);
                     const a = document.createElement('a'); a.href = url;
@@ -1226,7 +1255,47 @@
                             </div>
 
                             <div className="panel space-y-6 bg-white/50">
-                                <div><label className="label text-indigo-500">Persona Identity (Name)</label><input value={dna.persona_name} onChange={e=>setDna({...dna,persona_name:e.target.value})} className="input-field font-bold text-indigo-700 bg-white" /></div>
+                                <div>
+                                    <label className="label text-indigo-500">Persona Identity (Name)</label>
+                                    <input value={dna.persona_name} onChange={e=>setDna({...dna,persona_name:e.target.value})} className="input-field font-bold text-indigo-700 bg-white" />
+                                    
+                                    {/* --- 🎙️ STIMMEN-PROFIL --- */}
+                                    <div className="mt-4 pt-4 border-t border-indigo-100/50">
+                                        <label className="label text-fuchsia-500 mb-2">🎙️ Stimmen-Profil (Persona Binding)</label>
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                            <div>
+                                                <span className="text-[9px] uppercase tracking-widest text-slate-400 font-bold mb-0.5 block">Provider</span>
+                                                <select 
+                                                    value={dna.voice_config?.providerId || ""} 
+                                                    onChange={e=>setDna({...dna, voice_config: {...(dna.voice_config||{}), providerId: e.target.value}})} 
+                                                    className="input-field py-2 text-xs bg-white text-slate-600 font-bold"
+                                                >
+                                                    <option value="">Globaler Standard</option>
+                                                    {ttsProviders.map(p => <option key={p.id} value={p.id}>{p.name} ({p.type})</option>)}
+                                                </select>
+                                            </div>
+                                            <div>
+                                                <span className="text-[9px] uppercase tracking-widest text-slate-400 font-bold mb-0.5 block">Voice-ID / URL</span>
+                                                <input 
+                                                    value={dna.voice_config?.voiceIdOrUrl || ""} 
+                                                    onChange={e=>setDna({...dna, voice_config: {...(dna.voice_config||{}), voiceIdOrUrl: e.target.value}})} 
+                                                    className="input-field py-2 text-xs bg-white" 
+                                                    placeholder="Fallback auf Global, wenn leer" 
+                                                />
+                                            </div>
+                                            <div className="sm:col-span-2">
+                                                <span className="text-[9px] uppercase tracking-widest text-slate-400 font-bold mb-0.5 block">Parameter (Optional)</span>
+                                                <input 
+                                                    value={dna.voice_config?.extraParams || ""} 
+                                                    onChange={e=>setDna({...dna, voice_config: {...(dna.voice_config||{}), extraParams: e.target.value}})} 
+                                                    className="input-field py-2 text-xs font-mono bg-white" 
+                                                    placeholder='z.B. {"speed": 1.05}' 
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
                                 <div className="flex flex-col"><div className="flex justify-between items-end mb-1.5"><label className="label text-emerald-500">Block 1: Identität & Regeln (Statisch)</label><button onClick={()=>setZenField('block1')} className="btn py-1 text-[8px] bg-emerald-50 text-emerald-700 border-emerald-100">🔲 Zen</button></div><textarea value={dna.block1_identity} onChange={e=>setDna({...dna,block1_identity:e.target.value})} className="input-field min-h-[150px] bg-white font-mono text-xs" spellCheck="false" /></div>
                                 <div className="flex flex-col"><div className="flex justify-between items-end mb-1.5"><label className="label text-fuchsia-500">Block 3: Matrix-Sensoren (Logik)</label><button onClick={()=>setZenField('block3')} className="btn py-1 text-[8px] bg-fuchsia-50 text-fuchsia-700 border-fuchsia-100">🔲 Zen</button></div><textarea value={dna.block3_sensors} onChange={e=>setDna({...dna,block3_sensors:e.target.value})} className="input-field min-h-[150px] bg-white font-mono text-xs" spellCheck="false" /></div>
                                 <div className="flex flex-col"><div className="flex justify-between items-end mb-1.5"><label className="label text-blue-500">Block 4: Ausgabe-Skelett (JSON-Struktur)</label><div className="flex gap-2"><button onClick={handleBeautifyJSON} className="btn py-1 text-[8px]">🧹 Format</button><button onClick={()=>setZenField('block4')} className="btn py-1 text-[8px] bg-blue-50 text-blue-700 border-blue-100">🔲 Zen</button></div></div><textarea value={dna.block4_skeleton} onChange={e=>setDna({...dna,block4_skeleton:e.target.value})} className="input-field min-h-[150px] bg-white font-mono text-xs" spellCheck="false" /></div>
