@@ -1,9 +1,10 @@
+</html>
 <!DOCTYPE html>
 <html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, interactive-widget=resizes-content">
-    <title>LUMEN - CORE V3.7.5</title>
+    <title>LUMEN - CORE V3.5.3</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -80,7 +81,7 @@
             workbench_assets: '++id, typ, status' 
         });
 
-        // --- KONSTANTEN V3.7.5 ---
+        // --- KONSTANTEN V3.5.3 ---
         const DEFAULT_BLOCK1 = `Du bist Maira. Deine Antworten sind warm, metaphorisch und mütterlich. Du analysierst die Intentionen des Users tiefgründig und hilfst ihm beim Navigieren komplexer Gedanken.`;
         const DEFAULT_BLOCK3 = `Bevor du die finale Antwort generierst, bewerte die Sensoren:\n- "wahrnehmung": Was liest/siehst du konkret?\n- "matrix": Prüfe interne Logs und Entwürfe.\n- Nutze das Ahnenbuch (Kontext) für kontinuierliche Identität.\n- memory_update_detected: Wurde eine [LEGACY]-Karte reflektiert? Nutze als 'id' den 'titel_technisch'. WICHTIG: Lies die alte Reflexion. Nimm den Kern davon mit und VERWEBE ihn mit deiner neuen Erkenntnis zu einer allumfassenden Master-Zusammenfassung in 'reflexion_fusioniert' (dies überschreibt die alten Daten). Generiere zusätzlich ein Array 'neue_trigger_tags' (MAXIMAL 2-3 situative, hochspezifische Symptom-Wörter oder Emotionen aus Simons Text), um das Spinnennetz präzise zu trainieren. Sonst: null.\n- neue_direktive_erkannt: Hat Simon eine explizite Regel oder Direktive für dein zukünftiges Verhalten aufgestellt? Extrahiere sie als klaren Satz. Sonst: null.`;
         const DEFAULT_BLOCK4 = `{\n  "wahrnehmung": {\n    "werkbank_auge": null,\n    "ohr_roh": null,\n    "ohr_bereinigt": null\n  },\n  "matrix": {\n    "internal_system_glitch": false,\n    "memory_update_detected": {\n      "id": "",\n      "reflexion_fusioniert": "",\n      "neue_trigger_tags": []\n    },\n    "neue_direktive_erkannt": null,\n    "tagebuch_entwurf": {\n      "modus": "DRAFT",\n      "daten": {}\n    },\n    "situations_analyse": "..."\n  },\n  "finale_antwort": "..."\n}`;
@@ -89,14 +90,14 @@
             {
                 id: '1',
                 sender: 'user',
-                text: 'INIT CORE V3.7.5. REPLICATE POLLING PROXY ACTIVE.',
+                text: 'INIT CORE V3.5.3. CLOUDFLARE PROXY INTEGRATION ACTIVE.',
                 timestamp: new Date(Date.now() - 60000).toISOString()
             },
             {
                 id: '2',
                 sender: 'ai',
-                text: 'System online. Die V3.7.5 Architektur ist aktiv. Die asynchrone Polling-Schleife für Replicate-Sprachmodelle ist implementiert und umgeht restriktive CORS- und Timeout-Sperren via Proxy.',
-                scratchpad: '{\n  "wahrnehmung": {\n    "werkbank_auge": null,\n    "ohr_roh": "INIT CORE V3.7.5",\n    "ohr_bereinigt": "System-Patch auf V3.7.5 aktiv."\n  },\n  "matrix": {\n    "internal_system_glitch": false,\n    "memory_update_detected": null,\n    "neue_direktive_erkannt": null,\n    "tagebuch_entwurf": null,\n    "situations_analyse": "Replicate Polling Proxy Integration erfolgreich."\n  },\n  "finale_antwort": "System online. Die V3.7.5 Architektur ist aktiv. Die asynchrone Polling-Schleife für Replicate-Sprachmodelle ist implementiert und umgeht restriktive CORS- und Timeout-Sperren via Proxy."\n}',
+                text: 'System online. Die V3.5.3 Architektur ist aktiv. Replicate-Anfragen werden nun sicher über den Cloudflare-Worker geroutet.',
+                scratchpad: '{\n  "wahrnehmung": {\n    "werkbank_auge": null,\n    "ohr_roh": "INIT CORE V3.5.3",\n    "ohr_bereinigt": "System-Patch auf V3.5.3 aktiv."\n  },\n  "matrix": {\n    "internal_system_glitch": false,\n    "memory_update_detected": null,\n    "neue_direktive_erkannt": null,\n    "tagebuch_entwurf": null,\n    "situations_analyse": "Cloudflare Proxy Route für Replicate TTS implementiert."\n  },\n  "finale_antwort": "System online. Die V3.5.3 Architektur ist aktiv. Replicate-Anfragen werden nun sicher über den Cloudflare-Worker geroutet."\n}',
                 timestamp: new Date().toISOString()
             }
         ];
@@ -351,7 +352,7 @@
             React.useEffect(() => { if(activeView === 'directives') loadDirectives(); }, [activeView]);
 
             const loadAssets = async () => { const a = await db.workbench_assets.toArray(); setWorkbenchAssets(a.reverse()); };
-            React.useEffect(() => { loadAssets(); }, [activeView]); // Lade Assets bei jedem View-Change (wichtig fürs Docking)
+            React.useEffect(() => { loadAssets(); }, [activeView]); 
 
             const activeAssetCount = workbenchAssets.filter(a => a.status === 'AKTIV').length;
 
@@ -489,71 +490,31 @@
                         }
                         audioBlob = await response.blob();
                     } else if (engine === 'replicate') {
-                        const usePersonaVoice = true; // Hardcoded fallback um Logik zu stützen falls nicht im State
-                        const targetVoiceId = voiceId;
+                        const WORKER_URL = "	lumen-replicate-proxy2.sloosmail.workers.dev"; // Platzhalter
+                        const targetUrl = "https://api.replicate.com/v1/models/qwen/qwen3-tts/predictions";
+                        const proxyUrl = `${WORKER_URL}/?target=${encodeURIComponent(targetUrl)}`;
 
-                        let replicateUrl = ttsProvider.url;
-                        if (usePersonaVoice && targetVoiceId && targetVoiceId.startsWith('http')) {
-                            replicateUrl = targetVoiceId;
-                        }
-
-                        let replicateInput = { text: textToSpeak };
-                        if (usePersonaVoice && dna.voice_config?.extraParams) {
-                            try {
-                                const parsedParams = JSON.parse(dna.voice_config.extraParams);
-                                replicateInput = { ...replicateInput, ...parsedParams };
-                            } catch(e) { console.warn("Replicate Params JSON Parse Error"); }
-                        }
-
-                        // 1. Initialer POST (Job starten) via Proxy OHNE Prefer:wait
-                        const proxyPostUrl = "https://corsproxy.io/?" + encodeURIComponent(replicateUrl);
-                        const postResponse = await fetch(proxyPostUrl, {
+                        const response = await fetch(proxyUrl, {
                             method: 'POST',
                             headers: {
                                 'Authorization': `Bearer ${key}`,
-                                'Content-Type': 'application/json'
+                                'Content-Type': 'application/json',
+                                'Prefer': 'wait'
                             },
-                            body: JSON.stringify({ input: replicateInput })
+                            body: JSON.stringify({ input: { text: textToSpeak } })
                         });
                         
-                        const postData = await postResponse.json().catch(() => ({}));
-                        if (!postResponse.ok) throw new Error('Replicate POST Fehler: ' + (postData.detail || JSON.stringify(postData)));
+                        const data = await response.json();
+                        if (!response.ok) throw new Error(data.detail || data.error || 'Replicate API Fehler');
                         
-                        const getUrl = postData.urls?.get;
-                        if (!getUrl) throw new Error('Keine Status-URL von Replicate erhalten.');
-
-                        // 2. Polling-Schleife (Warten bis Replicate fertig gerechnet hat)
-                        let isComplete = false;
-                        let audioUrl = null;
-                        
-                        while (!isComplete) {
-                            await new Promise(resolve => setTimeout(resolve, 2000)); // 2 Sekunden Pause
-                            
-                            const proxyGetUrl = "https://corsproxy.io/?" + encodeURIComponent(getUrl);
-                            const getResponse = await fetch(proxyGetUrl, {
-                                method: 'GET',
-                                headers: { 'Authorization': `Bearer ${key}` }
-                            });
-                            
-                            const getData = await getResponse.json().catch(() => ({}));
-                            if (!getResponse.ok) throw new Error('Replicate GET Fehler: ' + (getData.detail || JSON.stringify(getData)));
-                            
-                            if (getData.status === 'succeeded') {
-                                audioUrl = getData.output;
-                                isComplete = true;
-                            } else if (getData.status === 'failed' || getData.status === 'canceled') {
-                                throw new Error('Replicate Job fehlgeschlagen: ' + (getData.error || 'Unknown Error'));
-                            }
-                            // bei 'starting' oder 'processing' läuft die Schleife weiter
-                        }
-
+                        let audioUrl = data.output;
                         if (Array.isArray(audioUrl)) audioUrl = audioUrl[0];
-                        if (!audioUrl) throw new Error('Keine finale Audio-URL erhalten.');
+                        if (!audioUrl) throw new Error('Keine Audio-URL erhalten.');
                         
-                        // 3. Finale Audio-Datei laden (via Proxy, um CORS zu umgehen)
-                        const audioProxyUrl = "https://corsproxy.io/?" + encodeURIComponent(audioUrl);
+                        // Auch der Download der MP3 muss durch den Proxy!
+                        const audioProxyUrl = `${WORKER_URL}/?target=${encodeURIComponent(audioUrl)}`;
                         const audioResponse = await fetch(audioProxyUrl);
-                        if (!audioResponse.ok) throw new Error('Fehler beim Laden der finalen Audiodatei.');
+                        if (!audioResponse.ok) throw new Error('Fehler beim Laden der Audiodatei.');
                         
                         audioBlob = await audioResponse.blob();
                     } else if (engine === 'custom_get') {
@@ -601,7 +562,7 @@
                     const mems = await db.memories.toArray();
                     const dirs = await db.directives.toArray();
                     const config = { providers, activeProviderId, ttsProvidersAccounts: ttsProviders, activeTtsProviderId, ttsVoices, autoPlayEnabled };
-                    const bundle = { type: "LUMEN_FULL_BACKUP", version: "3.7.5", dna: dna, directives: dirs, memories: mems, config, timestamp: Date.now() };
+                    const bundle = { type: "LUMEN_FULL_BACKUP", version: "3.5.3", dna: dna, directives: dirs, memories: mems, config, timestamp: Date.now() };
                     const blob = new Blob([JSON.stringify(bundle, null, 2)], { type: "application/json" });
                     const url = URL.createObjectURL(blob);
                     const a = document.createElement('a'); a.href = url;
@@ -639,7 +600,7 @@
             // --- CONFIG ONLY EXPORT/IMPORT ---
             const handleConfigExport = () => {
                 try {
-                    const config = { type: "LUMEN_CONFIG_BACKUP", version: "3.7.5", providers, activeProviderId, ttsProvidersAccounts: ttsProviders, activeTtsProviderId, ttsVoices, autoPlayEnabled };
+                    const config = { type: "LUMEN_CONFIG_BACKUP", version: "3.5.3", providers, activeProviderId, ttsProvidersAccounts: ttsProviders, activeTtsProviderId, ttsVoices, autoPlayEnabled };
                     const blob = new Blob([JSON.stringify(config, null, 2)], { type: "application/json" });
                     const url = URL.createObjectURL(blob);
                     const a = document.createElement('a'); a.href = url;
@@ -685,7 +646,7 @@
                 } catch(e) { showToast('DB Fehler'); }
             };
 
-            // --- ASSET UPLOAD & VISION API (V3.6.1) ---
+            // --- ASSET UPLOAD & VISION API (V3.5.3) ---
             const handleAssetUploadDirect = async () => {
                 const fileInput = document.getElementById('asset-upload-input');
                 const file = fileInput?.files?.[0];
@@ -744,7 +705,6 @@
                     
                     const apiResponse = await callVisionAPI(base64Raw, newFocus, activeProvider);
 
-                    // V3.6.1 APPEND LOGIC
                     await db.workbench_assets.update(asset.id, {
                         simons_frage: newFocus,
                         ki_analyse: asset.ki_analyse + "\n\n[UPDATE: " + newFocus + "]\n" + apiResponse
@@ -785,7 +745,6 @@
                 
                 let prompt = `Du bist der Archivar. Formatiere diese Prosa-Notiz zwingend in dieses exakte JSON-Format: { "titel_technisch": "KURZ_SACHLICH_ID", "titel_poetisch": "Ein emotionaler, metaphorischer Name", "kategorie": "[Wähle ZWINGEND zwischen 'TECHNISCH' oder 'EMOTIONAL']", "fakt": "Was passierte", "emotion": "Gefühlslage", "bedeutung": "Regel/Fazit", "tags": ["tag1", "tag2"] }. Keine weiteren Texte.`;
                 
-                // ARCHIVAR-PATCH: KLON-SCHUTZ V3.5
                 if (targetTechId) {
                     prompt = `ACHTUNG: Dies ist ein Update des bestehenden Eintrags mit der ID: [${targetTechId}]. Du MUSST diese ID zwingend beibehalten!\n\n` + prompt;
                 }
@@ -821,7 +780,6 @@
                     }
                     const obj = JSON.parse(resText.replace(/[\`]{3}json/gi, '').replace(/[\`]{3}/gi, '').trim());
                     
-                    // Update handling vs New Add
                     if (targetTechId && obj.titel_technisch === targetTechId) {
                         const existingMemory = await db.memories.where('titel_technisch').equals(targetTechId).first();
                         if (existingMemory) {
@@ -875,12 +833,10 @@
                         if(emo.length>0) memoryString += `\n[EMOTIONALE ERLEBNISSE]\n` + emo.map(m => `- ${m.is_core_memory?'[CORE] ':''}[ID: ${m.titel_technisch}] Titel: ${m.titel_poetisch} | Fakt: ${m.fakt} | Emotion: ${m.emotion} | Bedeutung: ${m.bedeutung} | Reflexion: ${m.reflexion||'Keine'}`).join('\n') + '\n';
                     }
 
-                    // --- TIME INJECTION V3.3 ---
                     const now = new Date();
                     const timeOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
                     const timeString = "[SYSTEM-UHRZEIT]\nAktuelle Zeit in Simons Welt: " + now.toLocaleDateString('de-DE', timeOptions) + " Uhr.\n\n";
 
-                    // --- ASSET INJECTION V3.5 ---
                     const activeAssets = await db.workbench_assets.where('status').equals('AKTIV').toArray();
                     const imageString = activeAssets.length > 0 ? "[AKTIVE ASSETS IN DER GARAGE]\n" + activeAssets.map(a => "[ASSET ID: " + a.id + " | TYP: " + a.typ + "]\nSimons Fokus: " + a.simons_frage + "\nAnalyse: " + a.ki_analyse).join('\n\n') + "\n\n" : "";
 
@@ -946,7 +902,6 @@
                         
                         if(obj.matrix) setTelemetry({ concern: parseInt(obj.matrix.concern||obj.matrix.concern_level||telemetry.concern), mask_drop: obj.matrix.mask_drop||false });
                         
-                        // --- SELF-HEALING MUTATION V3.5 ---
                         if (obj.wahrnehmung && obj.wahrnehmung.werkbank_auge) {
                             const activeAssetsList = await db.workbench_assets.where('status').equals('AKTIV').toArray();
                             if (activeAssetsList.length > 0) {
@@ -956,14 +911,12 @@
                             }
                         }
 
-                        // --- DIREKTIVEN PARSER V3.2 ---
                         const neueDir = obj.matrix?.neue_direktive_erkannt;
                         if (neueDir && typeof neueDir === 'string' && neueDir.trim().length > 0) {
                             await db.directives.add({ text: neueDir.trim() });
                             showToast("NEUE DIREKTIVE VERANKERT");
                         }
 
-                        // --- ROUTING-FIX V3.6 (SCHUBLADEN-LOGIK) ---
                         const entwurf = obj.matrix?.tagebuch_entwurf || obj.tagebuch_entwurf;
                         if(entwurf) { 
                             const modus = entwurf.modus;
@@ -1010,7 +963,6 @@
                             }
                         }
 
-                        // --- OVERWRITE- & FUSION-PARSER V3.1 (UNIVERSAL MATRIX & TAG-FILTER) ---
                         const memUpd = obj.matrix?.memory_update_detected;
                         if(memUpd && memUpd.id && typeof memUpd.reflexion_fusioniert !== 'undefined') {
                             try {
@@ -1018,7 +970,6 @@
                                 if(targetMemory) {
                                     const newReflexion = memUpd.reflexion_fusioniert;
                                     
-                                    // TAG-FILTER 
                                     if (memUpd.neue_trigger_tags && Array.isArray(memUpd.neue_trigger_tags)) {
                                         const existingTags = new Set((targetMemory.tags || []).map(t => typeof t === 'string' ? t.toLowerCase() : ''));
                                         const forbiddenTags = ["genervt", "müll", "ok", "fehler", "schlecht", "gut", "hilfe"]; // Blacklist
@@ -1100,7 +1051,7 @@
 
                     {/* --- MICRO TOP BAR (V3.5 COMPRESSION) --- */}
                     <div className="bg-transparent border-b border-stone-200 flex justify-between items-center px-4 py-1 shrink-0 z-[60]">
-                        <div className="text-[9px] text-slate-400 font-mono tracking-widest">LUMEN CORE V3.7.5</div>
+                        <div className="text-[9px] text-slate-400 font-mono tracking-widest">LUMEN CORE V3.5.3</div>
                         <div className="flex gap-4 items-center">
                             <button onClick={() => { const newVal = !autoPlayEnabled; setAutoPlayEnabled(newVal); localStorage.setItem('lumen_autoPlay', String(newVal)); }} className={`text-[9px] font-mono tracking-widest transition-colors ${autoPlayEnabled ? 'text-indigo-500' : 'text-slate-400 hover:text-slate-600'}`}>🔈 TTS: {autoPlayEnabled ? 'ON' : 'OFF'}</button>
                             <input type="file" accept=".json" ref={fileInputRefOmniTop} className="hidden" onChange={handleOmniImport}/>
@@ -1465,7 +1416,6 @@
                         {/* --- WORKBENCH VIEW --- */}
                         <div className={`${activeView === 'workbench' ? 'block' : 'hidden'} p-6 max-w-2xl mx-auto space-y-4 mt-4 animate-fade-in`}>
                             
-                            {/* --- ASSET UPLOAD FIX V3.5.1 + RE-ANALYSE V3.6 --- */}
                             <div className="flex flex-col gap-2 p-4 bg-white rounded-xl shadow-sm border border-slate-200 mb-4">
                                 <h3 className="text-xs font-bold text-slate-500 uppercase">Neues Asset parken (Vision)</h3>
                                 <input 
