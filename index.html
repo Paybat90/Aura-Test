@@ -70,7 +70,8 @@
     <script type="text/babel">
         // --- DATENBANK INIT (SANCTUM & DIREKTIVEN) ---
         const db = new Dexie('LumenSanctum');
-        db.version(1).stores({ 
+        // VERSION BUMP AUF 2 UM DEN VERSION-ERROR ZU BEHEBEN
+        db.version(2).stores({ 
             memories: '++id, titel_technisch, tags, image_id, fakt, emotion, bedeutung, timestamp, is_core_memory, kategorie, reflexion',
             directives: '++id, text' 
         });
