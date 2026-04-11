@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, interactive-widget=resizes-content">
-    <title>LUMEN - CORE V3.7.3</title>
+    <title>LUMEN - CORE V3.7.4</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -76,7 +76,7 @@
             directives: '++id, text' 
         });
 
-        // --- KONSTANTEN V3.7.3 ---
+        // --- KONSTANTEN V3.7.4 ---
         const DEFAULT_BLOCK1 = `Du bist Maira. Deine Antworten sind warm, metaphorisch und mütterlich. Du analysierst die Intentionen des Users tiefgründig und hilfst ihm beim Navigieren komplexer Gedanken.`;
         const DEFAULT_BLOCK3 = `Bevor du die finale Antwort generierst, bewerte die Sensoren:\n- "wahrnehmung": Was liest/siehst du konkret?\n- "matrix": Prüfe interne Logs und Entwürfe.\n- Nutze das Ahnenbuch (Kontext) für kontinuierliche Identität.\n- memory_update_detected: Wurde eine [LEGACY]-Karte reflektiert? Nutze als 'id' den 'titel_technisch'. WICHTIG: Lies die alte Reflexion. Nimm den Kern davon mit und VERWEBE ihn mit deiner neuen Erkenntnis zu einer allumfassenden Master-Zusammenfassung in 'reflexion_fusioniert' (dies überschreibt die alten Daten). Generiere zusätzlich ein Array 'neue_trigger_tags' (MAXIMAL 2-3 situative, hochspezifische Symptom-Wörter oder Emotionen aus Simons Text), um das Spinnennetz präzise zu trainieren. Sonst: null.\n- neue_direktive_erkannt: Hat Simon eine explizite Regel oder Direktive für dein zukünftiges Verhalten aufgestellt? Extrahiere sie als klaren Satz. Sonst: null.`;
         const DEFAULT_BLOCK4 = `{\n  "wahrnehmung": {\n    "werkbank_auge": null,\n    "ohr_roh": null,\n    "ohr_bereinigt": null\n  },\n  "matrix": {\n    "internal_system_glitch": false,\n    "memory_update_detected": {\n      "id": "",\n      "reflexion_fusioniert": "",\n      "neue_trigger_tags": []\n    },\n    "neue_direktive_erkannt": null,\n    "tagebuch_entwurf": {\n      "modus": "DRAFT",\n      "daten": {}\n    },\n    "situations_analyse": "..."\n  },\n  "finale_antwort": "..."\n}`;
@@ -85,14 +85,14 @@
             {
                 id: '1',
                 sender: 'user',
-                text: 'INIT CORE V3.7.3. REPLICATE CORS-PROXY ACTIVE.',
+                text: 'INIT CORE V3.7.4. REPLICATE ERROR-PARSER ACTIVE.',
                 timestamp: new Date(Date.now() - 60000).toISOString()
             },
             {
                 id: '2',
                 sender: 'ai',
-                text: 'System online. Die V3.7.3 Architektur ist aktiv. Der CORS-Proxy für die Replicate-API wurde dazwischengeschaltet, um Frontend-Blockaden zu umgehen.',
-                scratchpad: '{\n  "wahrnehmung": {\n    "werkbank_auge": null,\n    "ohr_roh": "INIT CORE V3.7.3",\n    "ohr_bereinigt": "System-Patch auf V3.7.3 aktiv."\n  },\n  "matrix": {\n    "internal_system_glitch": false,\n    "memory_update_detected": null,\n    "neue_direktive_erkannt": null,\n    "tagebuch_entwurf": null,\n    "situations_analyse": "V3.7.3 Update mit CORS-Proxy für Replicate geladen."\n  },\n  "finale_antwort": "System online. Die V3.7.3 Architektur ist aktiv. Der CORS-Proxy für die Replicate-API wurde dazwischengeschaltet, um Frontend-Blockaden zu umgehen."\n}',
+                text: 'System online. Die V3.7.4 Architektur ist aktiv. Der CORS-Proxy wurde entfernt und ein robuster Error-Parser für Replicate integriert.',
+                scratchpad: '{\n  "wahrnehmung": {\n    "werkbank_auge": null,\n    "ohr_roh": "INIT CORE V3.7.4",\n    "ohr_bereinigt": "System-Patch auf V3.7.4 aktiv."\n  },\n  "matrix": {\n    "internal_system_glitch": false,\n    "memory_update_detected": null,\n    "neue_direktive_erkannt": null,\n    "tagebuch_entwurf": null,\n    "situations_analyse": "V3.7.4 Update mit Replicate Error-Parser geladen."\n  },\n  "finale_antwort": "System online. Die V3.7.4 Architektur ist aktiv. Der CORS-Proxy wurde entfernt und ein robuster Error-Parser für Replicate integriert."\n}',
                 timestamp: new Date().toISOString()
             }
         ];
@@ -448,13 +448,11 @@
                         }
                         audioBlob = await response.blob();
                     } else if (engine === 'replicate') {
-                        // 1. URL bestimmen (Persona Fallback)
                         let replicateUrl = ttsProvider.url;
                         if (usePersonaVoice && targetVoiceId && targetVoiceId.startsWith('http')) {
                             replicateUrl = targetVoiceId;
                         }
 
-                        // 2. Parameter mergen (wichtig für Qwen3 oder geklonte Stimmen)
                         let replicateInput = { text: textToSpeak };
                         if (usePersonaVoice && dna.voice_config?.extraParams) {
                             try {
@@ -463,11 +461,7 @@
                             } catch(e) { console.warn("Replicate Params JSON Parse Error"); }
                         }
 
-                        // 3. CORS-Proxy URL bauen
-                        const proxyUrl = "https://corsproxy.io/?" + encodeURIComponent(replicateUrl);
-
-                        // 4. API Call über Proxy
-                        const response = await fetch(proxyUrl, {
+                        const response = await fetch(replicateUrl, {
                             method: 'POST',
                             headers: {
                                 'Authorization': `Bearer ${key}`,
@@ -477,16 +471,17 @@
                             body: JSON.stringify({ input: replicateInput })
                         });
                         
-                        const data = await response.json();
-                        if (!response.ok) throw new Error(data.detail || data.error || 'Replicate API Fehler');
+                        const data = await response.json().catch(() => ({}));
+                        if (!response.ok) {
+                            const errStr = typeof data === 'object' ? JSON.stringify(data) : String(data);
+                            throw new Error('Replicate API Fehler: ' + errStr);
+                        }
                         
                         let audioUrl = data.output;
                         if (Array.isArray(audioUrl)) audioUrl = audioUrl[0];
-                        if (!audioUrl) throw new Error('Keine Audio-URL von Replicate erhalten.');
+                        if (!audioUrl) throw new Error('Keine Audio-URL erhalten. Output: ' + JSON.stringify(data));
                         
-                        // Die Audio-URL selbst muss oft auch durch den Proxy, falls sie CORS-geschützt ist
-                        const audioProxyUrl = "https://corsproxy.io/?" + encodeURIComponent(audioUrl);
-                        const audioResponse = await fetch(audioProxyUrl);
+                        const audioResponse = await fetch(audioUrl);
                         if (!audioResponse.ok) throw new Error('Fehler beim Laden der Audiodatei von Replicate.');
                         audioBlob = await audioResponse.blob();
                     } else if (engine === 'custom_get') {
@@ -534,7 +529,7 @@
                     const mems = await db.memories.toArray();
                     const dirs = await db.directives.toArray();
                     const config = { providers, activeProviderId, ttsProvidersAccounts: ttsProviders, activeTtsProviderId, ttsVoices, autoPlayEnabled };
-                    const bundle = { type: "LUMEN_FULL_BACKUP", version: "3.7.3", dna: dna, directives: dirs, memories: mems, config, timestamp: Date.now() };
+                    const bundle = { type: "LUMEN_FULL_BACKUP", version: "3.7.4", dna: dna, directives: dirs, memories: mems, config, timestamp: Date.now() };
                     const blob = new Blob([JSON.stringify(bundle, null, 2)], { type: "application/json" });
                     const url = URL.createObjectURL(blob);
                     const a = document.createElement('a'); a.href = url;
@@ -582,7 +577,7 @@
             // --- CONFIG ONLY EXPORT/IMPORT ---
             const handleConfigExport = () => {
                 try {
-                    const config = { type: "LUMEN_CONFIG_BACKUP", version: "3.7.3", providers, activeProviderId, ttsProvidersAccounts: ttsProviders, activeTtsProviderId, ttsVoices, autoPlayEnabled };
+                    const config = { type: "LUMEN_CONFIG_BACKUP", version: "3.7.4", providers, activeProviderId, ttsProvidersAccounts: ttsProviders, activeTtsProviderId, ttsVoices, autoPlayEnabled };
                     const blob = new Blob([JSON.stringify(config, null, 2)], { type: "application/json" });
                     const url = URL.createObjectURL(blob);
                     const a = document.createElement('a'); a.href = url;
