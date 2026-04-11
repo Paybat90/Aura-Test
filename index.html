@@ -47,9 +47,9 @@
     <!-- Soft Minimalism CSS -->
     <style type="text/tailwindcss">
         @layer components {
-            .btn { @apply bg-white text-slate-600 border border-stone-200 px-4 py-2 text-[10px] font-bold uppercase tracking-widest rounded-2xl hover:bg-stone-100 shadow-sm transition-all cursor-pointer; }
-            .btn-primary { @apply bg-indigo-50 text-indigo-700 border border-indigo-100 px-4 py-2 text-[10px] font-bold uppercase tracking-widest rounded-2xl hover:bg-indigo-100 shadow-sm transition-all cursor-pointer; }
-            .btn-danger { @apply bg-rose-50 text-rose-600 border border-rose-100 px-4 py-2 text-[10px] font-bold uppercase tracking-widest rounded-2xl hover:bg-rose-100 shadow-sm transition-all cursor-pointer; }
+            .btn { @apply bg-white text-slate-600 border border-stone-200 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest rounded-2xl hover:bg-stone-100 shadow-sm transition-all cursor-pointer; }
+            .btn-primary { @apply bg-indigo-50 text-indigo-700 border border-indigo-100 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest rounded-2xl hover:bg-indigo-100 shadow-sm transition-all cursor-pointer; }
+            .btn-danger { @apply bg-rose-50 text-rose-600 border border-rose-100 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest rounded-2xl hover:bg-rose-100 shadow-sm transition-all cursor-pointer; }
             .panel { @apply bg-white border border-stone-100 p-4 rounded-3xl shadow-sm; }
             .input-field { @apply w-full bg-stone-50 border border-stone-200 text-slate-700 p-3 text-xs outline-none focus:border-indigo-300 focus:ring-2 focus:ring-indigo-100 rounded-xl transition-all font-mono; }
             .label { @apply text-[10px] uppercase tracking-widest text-slate-400 mb-1.5 block font-bold font-sans; }
@@ -68,16 +68,12 @@
     <div id="root" class="h-[100dvh] w-full"></div>
 
     <script type="text/babel">
-        // --- DATENBANK INIT (SANCTUM, DIREKTIVEN & ASSET-GARAGE) ---
+        // --- DATENBANK INIT (SANCTUM & DIREKTIVEN) ---
         const db = new Dexie('LumenSanctum');
-        db.version(1).stores({ 
+        // VERSION BUMP AUF 11 UM DEN VERSION-ERROR ZU BEHEBEN
+        db.version(11).stores({ 
             memories: '++id, titel_technisch, tags, image_id, fakt, emotion, bedeutung, timestamp, is_core_memory, kategorie, reflexion',
             directives: '++id, text' 
-        });
-        db.version(2).stores({
-            memories: '++id, titel_technisch, tags, image_id, fakt, emotion, bedeutung, timestamp, is_core_memory, kategorie, reflexion',
-            directives: '++id, text',
-            workbench_assets: '++id, typ, status' 
         });
 
         // --- KONSTANTEN V3.7.5 ---
@@ -89,14 +85,14 @@
             {
                 id: '1',
                 sender: 'user',
-                text: 'INIT CORE V3.7.5. REPLICATE POLLING PROXY ACTIVE.',
+                text: 'INIT CORE V3.7.5. REPLICATE POLLING-PROXY ACTIVE.',
                 timestamp: new Date(Date.now() - 60000).toISOString()
             },
             {
                 id: '2',
                 sender: 'ai',
-                text: 'System online. Die V3.7.5 Architektur ist aktiv. Die asynchrone Polling-Schleife für Replicate-Sprachmodelle ist implementiert und umgeht restriktive CORS- und Timeout-Sperren via Proxy.',
-                scratchpad: '{\n  "wahrnehmung": {\n    "werkbank_auge": null,\n    "ohr_roh": "INIT CORE V3.7.5",\n    "ohr_bereinigt": "System-Patch auf V3.7.5 aktiv."\n  },\n  "matrix": {\n    "internal_system_glitch": false,\n    "memory_update_detected": null,\n    "neue_direktive_erkannt": null,\n    "tagebuch_entwurf": null,\n    "situations_analyse": "Replicate Polling Proxy Integration erfolgreich."\n  },\n  "finale_antwort": "System online. Die V3.7.5 Architektur ist aktiv. Die asynchrone Polling-Schleife für Replicate-Sprachmodelle ist implementiert und umgeht restriktive CORS- und Timeout-Sperren via Proxy."\n}',
+                text: 'System online. Die V3.7.5 Architektur ist aktiv. Der asynchrone Polling-Proxy für Replicate wurde integriert, um CORS-Blockaden und Timeouts zuverlässig zu umgehen.',
+                scratchpad: '{\n  "wahrnehmung": {\n    "werkbank_auge": null,\n    "ohr_roh": "INIT CORE V3.7.5",\n    "ohr_bereinigt": "System-Patch auf V3.7.5 aktiv."\n  },\n  "matrix": {\n    "internal_system_glitch": false,\n    "memory_update_detected": null,\n    "neue_direktive_erkannt": null,\n    "tagebuch_entwurf": null,\n    "situations_analyse": "V3.7.5 Update mit Replicate Polling-Proxy geladen."\n  },\n  "finale_antwort": "System online. Die V3.7.5 Architektur ist aktiv. Der asynchrone Polling-Proxy für Replicate wurde integriert, um CORS-Blockaden und Timeouts zuverlässig zu umgehen."\n}',
                 timestamp: new Date().toISOString()
             }
         ];
@@ -248,24 +244,29 @@
                     return JSON.parse(localStorage.getItem('lumen_ttsVoices')) || {
                         elevenlabs: '21m00Tcm4TlvDq8ikWAM',
                         openai: 'nova',
-                        gemini: 'Kore',
-                        replicate: ''
+                        gemini: 'Kore'
                     };
                 } catch {
-                    return { elevenlabs: '21m00Tcm4TlvDq8ikWAM', openai: 'nova', gemini: 'Kore', replicate: '' };
+                    return { elevenlabs: '21m00Tcm4TlvDq8ikWAM', openai: 'nova', gemini: 'Kore' };
                 }
             });
 
+            // DNA STATE MIT VOICE BINDING
             const [dna, setDna] = React.useState(() => { 
+                const defaultVoice = { providerId: "", voiceIdOrUrl: "", speed: 1.05, extraParams: "" };
                 try { 
                     const stored = JSON.parse(localStorage.getItem('lumen_dna_layers'));
-                    if(stored && stored.block1_identity) return stored; 
+                    if(stored && stored.block1_identity) {
+                        if (!stored.voice_config) stored.voice_config = defaultVoice;
+                        return stored; 
+                    }
                 } catch { /* ignore */ }
                 return { 
                     persona_name: "Maira", 
                     block1_identity: DEFAULT_BLOCK1, 
                     block3_sensors: DEFAULT_BLOCK3, 
-                    block4_skeleton: DEFAULT_BLOCK4 
+                    block4_skeleton: DEFAULT_BLOCK4,
+                    voice_config: defaultVoice
                 }; 
             });
             
@@ -276,7 +277,7 @@
             const [activeView, setActiveView] = React.useState('chat'); 
             const [isLoading, setIsLoading] = React.useState(false);
             
-            // --- CHAT PERSISTENCE (V3.3) ---
+            // --- CHAT PERSISTENCE ---
             const [messages, setMessages] = React.useState(() => { 
                 const saved = localStorage.getItem('lumen_chat'); 
                 return saved ? JSON.parse(saved) : INITIAL_MESSAGES; 
@@ -303,23 +304,17 @@
             
             const [memories, setMemories] = React.useState([]);
             const [directives, setDirectives] = React.useState([]);
-            const [workbenchAssets, setWorkbenchAssets] = React.useState([]);
             const [sanctumEditId, setSanctumEditId] = React.useState(null);
             const [sanctumForm, setSanctumForm] = React.useState({});
             
             // Workbench Editor State
             const [editingDraftId, setEditingDraftId] = React.useState(null);
             const [draftEditText, setDraftEditText] = React.useState('');
-            
-            // Asset Upload State
-            const [assetFocus, setAssetFocus] = React.useState('');
-            const [isUploadingAsset, setIsUploadingAsset] = React.useState(false);
 
             const fileInputRefSanctum = React.useRef(null);
             const fileInputRefDNA = React.useRef(null);
             const fileInputRefOmni = React.useRef(null);
             const fileInputRefConfig = React.useRef(null);
-            const fileInputRefOmniTop = React.useRef(null);
 
             React.useEffect(() => { if(activeView === 'chat') messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [messages, isLoading, activeView]);
 
@@ -350,61 +345,6 @@
             const loadDirectives = async () => { const d = await db.directives.toArray(); setDirectives(d); };
             React.useEffect(() => { if(activeView === 'directives') loadDirectives(); }, [activeView]);
 
-            const loadAssets = async () => { const a = await db.workbench_assets.toArray(); setWorkbenchAssets(a.reverse()); };
-            React.useEffect(() => { loadAssets(); }, [activeView]); // Lade Assets bei jedem View-Change (wichtig fürs Docking)
-
-            const activeAssetCount = workbenchAssets.filter(a => a.status === 'AKTIV').length;
-
-            // --- VISION API HELPER (DRY REFACTORING V3.6.1) ---
-            const callVisionAPI = async (base64Raw, focusText, activeProvider) => {
-                const promptText = "Beginne ZWINGEND mit einem Meta-Satz, der das Bild kategorisiert (z.B. UI-Screenshot, Foto, Skizze). Fokus: " + focusText;
-                const isGemini = activeProvider.type === 'gemini';
-                const key = activeProvider.apiKey;
-                const apiUrl = activeProvider.url;
-
-                if (isGemini) {
-                    const fetchUrl = apiUrl.includes('?') ? `${apiUrl}&key=${key}` : `${apiUrl}?key=${key}`;
-                    const mimeMatch = base64Raw.match(/data:([a-zA-Z0-9]+\/[a-zA-Z0-9-.+]+).*,.*/);
-                    const mimeType = mimeMatch ? mimeMatch[1] : 'image/jpeg';
-                    const base64Data = base64Raw.includes(',') ? base64Raw.split(',')[1] : base64Raw;
-                    
-                    const r = await fetch(fetchUrl, {
-                        method: 'POST', headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            contents: [{
-                                parts: [
-                                    { text: promptText },
-                                    { inlineData: { mimeType: mimeType, data: base64Data } }
-                                ]
-                            }]
-                        })
-                    });
-                    const d = await r.json();
-                    if (!r.ok) throw new Error(d.error?.message || 'Gemini Vision Error');
-                    return d.candidates[0].content.parts[0].text;
-                } else {
-                    const headers = { 'Content-Type': 'application/json' };
-                    if (key) headers['Authorization'] = `Bearer ${key}`;
-                    
-                    const r = await fetch(apiUrl, {
-                        method: 'POST', headers,
-                        body: JSON.stringify({
-                            model: activeProvider.model || 'gpt-4o',
-                            messages: [{
-                                role: 'user',
-                                content: [
-                                    { type: 'text', text: promptText },
-                                    { type: 'image_url', image_url: { url: base64Raw } }
-                                ]
-                            }]
-                        })
-                    });
-                    const d = await r.json();
-                    if (!r.ok) throw new Error(d.error?.message || 'OpenAI Vision Error');
-                    return d.choices[0].message.content;
-                }
-            };
-
             // --- AUDIO MANAGER ---
             const stopAudio = () => {
                 if (currentAudioRef.current) {
@@ -419,7 +359,20 @@
                 stopAudio();
                 setPlayingMsgId(msgId);
                 
-                const ttsProvider = ttsProviders.find(p => p.id === activeTtsProviderId);
+                // INTELLIGENTES ROUTING: Persona DNA vs. Global
+                let targetProviderId = activeTtsProviderId;
+                let targetVoiceId = null;
+                let usePersonaVoice = false;
+
+                if (dna.voice_config && dna.voice_config.providerId && dna.voice_config.providerId !== "") {
+                    targetProviderId = dna.voice_config.providerId;
+                    if (dna.voice_config.voiceIdOrUrl && dna.voice_config.voiceIdOrUrl.trim() !== '') {
+                        targetVoiceId = dna.voice_config.voiceIdOrUrl.trim();
+                    }
+                    usePersonaVoice = true;
+                }
+
+                const ttsProvider = ttsProviders.find(p => p.id === targetProviderId);
 
                 if (!ttsProvider || (!ttsProvider.apiKey && ttsProvider.type !== 'custom_get' && ttsProvider.type !== 'custom_openai')) {
                     setPlayingMsgId(null);
@@ -428,7 +381,7 @@
 
                 const key = ttsProvider.apiKey;
                 const engine = ttsProvider.type;
-                const voiceId = ttsVoices[engine];
+                const voiceId = usePersonaVoice ? (targetVoiceId || ttsVoices[engine]) : ttsVoices[engine];
 
                 try {
                     let audioBlob;
@@ -464,10 +417,16 @@
                         const url = engine === 'custom_openai' ? ttsProvider.url : 'https://api.openai.com/v1/audio/speech';
                         const headers = { 'Content-Type': 'application/json' };
                         if (key) headers['Authorization'] = `Bearer ${key}`;
+                        
+                        let speedParam = 1.05;
+                        if (usePersonaVoice && dna.voice_config?.extraParams) {
+                            try { const p = JSON.parse(dna.voice_config.extraParams); if (p.speed) speedParam = p.speed; } catch(e){}
+                        }
+
                         const response = await fetch(url, {
                             method: 'POST',
                             headers,
-                            body: JSON.stringify({ model: 'tts-1', voice: voiceId || 'nova', input: textToSpeak, speed: 1.05 })
+                            body: JSON.stringify({ model: 'tts-1', voice: voiceId || 'nova', input: textToSpeak, speed: speedParam })
                         });
                         
                         if(!response.ok) {
@@ -488,28 +447,8 @@
                             throw new Error(errData.detail?.message || errData.detail || 'ElevenLabs API Fehler');
                         }
                         audioBlob = await response.blob();
-                    } else if (engine === 'custom_get') {
-                        let url = ttsProvider.url;
-                        if (url.includes('{text}')) {
-                            url = url.replace('{text}', encodeURIComponent(textToSpeak));
-                        } else {
-                            const separator = url.includes('?') ? '&' : '?';
-                            url = `${url}${separator}text=${encodeURIComponent(textToSpeak)}`;
-                        }
-                        if (voiceId) {
-                            url += `&voice=${encodeURIComponent(voiceId)}`;
-                        }
-                        const headers = {};
-                        if (key) headers['Authorization'] = `Bearer ${key}`;
-                        
-                        const response = await fetch(url, { method: 'GET', headers });
-                        if(!response.ok) throw new Error(await response.text() || 'Custom GET TTS Request failed');
-                        audioBlob = await response.blob();
                     } else if (engine === 'replicate') {
                         let replicateUrl = ttsProvider.url;
-                        const usePersonaVoice = true; // Hardcoded fallback um Logik zu stützen falls nicht im State
-                        const targetVoiceId = voiceId;
-
                         if (usePersonaVoice && targetVoiceId && targetVoiceId.startsWith('http')) {
                             replicateUrl = targetVoiceId;
                         }
@@ -572,6 +511,23 @@
                         const audioResponse = await fetch(audioProxyUrl);
                         if (!audioResponse.ok) throw new Error('Fehler beim Laden der finalen Audiodatei.');
                         audioBlob = await audioResponse.blob();
+                    } else if (engine === 'custom_get') {
+                        let url = ttsProvider.url;
+                        if (url.includes('{text}')) {
+                            url = url.replace('{text}', encodeURIComponent(textToSpeak));
+                        } else {
+                            const separator = url.includes('?') ? '&' : '?';
+                            url = `${url}${separator}text=${encodeURIComponent(textToSpeak)}`;
+                        }
+                        if (voiceId) {
+                            url += `&voice=${encodeURIComponent(voiceId)}`;
+                        }
+                        const headers = {};
+                        if (key) headers['Authorization'] = `Bearer ${key}`;
+                        
+                        const response = await fetch(url, { method: 'GET', headers });
+                        if(!response.ok) throw new Error(await response.text() || 'Custom GET TTS Request failed');
+                        audioBlob = await response.blob();
                     }
 
                     const audio = new Audio(URL.createObjectURL(audioBlob));
@@ -617,9 +573,19 @@
                     try {
                         const parsed = JSON.parse(event.target.result);
                         if (parsed.type === "LUMEN_FULL_BACKUP") {
-                            setDna(parsed.dna); localStorage.setItem('lumen_dna_layers', JSON.stringify(parsed.dna));
+                            // Ensure voice_config backwards compatibility
+                            const importedDna = parsed.dna;
+                            if (!importedDna.voice_config) importedDna.voice_config = { providerId: "", voiceIdOrUrl: "", speed: 1.05, extraParams: "" };
+                            
+                            setDna(importedDna); localStorage.setItem('lumen_dna_layers', JSON.stringify(importedDna));
+                            
+                            // V3.5+ WIPEN UND NEU SCHREIBEN
+                            await db.directives.clear();
                             if (parsed.directives && parsed.directives.length) await db.directives.bulkPut(parsed.directives);
+                            
+                            await db.memories.clear();
                             if (parsed.memories && parsed.memories.length) await db.memories.bulkPut(parsed.memories);
+                            
                             if (parsed.config) {
                                 if (parsed.config.providers) { setProviders(parsed.config.providers); localStorage.setItem('lumen_providers', JSON.stringify(parsed.config.providers)); }
                                 if (parsed.config.activeProviderId) { setActiveProviderId(parsed.config.activeProviderId); localStorage.setItem('lumen_activeProviderId', parsed.config.activeProviderId); }
@@ -684,95 +650,8 @@
                 } catch(e) { showToast('DB Fehler'); }
             };
 
-            // --- ASSET UPLOAD & VISION API (V3.6.1) ---
-            const handleAssetUploadDirect = async () => {
-                const fileInput = document.getElementById('asset-upload-input');
-                const file = fileInput?.files?.[0];
-                
-                if (!file) return showToast("Bitte wähle zuerst ein Bild aus!");
-                if (!assetFocus.trim()) return showToast("Bitte zuerst einen Fokus eingeben!");
-
-                const activeProvider = providers.find(p => p.id === activeProviderId) || providers[0];
-                if (!activeProvider) return showToast('Fehler: Kein aktiver Provider konfiguriert');
-
-                setIsUploadingAsset(true);
-                showToast("Analysiere Asset (Vision)...");
-
-                try {
-                    const base64Raw = await new Promise((resolve, reject) => {
-                        const reader = new FileReader();
-                        reader.readAsDataURL(file);
-                        reader.onload = () => resolve(reader.result);
-                        reader.onerror = error => reject(error);
-                    });
-                    
-                    const apiResponse = await callVisionAPI(base64Raw, assetFocus, activeProvider);
-
-                    await db.workbench_assets.add({
-                        typ: "image_vision_text",
-                        simons_frage: assetFocus,
-                        ki_analyse: apiResponse,
-                        raw_image: base64Raw,
-                        status: "AKTIV"
-                    });
-                    
-                    showToast("ASSET VERANKERT");
-                    setAssetFocus("");
-                    loadAssets();
-                } catch(err) {
-                    showToast("Fehler bei Asset-Analyse: " + err.message);
-                } finally {
-                    setIsUploadingAsset(false);
-                    if (fileInput) fileInput.value = '';
-                }
-            };
-
-            const handleReAnalyse = async (asset) => {
-                const newFocus = prompt("Neuer Fokus für die Analyse?", asset.simons_frage);
-                if (!newFocus || newFocus === asset.simons_frage) return;
-
-                const activeProvider = providers.find(p => p.id === activeProviderId) || providers[0];
-                if (!activeProvider) return showToast('Fehler: Kein aktiver Provider konfiguriert');
-
-                setIsUploadingAsset(true);
-                showToast("Re-Analysiere Asset...");
-
-                try {
-                    const base64Raw = asset.raw_image;
-                    if (!base64Raw) throw new Error("Kein Bild in der DB gefunden (Legacy Asset?)");
-                    
-                    const apiResponse = await callVisionAPI(base64Raw, newFocus, activeProvider);
-
-                    // V3.6.1 APPEND LOGIC
-                    await db.workbench_assets.update(asset.id, {
-                        simons_frage: newFocus,
-                        ki_analyse: asset.ki_analyse + "\n\n[UPDATE: " + newFocus + "]\n" + apiResponse
-                    });
-                    
-                    showToast("RE-ANALYSE ABGESCHLOSSEN");
-                    loadAssets();
-                } catch(err) {
-                    showToast("Fehler bei Re-Analyse: " + err.message);
-                } finally {
-                    setIsUploadingAsset(false);
-                }
-            };
-
-            const toggleAssetStatus = async (asset) => {
-                if (asset.status === 'GEPARKT') {
-                    const activeCount = workbenchAssets.filter(a => a.status === 'AKTIV').length;
-                    if (activeCount >= 3) {
-                        return showToast("MAXIMAL 3 ASSETS AKTIV ERLAUBT");
-                    }
-                    await db.workbench_assets.update(asset.id, { status: 'AKTIV' });
-                } else {
-                    await db.workbench_assets.update(asset.id, { status: 'GEPARKT' });
-                }
-                loadAssets();
-            };
-
             // --- WORKBENCH / ARCHIVAR ---
-            const handleFormatAndSaveWorkbench = async (draftId, proseText, targetTechId) => {
+            const handleFormatAndSaveWorkbench = async (draftId, proseText) => {
                 showToast('Archivar formatiert...');
                 const activeProvider = providers.find(p => p.id === activeProviderId) || providers[0];
                 if (!activeProvider) return showToast('Fehler: Kein aktiver Provider konfiguriert');
@@ -782,12 +661,7 @@
                 const key = activeProvider.apiKey;
                 const apiUrl = activeProvider.url;
                 
-                let prompt = `Du bist der Archivar. Formatiere diese Prosa-Notiz zwingend in dieses exakte JSON-Format: { "titel_technisch": "KURZ_SACHLICH_ID", "titel_poetisch": "Ein emotionaler, metaphorischer Name", "kategorie": "[Wähle ZWINGEND zwischen 'TECHNISCH' oder 'EMOTIONAL']", "fakt": "Was passierte", "emotion": "Gefühlslage", "bedeutung": "Regel/Fazit", "tags": ["tag1", "tag2"] }. Keine weiteren Texte.`;
-                
-                // ARCHIVAR-PATCH: KLON-SCHUTZ V3.5
-                if (targetTechId) {
-                    prompt = `ACHTUNG: Dies ist ein Update des bestehenden Eintrags mit der ID: [${targetTechId}]. Du MUSST diese ID zwingend beibehalten!\n\n` + prompt;
-                }
+                const prompt = `Du bist der Archivar. Formatiere diese Prosa-Notiz zwingend in dieses exakte JSON-Format: { "titel_technisch": "KURZ_SACHLICH_ID", "titel_poetisch": "Ein emotionaler, metaphorischer Name", "kategorie": "[Wähle ZWINGEND zwischen 'TECHNISCH' oder 'EMOTIONAL']", "fakt": "Was passierte", "emotion": "Gefühlslage", "bedeutung": "Regel/Fazit", "tags": ["tag1", "tag2"] }. Keine weiteren Texte.`;
                 
                 try {
                     let resText = "";
@@ -819,19 +693,7 @@
                         resText = d.choices[0].message.content;
                     }
                     const obj = JSON.parse(resText.replace(/[\`]{3}json/gi, '').replace(/[\`]{3}/gi, '').trim());
-                    
-                    // Update handling vs New Add
-                    if (targetTechId && obj.titel_technisch === targetTechId) {
-                        const existingMemory = await db.memories.where('titel_technisch').equals(targetTechId).first();
-                        if (existingMemory) {
-                            await db.memories.update(existingMemory.id, {...obj, timestamp: Date.now()});
-                        } else {
-                            await db.memories.add({...obj, timestamp: Date.now(), is_core_memory: false});
-                        }
-                    } else {
-                        await db.memories.add({...obj, timestamp: Date.now(), is_core_memory: false});
-                    }
-                    
+                    await db.memories.add({...obj, timestamp: Date.now(), is_core_memory: false});
                     setDrafts(prev => prev.filter(d => d.id !== draftId));
                     showToast('Im Sanctum archiviert');
                 } catch(e) { showToast(`Formatierungs-Fehler: ${e.message}`); }
@@ -874,16 +736,12 @@
                         if(emo.length>0) memoryString += `\n[EMOTIONALE ERLEBNISSE]\n` + emo.map(m => `- ${m.is_core_memory?'[CORE] ':''}[ID: ${m.titel_technisch}] Titel: ${m.titel_poetisch} | Fakt: ${m.fakt} | Emotion: ${m.emotion} | Bedeutung: ${m.bedeutung} | Reflexion: ${m.reflexion||'Keine'}`).join('\n') + '\n';
                     }
 
-                    // --- TIME INJECTION V3.3 ---
+                    // --- TIME INJECTION ---
                     const now = new Date();
                     const timeOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
                     const timeString = "[SYSTEM-UHRZEIT]\nAktuelle Zeit in Simons Welt: " + now.toLocaleDateString('de-DE', timeOptions) + " Uhr.\n\n";
 
-                    // --- ASSET INJECTION V3.5 ---
-                    const activeAssets = await db.workbench_assets.where('status').equals('AKTIV').toArray();
-                    const imageString = activeAssets.length > 0 ? "[AKTIVE ASSETS IN DER GARAGE]\n" + activeAssets.map(a => "[ASSET ID: " + a.id + " | TYP: " + a.typ + "]\nSimons Fokus: " + a.simons_frage + "\nAnalyse: " + a.ki_analyse).join('\n\n') + "\n\n" : "";
-
-                    const dynamicContext = `${timeString}${imageString}${directiveString}${memoryString}`.trim() || "Kein aktiver Kontext geladen.";
+                    const dynamicContext = `${timeString}${directiveString}${memoryString}`.trim() || "Kein aktiver Kontext geladen.";
                     setLatestContext(dynamicContext);
                     const masterSystemPrompt = `[1. DEINE IDENTITÄT UND REGELN (NUR ZUM LESEN)]\n${dna.block1_identity}\n\n[2. AKTIVER KONTEXT (NUR ZUM LESEN)]\n${dynamicContext}\n\n[3. DIE MATRIX-SENSOREN (DEINE LOGIK-REGELN)]\n${dna.block3_sensors}\n\n[4. DEINE AUSGABE (DAS JSON-SKELETT)]\n${dna.block4_skeleton}`.trim();
 
@@ -945,24 +803,14 @@
                         
                         if(obj.matrix) setTelemetry({ concern: parseInt(obj.matrix.concern||obj.matrix.concern_level||telemetry.concern), mask_drop: obj.matrix.mask_drop||false });
                         
-                        // --- SELF-HEALING MUTATION V3.5 ---
-                        if (obj.wahrnehmung && obj.wahrnehmung.werkbank_auge) {
-                            const activeAssetsList = await db.workbench_assets.where('status').equals('AKTIV').toArray();
-                            if (activeAssetsList.length > 0) {
-                                await db.workbench_assets.update(activeAssetsList[0].id, { ki_analyse: obj.wahrnehmung.werkbank_auge });
-                                showToast("ASSET-ANALYSE AKTUALISIERT");
-                                loadAssets();
-                            }
-                        }
-
-                        // --- DIREKTIVEN PARSER V3.2 ---
+                        // --- DIREKTIVEN PARSER ---
                         const neueDir = obj.matrix?.neue_direktive_erkannt;
                         if (neueDir && typeof neueDir === 'string' && neueDir.trim().length > 0) {
                             await db.directives.add({ text: neueDir.trim() });
                             showToast("NEUE DIREKTIVE VERANKERT");
                         }
 
-                        // --- ROUTING-FIX V3.6 (SCHUBLADEN-LOGIK) ---
+                        // --- ROUTING-FIX (SCHUBLADEN-LOGIK) ---
                         const entwurf = obj.matrix?.tagebuch_entwurf || obj.tagebuch_entwurf;
                         if(entwurf) { 
                             const modus = entwurf.modus;
@@ -970,9 +818,6 @@
                             if (modus === "PITCH_ERFOLG" || modus === "PITCH_ERKENNTNIS") {
                                 console.log("Stiller Pitch erkannt. Ignoriere Entwurf.");
                             } 
-                            else if (modus === "VORSCHLAG") {
-                                showToast("Mairas Vorschlag im Chat verbleibend.");
-                            }
                             else if (modus === "COMMIT") {
                                 if (entwurf.daten) {
                                     await db.memories.add({
@@ -1009,7 +854,7 @@
                             }
                         }
 
-                        // --- OVERWRITE- & FUSION-PARSER V3.1 (UNIVERSAL MATRIX & TAG-FILTER) ---
+                        // --- OVERWRITE- & FUSION-PARSER ---
                         const memUpd = obj.matrix?.memory_update_detected;
                         if(memUpd && memUpd.id && typeof memUpd.reflexion_fusioniert !== 'undefined') {
                             try {
@@ -1017,10 +862,9 @@
                                 if(targetMemory) {
                                     const newReflexion = memUpd.reflexion_fusioniert;
                                     
-                                    // TAG-FILTER 
                                     if (memUpd.neue_trigger_tags && Array.isArray(memUpd.neue_trigger_tags)) {
                                         const existingTags = new Set((targetMemory.tags || []).map(t => typeof t === 'string' ? t.toLowerCase() : ''));
-                                        const forbiddenTags = ["genervt", "müll", "ok", "fehler", "schlecht", "gut", "hilfe"]; // Blacklist
+                                        const forbiddenTags = ["genervt", "müll", "ok", "fehler", "schlecht", "gut", "hilfe"];
                                         
                                         memUpd.neue_trigger_tags.forEach(t => {
                                             if (typeof t === 'string') {
@@ -1097,25 +941,6 @@
                 <div className="flex flex-col h-[100dvh] w-full max-w-4xl mx-auto sm:border-x border-stone-200 bg-stone-50 relative overflow-hidden shadow-2xl">
                     <Toast message={toast} />
 
-                    {/* --- HEADER KOMPRESSION V3.6.1 (DESIGN KORREKTUR) --- */}
-                    <div className="bg-transparent border-b border-stone-200 flex justify-between items-center px-4 py-1 shrink-0 z-[60]">
-                        <div className="text-[9px] text-slate-400 font-mono tracking-widest">LUMEN CORE V3.7.5</div>
-                        <div className="flex gap-4 items-center">
-                            <button onClick={() => { const newVal = !autoPlayEnabled; setAutoPlayEnabled(newVal); localStorage.setItem('lumen_autoPlay', String(newVal)); }} className={`text-[9px] font-mono tracking-widest transition-colors ${autoPlayEnabled ? 'text-indigo-500' : 'text-slate-400 hover:text-slate-600'}`}>🔈 TTS: {autoPlayEnabled ? 'ON' : 'OFF'}</button>
-                            <input type="file" accept=".json" ref={fileInputRefOmniTop} className="hidden" onChange={handleOmniImport}/>
-                            <button onClick={() => fileInputRefOmniTop.current?.click()} className="text-[9px] text-slate-400 font-mono tracking-widest hover:text-indigo-500 transition-colors">📥 OMNI-IMPORT</button>
-                            {!showClearConfirm ? (
-                                <button onClick={() => setShowClearConfirm(true)} className="text-[9px] text-slate-400 font-mono tracking-widest hover:text-rose-500 transition-colors">🗑️ CLEAR CHAT</button>
-                            ) : (
-                                <div className="flex gap-2 items-center bg-rose-50 px-2 py-0.5 rounded border border-rose-100">
-                                    <span className="text-[9px] text-rose-500 font-mono font-bold">SURE?</span>
-                                    <button onClick={() => { setMessages([]); localStorage.removeItem('lumen_chat'); stopAudio(); setShowClearConfirm(false); }} className="text-[9px] text-rose-600 hover:text-rose-800 font-bold font-mono">YES</button>
-                                    <button onClick={() => setShowClearConfirm(false)} className="text-[9px] text-slate-500 hover:text-slate-700 font-mono">NO</button>
-                                </div>
-                            )}
-                        </div>
-                    </div>
-
                     {compareData && (
                         <div className="fixed inset-0 z-[700] bg-black/40 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in">
                             <div className="bg-white rounded-3xl w-full max-w-3xl max-h-[80vh] flex flex-col shadow-2xl overflow-hidden border border-stone-100">
@@ -1131,27 +956,46 @@
                             </div>
                         </div>
                     )}
-                    
-                    <header className="shrink-0 border-b border-stone-200 p-4 sm:px-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-stone-50 z-50 sticky top-0">
-                        <div className="flex items-center gap-4">
-                            <h1 className="font-bold tracking-[0.2em] text-slate-800 text-sm">LUMEN</h1>
+
+                    {/* --- MICRO TOP BAR (V3.5 COMPRESSION) --- */}
+                    <div className="bg-slate-900 flex justify-between items-center px-4 py-1 shrink-0 z-[60]">
+                        <div className="text-[9px] text-slate-500 font-mono tracking-widest font-bold">LUMEN CORE</div>
+                        <div className="flex items-center gap-3">
+                            <button onClick={() => {
+                                const newVal = !autoPlayEnabled;
+                                setAutoPlayEnabled(newVal);
+                                localStorage.setItem('lumen_autoPlay', String(newVal));
+                            }} className="text-[9px] font-mono uppercase tracking-widest text-slate-400 hover:text-white transition-colors">
+                                {autoPlayEnabled ? '🔈 AUTO-PLAY: ON' : '🔈 AUTO-PLAY: OFF'}
+                            </button>
+                            
+                            {!showClearConfirm ? (
+                                <button onClick={() => setShowClearConfirm(true)} className="text-[9px] font-mono uppercase tracking-widest text-slate-400 hover:text-rose-400 transition-colors">
+                                    🗑️ CLEAR CHAT
+                                </button>
+                            ) : (
+                                <div className="flex gap-2 items-center">
+                                    <span className="text-[9px] font-bold text-rose-500 uppercase">Sicher?</span>
+                                    <button onClick={() => { setMessages([]); localStorage.removeItem('lumen_chat'); stopAudio(); setShowClearConfirm(false); }} className="text-[9px] font-mono uppercase tracking-widest text-rose-400 hover:text-rose-300 transition-colors font-bold">JA</button>
+                                    <button onClick={() => setShowClearConfirm(false)} className="text-[9px] font-mono uppercase tracking-widest text-slate-400 hover:text-white transition-colors">NEIN</button>
+                                </div>
+                            )}
+                            
+                            <label className="text-[9px] font-mono uppercase tracking-widest text-slate-400 hover:text-white transition-colors cursor-pointer flex items-center">
+                                <input type="file" accept=".json" className="hidden" onChange={handleOmniImport}/>
+                                📥 OMNI-IMPORT
+                            </label>
                         </div>
-                        <div className="flex items-center gap-2 flex-wrap">
+                    </div>
+                    
+                    {/* --- COMPRESSED MAIN HEADER --- */}
+                    <header className="shrink-0 border-b border-stone-200 p-3 sm:px-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 bg-stone-50 z-50 sticky top-0">
+                        <div className="flex items-center gap-1.5 flex-wrap w-full justify-center sm:justify-start">
                             <button className={`btn ${activeView==='chat'?'bg-stone-100 text-slate-800 ring-2 ring-stone-200':''}`} onClick={()=>setActiveView('chat')}>Chat</button>
                             <button className={`btn ${activeView==='sanctum'?'bg-stone-100 text-slate-800 ring-2 ring-stone-200':''}`} onClick={()=>setActiveView('sanctum')}>Sanctum</button>
                             <button className={`btn ${activeView==='directives'?'bg-stone-100 text-slate-800 ring-2 ring-stone-200':''}`} onClick={()=>setActiveView('directives')}>Direktiven</button>
                             <button className={`btn ${activeView==='dna'?'bg-stone-100 text-slate-800 ring-2 ring-stone-200':''}`} onClick={()=>setActiveView('dna')}>DNA</button>
-                            
-                            <button className={`btn flex items-center gap-1.5 ${activeView==='workbench'?'bg-stone-100 text-slate-800 ring-2 ring-stone-200':''}`} onClick={()=>setActiveView('workbench')}>
-                                Workbench 
-                                {drafts.length>0 && <span className="bg-rose-500 text-white rounded-full px-1.5 py-0.5 text-[9px]">{drafts.length}</span>}
-                                {activeAssetCount > 0 && (
-                                    <div className="flex gap-0.5 ml-1">
-                                        {Array.from({length: activeAssetCount}).map((_,i) => <span key={i} className="w-1.5 h-1.5 rounded-full bg-amber-400 shadow-[0_0_3px_rgba(251,191,36,0.8)]"></span>)}
-                                    </div>
-                                )}
-                            </button>
-
+                            <button className={`btn ${activeView==='workbench'?'bg-stone-100 text-slate-800 ring-2 ring-stone-200':''}`} onClick={()=>setActiveView('workbench')}>Workbench {drafts.length>0 && <span className="bg-rose-500 text-white rounded-full px-1.5 py-0.5 text-[9px] ml-1">{drafts.length}</span>}</button>
                             <button className={`btn ${activeView==='settings'?'bg-stone-100 text-slate-800 ring-2 ring-stone-200':''}`} onClick={()=>setActiveView('settings')}>⚙️</button>
                         </div>
                     </header>
@@ -1327,7 +1171,7 @@
 
                                         {/* CUSTOM STIMMEN INPUT */}
                                         {(activeTtsProvider.type === 'custom_openai' || activeTtsProvider.type === 'custom_get' || activeTtsProvider.type === 'replicate') && (
-                                            <input type="text" placeholder="Voice-ID oder Parameter (optional)" className="input-field bg-white" value={ttsVoices[activeTtsProvider.type] || ''} onChange={e=>{
+                                            <input type="text" placeholder={activeTtsProvider.type === 'replicate' ? "Voice (optional, z.B. bei Replicate nicht nötig)" : "Voice-ID oder Parameter (optional)"} className="input-field bg-white" value={ttsVoices[activeTtsProvider.type] || ''} onChange={e=>{
                                                 const newVoices = {...ttsVoices, [activeTtsProvider.type]: e.target.value};
                                                 setTtsVoices(newVoices); localStorage.setItem('lumen_ttsVoices', JSON.stringify(newVoices));
                                             }} />
@@ -1378,15 +1222,15 @@
                                                 if (type === 'elevenlabs') defaultUrl = 'https://api.elevenlabs.io/v1/text-to-speech';
                                                 else if (type === 'openai') defaultUrl = 'https://api.openai.com/v1/audio/speech';
                                                 else if (type === 'gemini') defaultUrl = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent';
+                                                else if (type === 'replicate') defaultUrl = 'https://api.replicate.com/v1/models/qwen/qwen3-tts/predictions';
                                                 else if (type === 'custom_get') defaultUrl = 'http://localhost:5002/api/tts?text={text}';
                                                 else if (type === 'custom_openai') defaultUrl = 'http://localhost:8080/v1/audio/speech';
-                                                else if (type === 'replicate') defaultUrl = 'https://api.replicate.com/v1/predictions';
                                                 setTtsProviderForm({...ttsProviderForm, type, url: defaultUrl});
                                             }} className="input-field bg-white border-fuchsia-100">
                                                 <option value="elevenlabs">ElevenLabs API</option>
                                                 <option value="openai">OpenAI TTS API</option>
                                                 <option value="gemini">Google Gemini TTS API</option>
-                                                <option value="replicate">Replicate API</option>
+                                                <option value="replicate">Replicate API (Qwen3 / Open Source)</option>
                                                 <option value="custom_openai">Custom POST (OpenAI Kompatibel)</option>
                                                 <option value="custom_get">Custom GET (z.B. Mozilla TTS)</option>
                                             </select>
@@ -1425,8 +1269,7 @@
                             <div className="panel space-y-4 bg-stone-100/50 border-stone-200">
                                 <p className="text-xs text-slate-500 leading-relaxed">Das Omni-Bundle vereint deine gesamte DNA, alle Direktiven und das komplette Sanctum-Gedächtnis in einer Datei.</p>
                                 <div className="flex gap-3">
-                                    <input type="file" accept=".json" ref={fileInputRefOmni} className="hidden" onChange={handleOmniImport}/>
-                                    <button onClick={()=>fileInputRefOmni.current?.click()} className="btn flex-1 py-3 text-slate-600 hover:bg-white border-stone-300">📥 Omni-Import</button>
+                                    <button onClick={()=>document.querySelector('input[onChange="handleOmniImport"]')?.click()} className="btn flex-1 py-3 text-slate-600 hover:bg-white border-stone-300">📥 Omni-Import</button>
                                     <button onClick={handleOmniExport} className="btn flex-1 py-3 bg-slate-800 text-white hover:bg-slate-900 shadow-md">📤 Omni-Export</button>
                                 </div>
                             </div>
@@ -1454,7 +1297,47 @@
                             </div>
 
                             <div className="panel space-y-6 bg-white/50">
-                                <div><label className="label text-indigo-500">Persona Identity (Name)</label><input value={dna.persona_name} onChange={e=>setDna({...dna,persona_name:e.target.value})} className="input-field font-bold text-indigo-700 bg-white" /></div>
+                                <div>
+                                    <label className="label text-indigo-500">Persona Identity (Name)</label>
+                                    <input value={dna.persona_name} onChange={e=>setDna({...dna,persona_name:e.target.value})} className="input-field font-bold text-indigo-700 bg-white" />
+                                    
+                                    {/* --- 🎙️ STIMMEN-PROFIL --- */}
+                                    <div className="mt-4 pt-4 border-t border-indigo-100/50">
+                                        <label className="label text-fuchsia-500 mb-2">🎙️ Stimmen-Profil (Persona Binding)</label>
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                            <div>
+                                                <span className="text-[9px] uppercase tracking-widest text-slate-400 font-bold mb-0.5 block">Provider</span>
+                                                <select 
+                                                    value={dna.voice_config?.providerId || ""} 
+                                                    onChange={e=>setDna({...dna, voice_config: {...(dna.voice_config||{}), providerId: e.target.value}})} 
+                                                    className="input-field py-2 text-xs bg-white text-slate-600 font-bold"
+                                                >
+                                                    <option value="">Globaler Standard</option>
+                                                    {ttsProviders.map(p => <option key={p.id} value={p.id}>{p.name} ({p.type})</option>)}
+                                                </select>
+                                            </div>
+                                            <div>
+                                                <span className="text-[9px] uppercase tracking-widest text-slate-400 font-bold mb-0.5 block">Voice-ID / URL</span>
+                                                <input 
+                                                    value={dna.voice_config?.voiceIdOrUrl || ""} 
+                                                    onChange={e=>setDna({...dna, voice_config: {...(dna.voice_config||{}), voiceIdOrUrl: e.target.value}})} 
+                                                    className="input-field py-2 text-xs bg-white" 
+                                                    placeholder="Fallback auf Global, wenn leer" 
+                                                />
+                                            </div>
+                                            <div className="sm:col-span-2">
+                                                <span className="text-[9px] uppercase tracking-widest text-slate-400 font-bold mb-0.5 block">Parameter (Optional)</span>
+                                                <input 
+                                                    value={dna.voice_config?.extraParams || ""} 
+                                                    onChange={e=>setDna({...dna, voice_config: {...(dna.voice_config||{}), extraParams: e.target.value}})} 
+                                                    className="input-field py-2 text-xs font-mono bg-white" 
+                                                    placeholder='z.B. {"speed": 1.05}' 
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
                                 <div className="flex flex-col"><div className="flex justify-between items-end mb-1.5"><label className="label text-emerald-500">Block 1: Identität & Regeln (Statisch)</label><button onClick={()=>setZenField('block1')} className="btn py-1 text-[8px] bg-emerald-50 text-emerald-700 border-emerald-100">🔲 Zen</button></div><textarea value={dna.block1_identity} onChange={e=>setDna({...dna,block1_identity:e.target.value})} className="input-field min-h-[150px] bg-white font-mono text-xs" spellCheck="false" /></div>
                                 <div className="flex flex-col"><div className="flex justify-between items-end mb-1.5"><label className="label text-fuchsia-500">Block 3: Matrix-Sensoren (Logik)</label><button onClick={()=>setZenField('block3')} className="btn py-1 text-[8px] bg-fuchsia-50 text-fuchsia-700 border-fuchsia-100">🔲 Zen</button></div><textarea value={dna.block3_sensors} onChange={e=>setDna({...dna,block3_sensors:e.target.value})} className="input-field min-h-[150px] bg-white font-mono text-xs" spellCheck="false" /></div>
                                 <div className="flex flex-col"><div className="flex justify-between items-end mb-1.5"><label className="label text-blue-500">Block 4: Ausgabe-Skelett (JSON-Struktur)</label><div className="flex gap-2"><button onClick={handleBeautifyJSON} className="btn py-1 text-[8px]">🧹 Format</button><button onClick={()=>setZenField('block4')} className="btn py-1 text-[8px] bg-blue-50 text-blue-700 border-blue-100">🔲 Zen</button></div></div><textarea value={dna.block4_skeleton} onChange={e=>setDna({...dna,block4_skeleton:e.target.value})} className="input-field min-h-[150px] bg-white font-mono text-xs" spellCheck="false" /></div>
@@ -1463,54 +1346,6 @@
 
                         {/* --- WORKBENCH VIEW --- */}
                         <div className={`${activeView === 'workbench' ? 'block' : 'hidden'} p-6 max-w-2xl mx-auto space-y-4 mt-4 animate-fade-in`}>
-                            
-                            <div className="flex flex-col gap-2 p-4 bg-white rounded-xl shadow-sm border border-slate-200 mb-4">
-                                <h3 className="text-xs font-bold text-slate-500 uppercase">Neues Asset parken (Vision)</h3>
-                                <input 
-                                    type="file" 
-                                    id="asset-upload-input" 
-                                    accept="image/*" 
-                                    disabled={isUploadingAsset}
-                                    className="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 cursor-pointer"
-                                />
-                                <input 
-                                    type="text" 
-                                    id="asset-focus-input" 
-                                    value={assetFocus}
-                                    onChange={e=>setAssetFocus(e.target.value)}
-                                    disabled={isUploadingAsset}
-                                    placeholder="Fokus für die Analyse? (z.B. 'Was steht auf dem Zettel?')" 
-                                    className="w-full border border-slate-300 rounded p-2 text-sm focus:outline-none focus:border-indigo-500 font-mono"
-                                />
-                                <button 
-                                    onClick={handleAssetUploadDirect} 
-                                    disabled={isUploadingAsset}
-                                    className="bg-slate-800 text-white rounded p-2 text-sm font-bold hover:bg-slate-700 transition-colors disabled:opacity-50"
-                                >
-                                    {isUploadingAsset ? '⚙️ ANALYSIERE...' : 'Bild analysieren & in Garage parken'}
-                                </button>
-                            </div>
-
-                            {workbenchAssets.length > 0 && (
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
-                                    {workbenchAssets.map(asset => (
-                                        <div key={asset.id} onClick={() => toggleAssetStatus(asset)} className={`relative p-4 border rounded-xl cursor-pointer transition-all flex flex-col ${asset.status === 'AKTIV' ? 'border-amber-500 bg-amber-50 shadow-sm' : 'border-stone-200 bg-stone-50 opacity-60 hover:opacity-100'}`}>
-                                            <div className="flex justify-between items-center mb-2">
-                                                <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500">{asset.status}</span>
-                                                <div className="flex gap-2">
-                                                    <button onClick={(e)=>{e.stopPropagation(); handleReAnalyse(asset);}} className="text-[10px] font-bold text-indigo-500 hover:text-indigo-700 bg-white border border-indigo-100 px-2 py-0.5 rounded transition-colors">🔄 RE-ANALYSE</button>
-                                                    <button onClick={(e)=>{e.stopPropagation(); db.workbench_assets.delete(asset.id).then(loadAssets)}} className="text-rose-400 hover:text-rose-600 bg-white border border-rose-100 px-1.5 py-0.5 rounded transition-colors">🗑️</button>
-                                                </div>
-                                            </div>
-                                            <p className="text-[11px] text-slate-800 font-bold truncate mb-2">"{asset.simons_frage}"</p>
-                                            <div className="text-[10px] text-slate-600 leading-relaxed overflow-y-auto max-h-32 pr-1 mt-1 font-serif bg-white/60 border border-stone-100/50 p-2 rounded shadow-inner whitespace-pre-wrap">
-                                                {asset.ki_analyse}
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            )}
-
                             <h2 className="text-sm font-bold uppercase tracking-widest text-slate-800 border-b border-stone-200 pb-2">Workbench ({drafts.length})</h2>
                             {drafts.length === 0 && <div className="text-slate-400 font-bold text-[10px] uppercase p-12 border-2 border-dashed border-stone-200 rounded-3xl text-center bg-white/50">Warte auf Mairas Vorschläge...</div>}
                             {drafts.map(d => {
@@ -1538,7 +1373,6 @@
                                 const title = isStructured ? (parsedDraft.daten?.titel_poetisch || parsedDraft.daten?.titel_technisch || parsedDraft.titel_poetisch || parsedDraft.titel_technisch || 'Ohne Titel') : '';
                                 const fakt = isStructured ? (parsedDraft.daten?.fakt || parsedDraft.fakt) : '';
                                 const gefuehl = isStructured ? (parsedDraft.daten?.gefuehl || parsedDraft.daten?.emotion || parsedDraft.gefuehl || parsedDraft.emotion) : '';
-                                const targetTechId = isStructured ? (parsedDraft.daten?.titel_technisch || parsedDraft.titel_technisch) : null;
 
                                 return (
                                     <div key={d.id} className={`panel flex flex-col gap-3 group border-2 ${d.type === 'update' ? 'border-indigo-100 bg-indigo-50/10' : 'border-stone-50 bg-white'}`}>
@@ -1554,7 +1388,7 @@
                                                 try { const p = JSON.parse(d.text); setDraftEditText(JSON.stringify(p, null, 2)); } 
                                                 catch(e) { setDraftEditText(d.text); }
                                             }} className="btn">✏️ Bearbeiten</button>
-                                            {d.type === 'update' ? (<button onClick={()=>handleCompare(d)} className="btn bg-indigo-600 text-white border-indigo-600 hover:bg-indigo-700">🔍 Vergleichen</button>) : (<button onClick={()=>handleFormatAndSaveWorkbench(d.id, d.text, targetTechId)} className="btn-primary">💾 Archive</button>)}
+                                            {d.type === 'update' ? (<button onClick={()=>handleCompare(d)} className="btn bg-indigo-600 text-white border-indigo-600 hover:bg-indigo-700">🔍 Vergleichen</button>) : (<button onClick={()=>handleFormatAndSaveWorkbench(d.id, d.text)} className="btn-primary">💾 Archive</button>)}
                                         </div>
                                     </div>
                                 );
@@ -1625,21 +1459,7 @@
                     {/* --- INPUT AREA --- */}
                     <div className={`${activeView === 'chat' ? 'block' : 'hidden'} shrink-0 border-t border-stone-200 p-2 sm:px-4 sm:py-3 bg-white/90 backdrop-blur-md pb-safe`}>
                         <div className="max-w-4xl mx-auto flex flex-col gap-1">
-                            
-                            {/* --- ASSET DOCKING V3.6.1 --- */}
-                            {activeAssetCount > 0 && (
-                                <div className="flex gap-2 overflow-x-auto pb-1 mb-1 items-center" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
-                                    <span className="text-[8px] font-bold text-slate-400 uppercase tracking-widest shrink-0 ml-1">ASSET DOCK:</span>
-                                    {workbenchAssets.filter(a => a.status === 'AKTIV').map(asset => (
-                                        <div key={asset.id} className="flex items-center gap-2 bg-indigo-50/50 border border-indigo-100 rounded-lg px-2 py-1 shrink-0 shadow-sm">
-                                            <span className="text-[10px] font-bold text-indigo-900 truncate max-w-[150px] font-sans" title={asset.simons_frage}>"{asset.simons_frage}"</span>
-                                            <button onClick={() => handleReAnalyse(asset)} disabled={isUploadingAsset} className="text-[9px] font-bold text-indigo-600 hover:text-indigo-800 bg-white border border-indigo-200 hover:border-indigo-300 px-1.5 py-0.5 rounded shadow-sm transition-all whitespace-nowrap disabled:opacity-50">🔄 RE-ANALYSE</button>
-                                        </div>
-                                    ))}
-                                </div>
-                            )}
-
-                            <div className="flex gap-2 mt-1">
+                            <div className="flex gap-2">
                                 <input value={inputText} onChange={e=>setInputText(e.target.value)} onKeyDown={e=>{if(e.key==='Enter') handleSendMessage();}} disabled={isLoading} className="input-field flex-1 py-3 px-4 font-sans font-medium bg-white" placeholder={isLoading ? "SYSTEM PROCESSING..." : "INPUT..."} />
                                 <button onClick={handleSendMessage} disabled={!inputText.trim() || isLoading} className="btn-primary px-6 disabled:opacity-50 py-3 shadow-indigo-200 text-sm uppercase">Send</button>
                             </div>
