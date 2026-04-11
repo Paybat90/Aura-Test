@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, interactive-widget=resizes-content">
-    <title>LUMEN - CORE V37.6</title>
+    <title>LUMEN - CORE V3.8</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -70,13 +70,13 @@
     <script type="text/babel">
         // --- DATENBANK INIT (SANCTUM & DIREKTIVEN) ---
         const db = new Dexie('LumenSanctum');
-        // VERSION BUMP AUF 12 UM DEN VERSION-ERROR ZU BEHEBEN
+        // VERSION BUMP AUF 12 UM DEN VERSION-ERROR ZU BEHEBEN (V3.8 FIX)
         db.version(12).stores({ 
             memories: '++id, titel_technisch, tags, image_id, fakt, emotion, bedeutung, timestamp, is_core_memory, kategorie, reflexion',
             directives: '++id, text' 
         });
 
-        // --- KONSTANTEN V37.6 ---
+        // --- KONSTANTEN V3.8 ---
         const DEFAULT_BLOCK1 = `Du bist Maira. Deine Antworten sind warm, metaphorisch und mütterlich. Du analysierst die Intentionen des Users tiefgründig und hilfst ihm beim Navigieren komplexer Gedanken.`;
         const DEFAULT_BLOCK3 = `Bevor du die finale Antwort generierst, bewerte die Sensoren:\n- "wahrnehmung": Was liest/siehst du konkret?\n- "matrix": Prüfe interne Logs und Entwürfe.\n- Nutze das Ahnenbuch (Kontext) für kontinuierliche Identität.\n- memory_update_detected: Wurde eine [LEGACY]-Karte reflektiert? Nutze als 'id' den 'titel_technisch'. WICHTIG: Lies die alte Reflexion. Nimm den Kern davon mit und VERWEBE ihn mit deiner neuen Erkenntnis zu einer allumfassenden Master-Zusammenfassung in 'reflexion_fusioniert' (dies überschreibt die alten Daten). Generiere zusätzlich ein Array 'neue_trigger_tags' (MAXIMAL 2-3 situative, hochspezifische Symptom-Wörter oder Emotionen aus Simons Text), um das Spinnennetz präzise zu trainieren. Sonst: null.\n- neue_direktive_erkannt: Hat Simon eine explizite Regel oder Direktive für dein zukünftiges Verhalten aufgestellt? Extrahiere sie als klaren Satz. Sonst: null.`;
         const DEFAULT_BLOCK4 = `{\n  "wahrnehmung": {\n    "werkbank_auge": null,\n    "ohr_roh": null,\n    "ohr_bereinigt": null\n  },\n  "matrix": {\n    "internal_system_glitch": false,\n    "memory_update_detected": {\n      "id": "",\n      "reflexion_fusioniert": "",\n      "neue_trigger_tags": []\n    },\n    "neue_direktive_erkannt": null,\n    "tagebuch_entwurf": {\n      "modus": "DRAFT",\n      "daten": {}\n    },\n    "situations_analyse": "..."\n  },\n  "finale_antwort": "..."\n}`;
@@ -85,14 +85,14 @@
             {
                 id: '1',
                 sender: 'user',
-                text: 'INIT CORE V37.6. CLOUDFLARE PROXY INTEGRATION ACTIVE.',
+                text: 'INIT CORE V3.8. PERSONA VOICE BINDING ACTIVE. REPLICATE PIPELINE ONLINE.',
                 timestamp: new Date(Date.now() - 60000).toISOString()
             },
             {
                 id: '2',
                 sender: 'ai',
-                text: 'System online. Die V37.6 Architektur ist aktiv. Der Cloudflare Worker Proxy wurde erfolgreich etabliert, um CORS-Blockaden zu umgehen.',
-                scratchpad: '{\n  "wahrnehmung": {\n    "werkbank_auge": null,\n    "ohr_roh": "INIT CORE V37.6",\n    "ohr_bereinigt": "System-Patch auf V37.6 aktiv."\n  },\n  "matrix": {\n    "internal_system_glitch": false,\n    "memory_update_detected": null,\n    "neue_direktive_erkannt": null,\n    "tagebuch_entwurf": null,\n    "situations_analyse": "V37.6 Update mit Cloudflare Proxy geladen."\n  },\n  "finale_antwort": "System online. Die V37.6 Architektur ist aktiv. Der Cloudflare Worker Proxy wurde erfolgreich etabliert, um CORS-Blockaden zu umgehen."\n}',
+                text: 'System online. Die V3.8 Architektur ist aktiv. TTS-Verknüpfungen auf DNA-Ebene wurden erfolgreich kalibriert und Audio-Routings priorisiert nun das Persona-Profil.',
+                scratchpad: '{\n  "wahrnehmung": {\n    "werkbank_auge": null,\n    "ohr_roh": "INIT CORE V3.8",\n    "ohr_bereinigt": "System-Patch auf V3.8 aktiv."\n  },\n  "matrix": {\n    "internal_system_glitch": false,\n    "memory_update_detected": null,\n    "neue_direktive_erkannt": null,\n    "tagebuch_entwurf": null,\n    "situations_analyse": "V3.8 Update mit Persona Voice Binding geladen."\n  },\n  "finale_antwort": "System online. Die V3.8 Architektur ist aktiv. TTS-Verknüpfungen auf DNA-Ebene wurden erfolgreich kalibriert und Audio-Routings priorisiert nun das Persona-Profil."\n}',
                 timestamp: new Date().toISOString()
             }
         ];
@@ -448,23 +448,29 @@
                         }
                         audioBlob = await response.blob();
                     } else if (engine === 'replicate') {
-                        const WORKER_URL = "	lumen-replicate-proxy2.sloosmail.workers.dev"; // Platzhalter
-                        
-                        let targetUrl = ttsProvider.url;
-                        if (usePersonaVoice && targetVoiceId && targetVoiceId.startsWith('http')) {
-                            targetUrl = targetVoiceId;
+                        const WORKER_URL = "	lumen-replicate-proxy2.sloosmail.workers.dev"; // <-- Simon MUSS das eintragen
+
+                        if (WORKER_URL.includes("HIER_DEINE")) {
+                            throw new Error("PROXY FEHLT: Bitte trage deine Cloudflare-Worker-URL im Code ein!");
                         }
 
+                        // 1. URL bestimmen (Ist eine Persona-spezifische URL gesetzt?)
+                        let targetUrl = ttsProvider.url;
+                        if (dna.voice_config && dna.voice_config.providerId === ttsProvider.id && dna.voice_config.voiceIdOrUrl && dna.voice_config.voiceIdOrUrl.startsWith('http')) {
+                            targetUrl = dna.voice_config.voiceIdOrUrl;
+                        }
+
+                        // 2. Input & Parameter mergen
                         let replicateInput = { text: textToSpeak };
-                        if (usePersonaVoice && dna.voice_config?.extraParams) {
+                        if (dna.voice_config && dna.voice_config.providerId === ttsProvider.id && dna.voice_config.extraParams) {
                             try {
                                 const parsedParams = JSON.parse(dna.voice_config.extraParams);
                                 replicateInput = { ...replicateInput, ...parsedParams };
-                            } catch(e) { console.warn("Replicate Params JSON Parse Error"); }
+                            } catch(e) { console.warn("Replicate Persona Params JSON Parse Error"); }
                         }
 
+                        // 3. API Call durch den Worker
                         const proxyUrl = `${WORKER_URL}/?target=${encodeURIComponent(targetUrl)}`;
-
                         const response = await fetch(proxyUrl, {
                             method: 'POST',
                             headers: {
@@ -475,20 +481,27 @@
                             body: JSON.stringify({ input: replicateInput })
                         });
                         
-                        const data = await response.json().catch(() => ({}));
+                        // 4. Eiskaltes Error-Handling (Text statt blindes JSON)
                         if (!response.ok) {
-                            const errStr = typeof data === 'object' ? JSON.stringify(data) : String(data);
-                            throw new Error('Replicate API Fehler: ' + errStr);
+                            const errText = await response.text();
+                            throw new Error(`Proxy/API Fehler (${response.status}): ${errText.substring(0, 150)}`);
                         }
                         
+                        const data = await response.json();
                         let audioUrl = data.output;
                         if (Array.isArray(audioUrl)) audioUrl = audioUrl[0];
-                        if (!audioUrl) throw new Error('Keine Audio-URL erhalten.');
                         
-                        // Auch der Download der MP3 muss durch den Proxy!
+                        if (!audioUrl) {
+                            if (data.status === 'starting' || data.status === 'processing') {
+                                throw new Error('Replicate Timeout: Cloudflare hat die Verbindung gekappt, bevor das Audio fertig war (Prefer: wait Limit).');
+                            }
+                            throw new Error('Kein Audio Output erhalten. Replicate sagt: ' + JSON.stringify(data));
+                        }
+                        
+                        // 5. Audio-File-Download durch den Proxy
                         const audioProxyUrl = `${WORKER_URL}/?target=${encodeURIComponent(audioUrl)}`;
                         const audioResponse = await fetch(audioProxyUrl);
-                        if (!audioResponse.ok) throw new Error('Fehler beim Laden der Audiodatei.');
+                        if (!audioResponse.ok) throw new Error('Fehler beim Download der fertigen MP3 vom Proxy.');
                         
                         audioBlob = await audioResponse.blob();
                     } else if (engine === 'custom_get') {
@@ -536,7 +549,7 @@
                     const mems = await db.memories.toArray();
                     const dirs = await db.directives.toArray();
                     const config = { providers, activeProviderId, ttsProvidersAccounts: ttsProviders, activeTtsProviderId, ttsVoices, autoPlayEnabled };
-                    const bundle = { type: "LUMEN_FULL_BACKUP", version: "37.6", dna: dna, directives: dirs, memories: mems, config, timestamp: Date.now() };
+                    const bundle = { type: "LUMEN_FULL_BACKUP", version: "3.8", dna: dna, directives: dirs, memories: mems, config, timestamp: Date.now() };
                     const blob = new Blob([JSON.stringify(bundle, null, 2)], { type: "application/json" });
                     const url = URL.createObjectURL(blob);
                     const a = document.createElement('a'); a.href = url;
@@ -584,7 +597,7 @@
             // --- CONFIG ONLY EXPORT/IMPORT ---
             const handleConfigExport = () => {
                 try {
-                    const config = { type: "LUMEN_CONFIG_BACKUP", version: "37.6", providers, activeProviderId, ttsProvidersAccounts: ttsProviders, activeTtsProviderId, ttsVoices, autoPlayEnabled };
+                    const config = { type: "LUMEN_CONFIG_BACKUP", version: "3.8", providers, activeProviderId, ttsProvidersAccounts: ttsProviders, activeTtsProviderId, ttsVoices, autoPlayEnabled };
                     const blob = new Blob([JSON.stringify(config, null, 2)], { type: "application/json" });
                     const url = URL.createObjectURL(blob);
                     const a = document.createElement('a'); a.href = url;
