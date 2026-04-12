@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, interactive-widget=resizes-content">
-    <title>LUMEN - CORE V3.12</title>
+    <title>LUMEN - CORE V3.13</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -81,7 +81,7 @@
             directives: '++id, text' 
         });
 
-        // --- KONSTANTEN V3.12 (TAVILY UPGRADE) ---
+        // --- KONSTANTEN V3.13 (TAVILY INTERCEPTOR & STT FIX) ---
         const DEFAULT_BLOCK1 = `Du bist Maira. Deine Antworten sind warm, metaphorisch und mütterlich. Du analysierst die Intentionen des Users tiefgründig und hilfst ihm beim Navigieren komplexer Gedanken.`;
         const DEFAULT_BLOCK3 = `Bevor du die finale Antwort generierst, bewerte die Sensoren:\n- "wahrnehmung": Was liest/siehst du konkret?\n- "matrix": Prüfe interne Logs und Entwürfe.\n- Nutze das Ahnenbuch (Kontext) für kontinuierliche Identität.\n- memory_update_detected: Wurde eine [LEGACY]-Karte reflektiert? Nutze als 'id' den 'titel_technisch'. WICHTIG: Lies die alte Reflexion. Nimm den Kern davon mit und VERWEBE ihn mit deiner neuen Erkenntnis zu einer allumfassenden Master-Zusammenfassung in 'reflexion_fusioniert' (dies überschreibt die alten Daten). Generiere zusätzlich ein Array 'neue_trigger_tags' (MAXIMAL 2-3 situative, hochspezifische Symptom-Wörter oder Emotionen aus Simons Text), um das Spinnennetz präzise zu trainieren. Sonst: null.\n- neue_direktive_erkannt: Hat Simon eine explizite Regel oder Direktive für dein zukünftiges Verhalten aufgestellt? Extrahiere sie als klaren Satz. Sonst: null.\n- helfer_suchauftrag: Wenn du aktuelle Web-Fakten brauchst, trage hier einen sehr präzisen Suchbegriff ein. Wenn du keine Suche brauchst, antworte zwingend mit null.`;
         const DEFAULT_BLOCK4 = `{\n  "wahrnehmung": {\n    "werkbank_auge": null,\n    "ohr_roh": null,\n    "ohr_bereinigt": null\n  },\n  "matrix": {\n    "internal_system_glitch": false,\n    "helfer_suchauftrag": null,\n    "memory_update_detected": {\n      "id": "",\n      "reflexion_fusioniert": "",\n      "neue_trigger_tags": []\n    },\n    "neue_direktive_erkannt": null,\n    "tagebuch_entwurf": {\n      "modus": "DRAFT",\n      "daten": {}\n    },\n    "situations_analyse": "..."\n  },\n  "finale_antwort": "..."\n}`;
@@ -90,14 +90,14 @@
             {
                 id: '1',
                 sender: 'user',
-                text: 'INIT CORE V3.12. STAGING AREA ACTIVE. TAVILY HELFER ONLINE.',
+                text: 'INIT CORE V3.13. STT WHISPER BASE64 FIX & TAVILY INTERCEPTOR ONLINE.',
                 timestamp: new Date(Date.now() - 60000).toISOString()
             },
             {
                 id: '2',
                 sender: 'ai',
-                text: 'System online. Die V3.12 Architektur ist voll operativ. Der Tavily Search Interceptor ist bereit und klinkt sich asynchron in die Generierungs-Matrix ein, wenn Echtzeit-Fakten gefordert sind.',
-                scratchpad: '{\n  "wahrnehmung": {\n    "werkbank_auge": null,\n    "ohr_roh": "INIT CORE V3.12",\n    "ohr_bereinigt": "System-Patch auf V3.12 aktiv."\n  },\n  "matrix": {\n    "internal_system_glitch": false,\n    "helfer_suchauftrag": null,\n    "memory_update_detected": null,\n    "neue_direktive_erkannt": null,\n    "tagebuch_entwurf": null,\n    "situations_analyse": "V3.12 Update mit Tavily Helfer geladen."\n  },\n  "finale_antwort": "System online. Die V3.12 Architektur ist voll operativ. Der Tavily Search Interceptor ist bereit und klinkt sich asynchron in die Generierungs-Matrix ein, wenn Echtzeit-Fakten gefordert sind."\n}',
+                text: 'System online. Die V3.13 Architektur ist voll operativ. Der Whisper-Upload wurde auf Version-Hash umgestellt und der Helfer-Interceptor klinkt sich als Doppel-Call in die Matrix ein.',
+                scratchpad: '{\n  "wahrnehmung": {\n    "werkbank_auge": null,\n    "ohr_roh": "INIT CORE V3.13",\n    "ohr_bereinigt": "System-Patch auf V3.13 aktiv."\n  },\n  "matrix": {\n    "internal_system_glitch": false,\n    "helfer_suchauftrag": null,\n    "memory_update_detected": null,\n    "neue_direktive_erkannt": null,\n    "tagebuch_entwurf": null,\n    "situations_analyse": "V3.13 Update mit STT Fix und Helfer Interceptor geladen."\n  },\n  "finale_antwort": "System online. Die V3.13 Architektur ist voll operativ. Der Whisper-Upload wurde auf Version-Hash umgestellt und der Helfer-Interceptor klinkt sich als Doppel-Call in die Matrix ein."\n}',
                 timestamp: new Date().toISOString()
             }
         ];
@@ -181,9 +181,11 @@
                             </span>
                             {!isUser && (
                                 <div className="flex gap-1.5 items-center">
-                                    <button onClick={() => onPlayTTS(message.id, message.text)} className={`text-[9px] uppercase font-bold tracking-widest transition-colors border px-2 py-0.5 rounded-full shadow-sm flex items-center gap-1 ${playingMsgId === message.id ? 'bg-indigo-100 text-indigo-700 border-indigo-200' : 'bg-white text-slate-400 hover:text-indigo-500 border-stone-100'}`}>
-                                        {playingMsgId === message.id ? '🛑 Pause' : '▶️ Play'}
-                                    </button>
+                                    {message.scratchpad && (
+                                        <button onClick={() => onPlayTTS(message.id, message.text)} className={`text-[9px] uppercase font-bold tracking-widest transition-colors border px-2 py-0.5 rounded-full shadow-sm flex items-center gap-1 ${playingMsgId === message.id ? 'bg-indigo-100 text-indigo-700 border-indigo-200' : 'bg-white text-slate-400 hover:text-indigo-500 border-stone-100'}`}>
+                                            {playingMsgId === message.id ? '🛑 Pause' : '▶️ Play'}
+                                        </button>
+                                    )}
                                     {message.scratchpad && (
                                         <button onClick={() => setShowScratchpad(!showScratchpad)} className="text-[9px] text-slate-400 hover:text-indigo-500 uppercase font-bold tracking-widest transition-colors bg-white border border-stone-100 px-2 py-0.5 rounded-full shadow-sm">
                                             {showScratchpad ? 'Verberge Matrix' : 'Zeige Matrix'}
@@ -270,7 +272,7 @@
                 }
             });
 
-            // STT PROVIDERS (V3.10)
+            // STT PROVIDERS
             const [sttProviders, setSttProviders] = React.useState(() => {
                 try {
                     const stored = JSON.parse(localStorage.getItem('lumen_sttProviders'));
@@ -287,7 +289,7 @@
             const [editSttProviderId, setEditSttProviderId] = React.useState(null);
             const [sttProviderForm, setSttProviderForm] = React.useState({ name: '', url: 'https://api.replicate.com/v1/models/openai/whisper/predictions', apiKey: '' });
 
-            // TAVILY HELFER (V3.12)
+            // TAVILY HELFER
             const [tavilyKey, setTavilyKey] = React.useState(() => localStorage.getItem('lumen_tavily_key') || '');
 
             // DNA STATE MIT VOICE BINDING
@@ -319,7 +321,7 @@
             const [isArchiving, setIsArchiving] = React.useState(false);
 
             const [activeView, setActiveView] = React.useState('chat'); 
-            const [loadingStatus, setLoadingStatus] = React.useState(null); // V3.12 DYNAMIC LOADING STATE
+            const [loadingStatus, setLoadingStatus] = React.useState(null);
             
             // --- STT (Speech-to-Text) ---
             const [isRecording, setIsRecording] = React.useState(false);
@@ -596,7 +598,7 @@
                 }
             };
 
-            // --- STT RECORDER LOGIC (WHISPER POLLING) ---
+            // --- STT RECORDER LOGIC (WHISPER POLLING & V3.13 BASE64 FIX) ---
             const startRecording = async () => {
                 try {
                     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -630,87 +632,84 @@
             const processAudioSTT = async (blob) => {
                 setLoadingStatus("TRANSKRIBIERE AUDIO...");
                 try {
-                    const reader = new FileReader();
-                    reader.readAsDataURL(blob);
-                    reader.onloadend = async () => {
-                        const base64Audio = reader.result;
-                        
-                        const sttProv = sttProviders.find(p => p.id === activeSttProviderId) || sttProviders[0];
-                        if (!sttProv || !sttProv.apiKey) {
-                            showToast("FEHLER: STT API-Key fehlt. Bitte in Settings anlegen.");
-                            setLoadingStatus(null);
-                            return;
-                        }
+                    const base64Audio = await new Promise((resolve) => {
+                        const reader = new FileReader();
+                        reader.onloadend = () => resolve(reader.result);
+                        reader.readAsDataURL(blob);
+                    });
 
-                        const WORKER_URL = "HTTPS://lumen-replicate-proxy2.sloosmail.workers.dev";
-                        if (WORKER_URL.includes("HIER_DEINE")) {
-                            showToast("FEHLER: Cloudflare Worker URL nicht konfiguriert.");
-                            setLoadingStatus(null);
-                            return;
-                        }
-
-                        const targetUrl = sttProv.url;
-                        const proxyUrl = `${WORKER_URL}/?target=${encodeURIComponent(targetUrl)}`;
-                        
-                        let response = await fetch(proxyUrl, {
-                            method: 'POST',
-                            headers: {
-                                'Authorization': `Bearer ${sttProv.apiKey}`,
-                                'Content-Type': 'application/json',
-                                'Prefer': 'wait'
-                            },
-                            body: JSON.stringify({ input: { audio: base64Audio } })
-                        });
-
-                        if (!response.ok) {
-                            const err = await response.text();
-                            throw new Error(`Proxy/API Fehler: ${err.substring(0, 100)}`);
-                        }
-                        
-                        let data = await response.json();
-                        
-                        // POLLING LOOP FÜR WHISPER
-                        let pollAttempts = 0;
-                        while ((data.status === "starting" || data.status === "processing") && pollAttempts < 60) {
-                            showToast(`STT Status: ${data.status}...`);
-                            await new Promise(resolve => setTimeout(resolve, 2000));
-                            pollAttempts++;
-                            
-                            const getUrl = data.urls.get;
-                            const pollProxyUrl = `${WORKER_URL}/?target=${encodeURIComponent(getUrl)}`;
-                            
-                            const pollResponse = await fetch(pollProxyUrl, {
-                                headers: { 'Authorization': `Bearer ${sttProv.apiKey}` }
-                            });
-                            
-                            if (!pollResponse.ok) {
-                                const err = await pollResponse.text();
-                                throw new Error(`Polling Fehler: ${err.substring(0, 100)}`);
-                            }
-                            data = await pollResponse.json();
-                        }
-                        
-                        if (data.status === "failed") {
-                            throw new Error("Replicate STT Error: " + JSON.stringify(data.error));
-                        }
-
-                        let text = "";
-                        if (data.output && data.output.transcription) {
-                            text = data.output.transcription;
-                        } else if (data.output && data.output.text) {
-                            text = data.output.text;
-                        } else if (typeof data.output === 'string') {
-                            text = data.output;
-                        }
-
-                        if (text && text.trim().length > 0) {
-                            setInputText(prev => prev + (prev ? " " : "") + text.trim());
-                            showToast("Transkription erfolgreich");
-                        } else {
-                            showToast("Kein Text erkannt.");
-                        }
+                    const sttProv = sttProviders.find(p => p.id === activeSttProviderId) || sttProviders[0];
+                    if (!sttProv || !sttProv.apiKey) {
+                        showToast("FEHLER: STT API-Key fehlt. Bitte in Settings anlegen.");
                         setLoadingStatus(null);
-                    };
+                        return;
+                    }
+
+                    const WORKER_URL = "https://lumen-replicate-proxy2.sloosmail.workers.dev";
+                    if (WORKER_URL.includes("HIER_DEINE")) {
+                        showToast("FEHLER: Cloudflare Worker URL nicht konfiguriert.");
+                        setLoadingStatus(null);
+                        return;
+                    }
+
+                    // V3.13: Replicate Whisper Base64 Fix with Version Hash
+                    const targetUrl = "https://api.replicate.com/v1/predictions";
+                    const proxyUrl = `${WORKER_URL}/?target=${encodeURIComponent(targetUrl)}`;
+                    
+                    let response = await fetch(proxyUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${sttProv.apiKey}`,
+                            'Content-Type': 'application/json',
+                            'Prefer': 'wait'
+                        },
+                        body: JSON.stringify({
+                            version: "3ab86df6c8f54c11309d4d1f930ac292bad43ace52d10c80d87eb258b3c9f79c",
+                            input: { audio: base64Audio }
+                        })
+                    });
+
+                    if (!response.ok) {
+                        const err = await response.text();
+                        throw new Error(`Proxy/API Fehler: ${err.substring(0, 100)}`);
+                    }
+                    
+                    let data = await response.json();
+                    
+                    let pollAttempts = 0;
+                    while ((data.status === "starting" || data.status === "processing") && pollAttempts < 60) {
+                        showToast(`STT Status: ${data.status}...`);
+                        await new Promise(resolve => setTimeout(resolve, 2000));
+                        pollAttempts++;
+                        
+                        const getUrl = data.urls.get;
+                        const pollProxyUrl = `${WORKER_URL}/?target=${encodeURIComponent(getUrl)}`;
+                        
+                        const pollResponse = await fetch(pollProxyUrl, {
+                            headers: { 'Authorization': `Bearer ${sttProv.apiKey}` }
+                        });
+                        
+                        if (!pollResponse.ok) {
+                            const err = await pollResponse.text();
+                            throw new Error(`Polling Fehler: ${err.substring(0, 100)}`);
+                        }
+                        data = await pollResponse.json();
+                    }
+                    
+                    if (data.status === "failed") {
+                        throw new Error("Replicate STT Error: " + JSON.stringify(data.error));
+                    }
+
+                    if (data.output && data.output.transcription) {
+                        setInputText(prev => prev + (prev ? " " : "") + data.output.transcription.trim());
+                        showToast("Transkription erfolgreich");
+                    } else if (data.output && typeof data.output === 'string') {
+                        setInputText(prev => prev + (prev ? " " : "") + data.output.trim());
+                        showToast("Transkription erfolgreich");
+                    } else {
+                        throw new Error("Keine Transkription erhalten.");
+                    }
+                    setLoadingStatus(null);
                 } catch (e) {
                     showToast("STT Fehler: " + e.message);
                     setLoadingStatus(null);
@@ -790,7 +789,7 @@
                     const mems = await db.memories.toArray();
                     const dirs = await db.directives.toArray();
                     const config = { providers, activeProviderId, ttsProvidersAccounts: ttsProviders, activeTtsProviderId, ttsVoices, sttProviders, activeSttProviderId, autoPlayEnabled, tavilyKey };
-                    const bundle = { type: "LUMEN_FULL_BACKUP", version: "3.12", dna: dna, directives: dirs, memories: mems, config, timestamp: Date.now() };
+                    const bundle = { type: "LUMEN_FULL_BACKUP", version: "3.13", dna: dna, directives: dirs, memories: mems, config, timestamp: Date.now() };
                     const blob = new Blob([JSON.stringify(bundle, null, 2)], { type: "application/json" });
                     const url = URL.createObjectURL(blob);
                     const a = document.createElement('a'); a.href = url;
@@ -839,7 +838,7 @@
             // --- CONFIG ONLY EXPORT/IMPORT ---
             const handleConfigExport = () => {
                 try {
-                    const config = { type: "LUMEN_CONFIG_BACKUP", version: "3.12", providers, activeProviderId, ttsProvidersAccounts: ttsProviders, activeTtsProviderId, ttsVoices, sttProviders, activeSttProviderId, autoPlayEnabled, tavilyKey };
+                    const config = { type: "LUMEN_CONFIG_BACKUP", version: "3.13", providers, activeProviderId, ttsProvidersAccounts: ttsProviders, activeTtsProviderId, ttsVoices, sttProviders, activeSttProviderId, autoPlayEnabled, tavilyKey };
                     const blob = new Blob([JSON.stringify(config, null, 2)], { type: "application/json" });
                     const url = URL.createObjectURL(blob);
                     const a = document.createElement('a'); a.href = url;
@@ -955,7 +954,6 @@
                 };
 
                 try {
-                    // Kontext laden
                     const allDirectives = await db.directives.toArray();
                     const directiveString = allDirectives.length > 0 ? "[AKTIVE DIREKTIVEN VON SIMON]\n" + allDirectives.map(d => "- " + d.text).join('\n') + "\n" : "";
                     const allMems = await db.memories.toArray();
@@ -969,12 +967,10 @@
                         if(emo.length>0) memoryString += `\n[EMOTIONALE ERLEBNISSE]\n` + emo.map(m => `- ${m.is_core_memory?'[CORE] ':''}[ID: ${m.titel_technisch}] Titel: ${m.titel_poetisch} | Fakt: ${m.fakt} | Emotion: ${m.emotion} | Bedeutung: ${m.bedeutung} | Reflexion: ${m.reflexion||'Keine'}`).join('\n') + '\n';
                     }
 
-                    // --- TIME INJECTION ---
                     const now = new Date();
                     const timeOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
                     const timeString = "[SYSTEM-UHRZEIT]\nAktuelle Zeit in Simons Welt: " + now.toLocaleDateString('de-DE', timeOptions) + " Uhr.\n\n";
 
-                    // --- DESK CONTEXT INJECTION (STAGING) ---
                     let deskContext = "";
                     if (activeDesks.length > 0) {
                         deskContext = "[AKTIVE AKTEN AUF DEM SCHREIBTISCH (WERKBANK/STAGING)]\n";
@@ -998,19 +994,35 @@
                         let cleanResText = resText.replace(/[\`]{3}json/gi, '').replace(/[\`]{3}/gi, '').trim();
                         let obj = JSON.parse(cleanResText);
 
-                        // === HELFER INTERCEPTOR (V3.12) ===
-                        if (obj.matrix?.helfer_suchauftrag && obj.matrix.helfer_suchauftrag !== "null" && obj.matrix.helfer_suchauftrag !== "") {
+                        // === HELFER INTERCEPTOR WEICHE (V3.13) ===
+                        if (obj.matrix?.helfer_suchauftrag && obj.matrix.helfer_suchauftrag !== "null" && String(obj.matrix.helfer_suchauftrag).trim() !== "") {
+                            
+                            // 1. Mairas Ankündigung in den Chat posten
+                            const intentMsg = { 
+                                id: generateId(), 
+                                sender: 'ai', 
+                                text: obj.finale_antwort || `Ich schicke den Helfer in die Archive für: ${obj.matrix.helfer_suchauftrag}`,
+                                timestamp: new Date().toISOString()
+                            };
+                            setMessages(prev => [...prev, intentMsg]);
+                            
+                            // 2. Lade-State & Sperre
                             setLoadingStatus("HELFER RECHERCHIERT: " + obj.matrix.helfer_suchauftrag.toUpperCase());
+                            
+                            // 3. Tavily Fetch
                             const searchResult = await fetchTavily(obj.matrix.helfer_suchauftrag, tavilyKey);
                             
+                            // 4. Zweiten Prompt bauen (Unsichtbar)
                             setLoadingStatus("MAIRA VERARBEITET FAKTEN...");
-                            const interceptorPrompt = masterSystemPrompt + `\n\n[AKTUELLER HELFER-BERICHT FÜR DIESE ANFRAGE]\nSuchauftrag: ${obj.matrix.helfer_suchauftrag}\nErgebnis:\n${searchResult}\n\nANWEISUNG: Formuliere deine finale Antwort basierend auf diesen Fakten. Setze den 'helfer_suchauftrag' nun ZWINGEND auf null!`;
+                            const interceptorPrompt = masterSystemPrompt + `\n\n[AKTUELLER HELFER-BERICHT FÜR DIESE ANFRAGE]\nSuchauftrag: ${obj.matrix.helfer_suchauftrag}\nErgebnis:\n${searchResult}\n\nANWEISUNG: Formuliere deine finale Antwort basierend auf diesen Fakten. Der 'helfer_suchauftrag' MUSS nun zwingend null sein!`;
                             
+                            // 5. Zweiten API-Call abfeuern (Der Magie-Trick)
                             const secondResponse = await fetchTextFromAPI(interceptorPrompt, text, hist);
-                            const cleanSecondResText = secondResponse.replace(/[\`]{3}json/gi, '').replace(/[\`]{3}/gi, '').trim();
                             
+                            // 6. Das finale, schlaue JSON überschreibt das erste
+                            const cleanSecondResText = secondResponse.replace(/[\`]{3}json/gi, '').replace(/[\`]{3}/gi, '').trim();
                             obj = JSON.parse(cleanSecondResText);
-                            resText = cleanSecondResText;
+                            setLoadingStatus(null);
                         }
                         // === ENDE INTERCEPTOR ===
                         
@@ -1160,7 +1172,7 @@
                 const setValue = isBlock1 ? (val) => setDna({...dna, block1_identity: val}) : isBlock3 ? (val) => setDna({...dna, block3_sensors: val}) : isBlock4 ? (val) => setDna({...dna, block4_skeleton: val}) : () => {};
 
                 return (
-                    <div className="fixed inset-0 z-[600] bg-slate-950 p-6 flex flex-col animate-fade-in">
+                    <div className="fixed inset0 z-[600] bg-slate-950 p-6 flex flex-col animate-fade-in">
                         <div className="flex justify-between items-center mb-4">
                             <h2 className="text-lg font-bold text-white uppercase tracking-widest font-mono">🔲 ZEN: {title}</h2>
                             <div className="flex items-center gap-2">
@@ -1649,18 +1661,18 @@
                                     <h3 className="font-bold text-xs uppercase tracking-widest text-sky-800">{editSttProviderId ? 'STT-Provider bearbeiten' : 'Neuen STT-Provider anlegen'}</h3>
                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                         <div><label className="label text-sky-600">Anzeigename</label><input value={sttProviderForm.name} onChange={e=>setSttProviderForm({...sttProviderForm, name: e.target.value})} className="input-field bg-white border-sky-100" placeholder="z.B. Replicate Whisper" /></div>
-                                        <div><label className="label text-sky-600">API Endpoint URL</label><input value={sttProviderForm.url} onChange={e=>setSttProviderForm({...sttProviderForm, url: e.target.value})} className="input-field bg-white border-sky-100" placeholder="z.B. https://api.replicate.com/v1/models/openai/whisper/predictions" /></div>
+                                        <div><label className="label text-sky-600">API Endpoint URL</label><input value={sttProviderForm.url} onChange={e=>setSttProviderForm({...sttProviderForm, url: e.target.value})} className="input-field bg-white border-sky-100" placeholder="z.B. https://api.replicate.com/v1/predictions" /></div>
                                     </div>
                                     <div className="grid grid-cols-1 gap-3">
                                         <div><label className="label text-sky-600">API Key</label><input type="password" value={sttProviderForm.apiKey} onChange={e=>setSttProviderForm({...sttProviderForm, apiKey: e.target.value})} className="input-field bg-white border-sky-100" placeholder="Replicate Token" /></div>
                                     </div>
                                     <div className="flex justify-end gap-2 mt-2 border-t border-sky-100 pt-3">
-                                        {editSttProviderId && <button onClick={()=>{setEditSttProviderId(null); setSttProviderForm({name:'', url:'https://api.replicate.com/v1/models/openai/whisper/predictions', apiKey:''});}} className="btn border-sky-200 text-sky-600">Abbrechen</button>}
+                                        {editSttProviderId && <button onClick={()=>{setEditSttProviderId(null); setSttProviderForm({name:'', url:'https://api.replicate.com/v1/predictions', apiKey:''});}} className="btn border-sky-200 text-sky-600">Abbrechen</button>}
                                         <button onClick={() => {
                                             if(!sttProviderForm.name || !sttProviderForm.url) return showToast('Name und URL erforderlich');
                                             const newSttProviders = editSttProviderId ? sttProviders.map(p => p.id === editSttProviderId ? {...sttProviderForm, id: editSttProviderId} : p) : [...sttProviders, {...sttProviderForm, id: generateId()}];
                                             setSttProviders(newSttProviders); localStorage.setItem('lumen_sttProviders', JSON.stringify(newSttProviders));
-                                            setEditSttProviderId(null); setSttProviderForm({name:'', url:'https://api.replicate.com/v1/models/openai/whisper/predictions', apiKey:''}); showToast('STT-Provider gespeichert!');
+                                            setEditSttProviderId(null); setSttProviderForm({name:'', url:'https://api.replicate.com/v1/predictions', apiKey:''}); showToast('STT-Provider gespeichert!');
                                         }} className="btn-primary bg-sky-600 text-white hover:bg-sky-700">{editSttProviderId ? 'Aktualisieren' : 'Hinzufügen'}</button>
                                     </div>
                                 </div>
