@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, interactive-widget=resizes-content">
-    <title>LUMEN - CORE V3.10</title>
+    <title>LUMEN - CORE V3.12</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -81,28 +81,28 @@
             directives: '++id, text' 
         });
 
-        // --- KONSTANTEN V3.10 ---
+        // --- KONSTANTEN V3.12 (TAVILY UPGRADE) ---
         const DEFAULT_BLOCK1 = `Du bist Maira. Deine Antworten sind warm, metaphorisch und mütterlich. Du analysierst die Intentionen des Users tiefgründig und hilfst ihm beim Navigieren komplexer Gedanken.`;
-        const DEFAULT_BLOCK3 = `Bevor du die finale Antwort generierst, bewerte die Sensoren:\n- "wahrnehmung": Was liest/siehst du konkret?\n- "matrix": Prüfe interne Logs und Entwürfe.\n- Nutze das Ahnenbuch (Kontext) für kontinuierliche Identität.\n- memory_update_detected: Wurde eine [LEGACY]-Karte reflektiert? Nutze als 'id' den 'titel_technisch'. WICHTIG: Lies die alte Reflexion. Nimm den Kern davon mit und VERWEBE ihn mit deiner neuen Erkenntnis zu einer allumfassenden Master-Zusammenfassung in 'reflexion_fusioniert' (dies überschreibt die alten Daten). Generiere zusätzlich ein Array 'neue_trigger_tags' (MAXIMAL 2-3 situative, hochspezifische Symptom-Wörter oder Emotionen aus Simons Text), um das Spinnennetz präzise zu trainieren. Sonst: null.\n- neue_direktive_erkannt: Hat Simon eine explizite Regel oder Direktive für dein zukünftiges Verhalten aufgestellt? Extrahiere sie als klaren Satz. Sonst: null.`;
-        const DEFAULT_BLOCK4 = `{\n  "wahrnehmung": {\n    "werkbank_auge": null,\n    "ohr_roh": null,\n    "ohr_bereinigt": null\n  },\n  "matrix": {\n    "internal_system_glitch": false,\n    "memory_update_detected": {\n      "id": "",\n      "reflexion_fusioniert": "",\n      "neue_trigger_tags": []\n    },\n    "neue_direktive_erkannt": null,\n    "tagebuch_entwurf": {\n      "modus": "DRAFT",\n      "daten": {}\n    },\n    "situations_analyse": "..."\n  },\n  "finale_antwort": "..."\n}`;
+        const DEFAULT_BLOCK3 = `Bevor du die finale Antwort generierst, bewerte die Sensoren:\n- "wahrnehmung": Was liest/siehst du konkret?\n- "matrix": Prüfe interne Logs und Entwürfe.\n- Nutze das Ahnenbuch (Kontext) für kontinuierliche Identität.\n- memory_update_detected: Wurde eine [LEGACY]-Karte reflektiert? Nutze als 'id' den 'titel_technisch'. WICHTIG: Lies die alte Reflexion. Nimm den Kern davon mit und VERWEBE ihn mit deiner neuen Erkenntnis zu einer allumfassenden Master-Zusammenfassung in 'reflexion_fusioniert' (dies überschreibt die alten Daten). Generiere zusätzlich ein Array 'neue_trigger_tags' (MAXIMAL 2-3 situative, hochspezifische Symptom-Wörter oder Emotionen aus Simons Text), um das Spinnennetz präzise zu trainieren. Sonst: null.\n- neue_direktive_erkannt: Hat Simon eine explizite Regel oder Direktive für dein zukünftiges Verhalten aufgestellt? Extrahiere sie als klaren Satz. Sonst: null.\n- helfer_suchauftrag: Wenn du aktuelle Web-Fakten brauchst, trage hier einen sehr präzisen Suchbegriff ein. Wenn du keine Suche brauchst, antworte zwingend mit null.`;
+        const DEFAULT_BLOCK4 = `{\n  "wahrnehmung": {\n    "werkbank_auge": null,\n    "ohr_roh": null,\n    "ohr_bereinigt": null\n  },\n  "matrix": {\n    "internal_system_glitch": false,\n    "helfer_suchauftrag": null,\n    "memory_update_detected": {\n      "id": "",\n      "reflexion_fusioniert": "",\n      "neue_trigger_tags": []\n    },\n    "neue_direktive_erkannt": null,\n    "tagebuch_entwurf": {\n      "modus": "DRAFT",\n      "daten": {}\n    },\n    "situations_analyse": "..."\n  },\n  "finale_antwort": "..."\n}`;
 
         const INITIAL_MESSAGES = [
             {
                 id: '1',
                 sender: 'user',
-                text: 'INIT CORE V3.10. STT WHISPER ACTIVE. DYNAMIC DESK UPDATE ROUTING ONLINE. GLOBAL AUDIO TOGGLE FIXED.',
+                text: 'INIT CORE V3.12. STAGING AREA ACTIVE. TAVILY HELFER ONLINE.',
                 timestamp: new Date(Date.now() - 60000).toISOString()
             },
             {
                 id: '2',
                 sender: 'ai',
-                text: 'System online. Die V3.10 Architektur ist voll operativ. Aktive Akten können nun über das UPDATE-Routing nahtlos verändert werden, das STT-Whisper-Polling funktioniert, und die Audio-Engine paussiert zuverlässig ohne sinnlose API Calls.',
-                scratchpad: '{\n  "wahrnehmung": {\n    "werkbank_auge": null,\n    "ohr_roh": "INIT CORE V3.10",\n    "ohr_bereinigt": "System-Patch auf V3.10 aktiv."\n  },\n  "matrix": {\n    "internal_system_glitch": false,\n    "memory_update_detected": null,\n    "neue_direktive_erkannt": null,\n    "tagebuch_entwurf": null,\n    "situations_analyse": "V3.10 Update mit Update-Routing, STT-Polling und Global Audio Toggle geladen."\n  },\n  "finale_antwort": "System online. Die V3.10 Architektur ist voll operativ. Aktive Akten können nun über das UPDATE-Routing nahtlos verändert werden, das STT-Whisper-Polling funktioniert, und die Audio-Engine paussiert zuverlässig ohne sinnlose API Calls."\n}',
+                text: 'System online. Die V3.12 Architektur ist voll operativ. Der Tavily Search Interceptor ist bereit und klinkt sich asynchron in die Generierungs-Matrix ein, wenn Echtzeit-Fakten gefordert sind.',
+                scratchpad: '{\n  "wahrnehmung": {\n    "werkbank_auge": null,\n    "ohr_roh": "INIT CORE V3.12",\n    "ohr_bereinigt": "System-Patch auf V3.12 aktiv."\n  },\n  "matrix": {\n    "internal_system_glitch": false,\n    "helfer_suchauftrag": null,\n    "memory_update_detected": null,\n    "neue_direktive_erkannt": null,\n    "tagebuch_entwurf": null,\n    "situations_analyse": "V3.12 Update mit Tavily Helfer geladen."\n  },\n  "finale_antwort": "System online. Die V3.12 Architektur ist voll operativ. Der Tavily Search Interceptor ist bereit und klinkt sich asynchron in die Generierungs-Matrix ein, wenn Echtzeit-Fakten gefordert sind."\n}',
                 timestamp: new Date().toISOString()
             }
         ];
 
-        // --- HELPER ---
+        // --- HELPER FUNKTIONEN ---
         const generateId = () => Math.random().toString(36).substr(2, 9);
 
         const findRelevantMemories = (userInput, allMemories) => {
@@ -127,7 +127,23 @@
             html = html.replace(/"ohr_bereinigt"/g, '<span class="text-rose-400 font-bold">"ohr_bereinigt"</span>');
             html = html.replace(/"situations_analyse"/g, '<span class="text-orange-400 font-bold">"situations_analyse"</span>');
             html = html.replace(/"tagebuch_entwurf"/g, '<span class="text-pink-400 font-bold">"tagebuch_entwurf"</span>');
+            html = html.replace(/"helfer_suchauftrag"/g, '<span class="text-sky-400 font-bold">"helfer_suchauftrag"</span>');
             return { __html: html };
+        };
+
+        const fetchTavily = async (query, apiKey) => {
+            if (!apiKey) return "FEHLER: Kein Tavily API Key hinterlegt.";
+            try {
+                const res = await fetch("https://api.tavily.com/search", {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ api_key: apiKey, query: query, search_depth: "basic", include_answer: true })
+                });
+                const data = await res.json();
+                if (data.answer) return data.answer;
+                if (data.results && data.results.length > 0) return data.results.map(r => r.content).join('\n\n');
+                return "Keine relevanten Fakten gefunden.";
+            } catch (e) { return "Such-Fehler: " + e.message; }
         };
 
         // --- UI KOMPONENTEN ---
@@ -182,9 +198,7 @@
                             </p>
                             {!isUser && message.scratchpad && showScratchpad && (
                                 <div className="mt-4 pt-3 border-t border-indigo-200/50 animate-fade-in">
-                                    <pre className="text-[10px] font-mono text-indigo-800/80 whitespace-pre-wrap break-words w-full bg-white/50 border border-indigo-100 p-3 rounded-2xl shadow-inner">
-                                        {message.scratchpad}
-                                    </pre>
+                                    <pre className="text-[10px] font-mono text-indigo-800/80 whitespace-pre-wrap break-words w-full bg-white/50 border border-indigo-100 p-3 rounded-2xl shadow-inner" dangerouslySetInnerHTML={getXRayHTML(message.scratchpad)}></pre>
                                 </div>
                             )}
                         </div>
@@ -273,6 +287,9 @@
             const [editSttProviderId, setEditSttProviderId] = React.useState(null);
             const [sttProviderForm, setSttProviderForm] = React.useState({ name: '', url: 'https://api.replicate.com/v1/models/openai/whisper/predictions', apiKey: '' });
 
+            // TAVILY HELFER (V3.12)
+            const [tavilyKey, setTavilyKey] = React.useState(() => localStorage.getItem('lumen_tavily_key') || '');
+
             // DNA STATE MIT VOICE BINDING
             const [dna, setDna] = React.useState(() => { 
                 const defaultVoice = { providerId: "", voiceIdOrUrl: "", speed: 1.05, extraParams: "" };
@@ -295,13 +312,14 @@
             const [telemetry, setTelemetry] = React.useState({ concern: 0, bs_meter: 0, mask_drop: false });
             const [latestContext, setLatestContext] = React.useState("[AKTIVER KONTEXT WIRD ZUR LAUFZEIT INJIZIERT]");
             
-            // --- V3.10 DYNAMIC DESK (ACTIVE AKTEN) ---
+            // --- DYNAMIC DESK (STAGING AREA) ---
             const [activeDesks, setActiveDesks] = React.useState([]); 
             const [editingDeskItem, setEditingDeskItem] = React.useState(null);
             const [deskItemForm, setDeskItemForm] = React.useState({});
+            const [isArchiving, setIsArchiving] = React.useState(false);
 
             const [activeView, setActiveView] = React.useState('chat'); 
-            const [isLoading, setIsLoading] = React.useState(false);
+            const [loadingStatus, setLoadingStatus] = React.useState(null); // V3.12 DYNAMIC LOADING STATE
             
             // --- STT (Speech-to-Text) ---
             const [isRecording, setIsRecording] = React.useState(false);
@@ -341,7 +359,7 @@
             const fileInputRefOmni = React.useRef(null);
             const fileInputRefConfig = React.useRef(null);
 
-            React.useEffect(() => { if(activeView === 'chat') messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [messages, isLoading, activeView]);
+            React.useEffect(() => { if(activeView === 'chat') messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [messages, loadingStatus, activeView]);
 
             const showToast = (msg) => {
                 setToast(msg);
@@ -370,7 +388,7 @@
             const loadDirectives = async () => { const d = await db.directives.toArray(); setDirectives(d); };
             React.useEffect(() => { if(activeView === 'directives') loadDirectives(); }, [activeView]);
 
-            // --- AUDIO MANAGER (TTS & V3.10 GLOBAL TOGGLE FIX) ---
+            // --- AUDIO MANAGER (TTS) ---
             const stopAudio = () => {
                 if (window.currentAudio) {
                     window.currentAudio.pause();
@@ -382,23 +400,20 @@
             };
 
             const playMessageTTS = async (msgId, textToSpeak) => {
-                // V3.10: Global Toggle Logic (Kein blinder Fetch)
                 if (window.currentAudio && window.currentAudioId === msgId) {
                     if (window.currentAudio.paused) {
                         window.currentAudio.play();
                         setPlayingMsgId(msgId);
                     } else {
                         window.currentAudio.pause();
-                        setPlayingMsgId(null); // UI zeigt wieder "Play" an
+                        setPlayingMsgId(null);
                     }
                     return;
                 }
 
-                // Neues Audio wird geladen -> altes killen
                 stopAudio();
                 setPlayingMsgId(msgId);
                 
-                // INTELLIGENTES ROUTING: Persona DNA vs. Global
                 let targetProviderId = activeTtsProviderId;
                 let targetVoiceId = null;
                 let usePersonaVoice = false;
@@ -613,8 +628,7 @@
             };
 
             const processAudioSTT = async (blob) => {
-                setIsLoading(true);
-                showToast("Transkribiere Audio via Replicate...");
+                setLoadingStatus("TRANSKRIBIERE AUDIO...");
                 try {
                     const reader = new FileReader();
                     reader.readAsDataURL(blob);
@@ -624,14 +638,14 @@
                         const sttProv = sttProviders.find(p => p.id === activeSttProviderId) || sttProviders[0];
                         if (!sttProv || !sttProv.apiKey) {
                             showToast("FEHLER: STT API-Key fehlt. Bitte in Settings anlegen.");
-                            setIsLoading(false);
+                            setLoadingStatus(null);
                             return;
                         }
 
-                        const WORKER_URL = "HIER_DEINE_CLOUDFLARE_URL";
+                        const WORKER_URL = "HTTPS://lumen-replicate-proxy2.sloosmail.workers.dev";
                         if (WORKER_URL.includes("HIER_DEINE")) {
                             showToast("FEHLER: Cloudflare Worker URL nicht konfiguriert.");
-                            setIsLoading(false);
+                            setLoadingStatus(null);
                             return;
                         }
 
@@ -695,12 +709,79 @@
                         } else {
                             showToast("Kein Text erkannt.");
                         }
-                        setIsLoading(false);
+                        setLoadingStatus(null);
                     };
                 } catch (e) {
                     showToast("STT Fehler: " + e.message);
-                    setIsLoading(false);
+                    setLoadingStatus(null);
                 }
+            };
+
+            // --- ARCHIVAR (FORMAT & TAGGING) ---
+            const processWithArchivar = async (item) => {
+                const activeProvider = providers.find(p => p.id === activeProviderId) || providers[0];
+                if (!activeProvider) throw new Error('Kein Chat-Provider konfiguriert');
+                
+                const useJsonMode = activeProvider.jsonMode !== false;
+                const key = activeProvider.apiKey;
+                const apiUrl = activeProvider.url;
+                
+                const prompt = `Du bist der Archivar. Prüfe die folgenden Daten eines Gedächtnis-Eintrags. Korrigiere Rechtschreibung/Grammatik im Fakt, Emotion, Bedeutung und Reflexion behutsam, erhalte aber den Kern und die Tonalität. Optimiere den poetischen Titel falls nötig. Generiere zwingend ein Array "tags" mit 3-5 hochrelevanten Schlagwörtern zur Strukturierung. Antworte AUSSCHLIESSLICH in folgendem exakten JSON-Format, übernimm alle anderen Felder unverändert:
+{
+  "titel_technisch": "...",
+  "titel_poetisch": "...",
+  "kategorie": "...",
+  "fakt": "...",
+  "emotion": "...",
+  "bedeutung": "...",
+  "reflexion": "...",
+  "tags": ["tag1", "tag2", "tag3"]
+}`;
+
+                const payloadText = JSON.stringify({
+                    titel_technisch: item.titel_technisch,
+                    titel_poetisch: item.titel_poetisch,
+                    kategorie: item.kategorie,
+                    fakt: item.fakt,
+                    emotion: item.emotion,
+                    bedeutung: item.bedeutung,
+                    reflexion: item.reflexion,
+                    tags: item.tags
+                });
+
+                let resText = "";
+
+                if(activeProvider.type === 'gemini') {
+                    const fetchUrl = apiUrl.includes('?') ? `${apiUrl}&key=${key}` : `${apiUrl}?key=${key}`;
+                    const bodyPayload = { 
+                        systemInstruction: {parts:[{text:prompt}]}, 
+                        contents: [{role:'user', parts:[{text:payloadText}]}] 
+                    };
+                    if (useJsonMode) bodyPayload.generationConfig = { responseMimeType: "application/json" };
+                    
+                    const r = await fetch(fetchUrl, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(bodyPayload) });
+                    const d = await r.json(); 
+                    if(!r.ok) throw new Error(d.error?.message || 'Gemini API Fehler beim Archivar'); 
+                    resText = d.candidates[0].content.parts[0].text;
+                } else {
+                    const headers = { 'Content-Type': 'application/json' };
+                    if (key) headers['Authorization'] = `Bearer ${key}`;
+                    const bodyPayload = { 
+                        model: activeProvider.model || 'gpt-4o', 
+                        messages: [{role:'system',content:prompt}, {role:'user',content:payloadText}] 
+                    };
+                    if (useJsonMode) bodyPayload.response_format = { type: "json_object" };
+
+                    const r = await fetch(apiUrl, { method: 'POST', headers, body: JSON.stringify(bodyPayload) });
+                    const d = await r.json(); 
+                    if(!r.ok) throw new Error(d.error?.message || 'OpenAI API Fehler beim Archivar'); 
+                    resText = d.choices[0].message.content;
+                }
+
+                const cleanResText = resText.replace(/[\`]{3}json/gi, '').replace(/[\`]{3}/gi, '').trim();
+                const parsed = JSON.parse(cleanResText);
+                
+                return { ...item, ...parsed, isDirty: false };
             };
 
             // --- OMNI-BUNDLE (EXPORT/IMPORT) ---
@@ -708,8 +789,8 @@
                 try {
                     const mems = await db.memories.toArray();
                     const dirs = await db.directives.toArray();
-                    const config = { providers, activeProviderId, ttsProvidersAccounts: ttsProviders, activeTtsProviderId, ttsVoices, sttProviders, activeSttProviderId, autoPlayEnabled };
-                    const bundle = { type: "LUMEN_FULL_BACKUP", version: "3.10", dna: dna, directives: dirs, memories: mems, config, timestamp: Date.now() };
+                    const config = { providers, activeProviderId, ttsProvidersAccounts: ttsProviders, activeTtsProviderId, ttsVoices, sttProviders, activeSttProviderId, autoPlayEnabled, tavilyKey };
+                    const bundle = { type: "LUMEN_FULL_BACKUP", version: "3.12", dna: dna, directives: dirs, memories: mems, config, timestamp: Date.now() };
                     const blob = new Blob([JSON.stringify(bundle, null, 2)], { type: "application/json" });
                     const url = URL.createObjectURL(blob);
                     const a = document.createElement('a'); a.href = url;
@@ -726,13 +807,11 @@
                     try {
                         const parsed = JSON.parse(event.target.result);
                         if (parsed.type === "LUMEN_FULL_BACKUP") {
-                            // Ensure voice_config backwards compatibility
                             const importedDna = parsed.dna;
                             if (!importedDna.voice_config) importedDna.voice_config = { providerId: "", voiceIdOrUrl: "", speed: 1.05, extraParams: "" };
                             
                             setDna(importedDna); localStorage.setItem('lumen_dna_layers', JSON.stringify(importedDna));
                             
-                            // V3.5+ WIPEN UND NEU SCHREIBEN
                             await db.directives.clear();
                             if (parsed.directives && parsed.directives.length) await db.directives.bulkPut(parsed.directives);
                             
@@ -748,6 +827,7 @@
                                 if (parsed.config.sttProviders) { setSttProviders(parsed.config.sttProviders); localStorage.setItem('lumen_sttProviders', JSON.stringify(parsed.config.sttProviders)); }
                                 if (parsed.config.activeSttProviderId) { setActiveSttProviderId(parsed.config.activeSttProviderId); localStorage.setItem('lumen_activeSttProviderId', parsed.config.activeSttProviderId); }
                                 if (parsed.config.autoPlayEnabled !== undefined) { setAutoPlayEnabled(parsed.config.autoPlayEnabled); localStorage.setItem('lumen_autoPlay', String(parsed.config.autoPlayEnabled)); }
+                                if (parsed.config.tavilyKey !== undefined) { setTavilyKey(parsed.config.tavilyKey); localStorage.setItem('lumen_tavily_key', parsed.config.tavilyKey); }
                             }
                             loadMemories(); showToast('SYSTEM-RESTORE ERFOLGREICH');
                         } else showToast('FEHLER: INKOMPATIBLES FORMAT');
@@ -759,7 +839,7 @@
             // --- CONFIG ONLY EXPORT/IMPORT ---
             const handleConfigExport = () => {
                 try {
-                    const config = { type: "LUMEN_CONFIG_BACKUP", version: "3.10", providers, activeProviderId, ttsProvidersAccounts: ttsProviders, activeTtsProviderId, ttsVoices, sttProviders, activeSttProviderId, autoPlayEnabled };
+                    const config = { type: "LUMEN_CONFIG_BACKUP", version: "3.12", providers, activeProviderId, ttsProvidersAccounts: ttsProviders, activeTtsProviderId, ttsVoices, sttProviders, activeSttProviderId, autoPlayEnabled, tavilyKey };
                     const blob = new Blob([JSON.stringify(config, null, 2)], { type: "application/json" });
                     const url = URL.createObjectURL(blob);
                     const a = document.createElement('a'); a.href = url;
@@ -786,6 +866,7 @@
                                 if (config.sttProviders) { setSttProviders(config.sttProviders); localStorage.setItem('lumen_sttProviders', JSON.stringify(config.sttProviders)); }
                                 if (config.activeSttProviderId) { setActiveSttProviderId(config.activeSttProviderId); localStorage.setItem('lumen_activeSttProviderId', config.activeSttProviderId); }
                                 if (config.autoPlayEnabled !== undefined) { setAutoPlayEnabled(config.autoPlayEnabled); localStorage.setItem('lumen_autoPlay', String(config.autoPlayEnabled)); }
+                                if (config.tavilyKey !== undefined) { setTavilyKey(config.tavilyKey); localStorage.setItem('lumen_tavily_key', config.tavilyKey); }
                                 showToast('CONFIG-RESTORE ERFOLGREICH');
                             } else {
                                 showToast('FEHLER: KEINE CONFIG GEFUNDEN');
@@ -809,7 +890,7 @@
 
             // --- MAIN SEND ---
             const handleSendMessage = async () => {
-                if(!inputText.trim() || isLoading) return;
+                if(!inputText.trim() || loadingStatus) return;
                 const text = inputText.trim();
                 
                 const activeProvider = providers.find(p => p.id === activeProviderId) || providers[0];
@@ -821,7 +902,57 @@
 
                 const userMsgId = generateId();
                 setMessages(prev => [...prev.filter(m=>m.sender!=='system-error'), {id: userMsgId, sender:'user', text, timestamp: new Date().toISOString()}]);
-                setIsLoading(true);
+                setLoadingStatus("PROCESSING MATRIX...");
+
+                // --- LLM FETCH HELPER (ENCAPSULATED FOR INTERCEPTOR) ---
+                const fetchTextFromAPI = async (sysPrompt, userText, historyMessages) => {
+                    let resText = "";
+                    if(activeProvider.type === 'gemini') {
+                        const rawRoles = [...historyMessages.map(m => ({ role: m.sender==='user'?'user':'model', text: m.scratchpad ? m.scratchpad + '\n\n' + m.text : m.text })), {role:'user', text: userText}];
+                        const contents = []; let currentRole = null; let currentText = [];
+                        rawRoles.forEach(msg => {
+                            if (msg.role === currentRole) currentText.push(msg.text);
+                            else {
+                                if (currentRole) contents.push({ role: currentRole, parts: [{ text: currentText.join('\n\n---\n\n') }] });
+                                currentRole = msg.role; currentText = [msg.text];
+                            }
+                        });
+                        if (currentRole) contents.push({ role: currentRole, parts: [{ text: currentText.join('\n\n---\n\n') }] });
+
+                        const bodyPayload = { systemInstruction: {parts:[{text:sysPrompt}]}, contents };
+                        if (useJsonMode) bodyPayload.generationConfig = { responseMimeType: "application/json" };
+
+                        const fetchUrl = apiUrl.includes('?') ? `${apiUrl}&key=${key}` : `${apiUrl}?key=${key}`;
+                        const r = await fetch(fetchUrl, {
+                            method: 'POST', headers: {'Content-Type':'application/json'},
+                            body: JSON.stringify(bodyPayload)
+                        });
+                        const d = await r.json(); 
+                        if(!r.ok) throw new Error(d.error?.message || 'Unbekannter Gemini API Fehler'); 
+                        resText = d.candidates[0].content.parts[0].text;
+                    } else {
+                        const payload = [
+                            {role:'system',content:sysPrompt}, 
+                            ...historyMessages.map(m=>({ role:m.sender==='user'?'user':'assistant', content: m.scratchpad ? m.scratchpad + '\n\n' + m.text : m.text })), 
+                            {role:'user',content:userText}
+                        ];
+
+                        const headers = { 'Content-Type': 'application/json' };
+                        if (key) headers['Authorization'] = `Bearer ${key}`;
+
+                        const bodyPayload = { model: activeProvider.model || 'gpt-4o', messages: payload };
+                        if (useJsonMode) bodyPayload.response_format = { type: "json_object" };
+
+                        const r = await fetch(apiUrl, {
+                            method: 'POST', headers,
+                            body: JSON.stringify(bodyPayload)
+                        });
+                        const d = await r.json(); 
+                        if(!r.ok) throw new Error(d.error?.message || 'Unbekannter OpenAI API Fehler'); 
+                        resText = d.choices[0].message.content;
+                    }
+                    return resText;
+                };
 
                 try {
                     // Kontext laden
@@ -843,13 +974,13 @@
                     const timeOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
                     const timeString = "[SYSTEM-UHRZEIT]\nAktuelle Zeit in Simons Welt: " + now.toLocaleDateString('de-DE', timeOptions) + " Uhr.\n\n";
 
-                    // --- V3.10 DESK CONTEXT INJECTION ---
+                    // --- DESK CONTEXT INJECTION (STAGING) ---
                     let deskContext = "";
                     if (activeDesks.length > 0) {
-                        deskContext = "[AKTIVE AKTEN AUF DEM SCHREIBTISCH (WERKBANK)]\n";
+                        deskContext = "[AKTIVE AKTEN AUF DEM SCHREIBTISCH (WERKBANK/STAGING)]\n";
                         deskContext += "ACHTUNG KI: Der User hat diese spezifischen Einträge gerade vor sich. Wenn du einen Eintrag updaten sollst, beziehe dich ZWINGEND auf diese Daten und ID:\n\n";
                         activeDesks.forEach(desk => {
-                            const {tagsString, id, ...cleanDesk} = desk; // Strip React UI props
+                            const {tagsString, id, isDirty, ...cleanDesk} = desk; 
                             deskContext += JSON.stringify(cleanDesk, null, 2) + "\n\n";
                         });
                     }
@@ -858,58 +989,30 @@
                     setLatestContext(dynamicContext);
                     const masterSystemPrompt = `[1. DEINE IDENTITÄT UND REGELN (NUR ZUM LESEN)]\n${dna.block1_identity}\n\n[2. AKTIVER KONTEXT (NUR ZUM LESEN)]\n${dynamicContext}\n\n[3. DIE MATRIX-SENSOREN (DEINE LOGIK-REGELN)]\n${dna.block3_sensors}\n\n[4. DEINE AUSGABE (DAS JSON-SKELETT)]\n${dna.block4_skeleton}`.trim();
 
-                    let resText = "";
                     const hist = messages.filter(m=>m.sender==='user'||m.sender==='ai');
-
-                    if(activeProvider.type === 'gemini') {
-                        const rawRoles = [...hist.map(m => ({ role: m.sender==='user'?'user':'model', text: m.scratchpad ? m.scratchpad + '\n\n' + m.text : m.text })), {role:'user', text}];
-                        const contents = []; let currentRole = null; let currentText = [];
-                        rawRoles.forEach(msg => {
-                            if (msg.role === currentRole) currentText.push(msg.text);
-                            else {
-                                if (currentRole) contents.push({ role: currentRole, parts: [{ text: currentText.join('\n\n---\n\n') }] });
-                                currentRole = msg.role; currentText = [msg.text];
-                            }
-                        });
-                        if (currentRole) contents.push({ role: currentRole, parts: [{ text: currentText.join('\n\n---\n\n') }] });
-
-                        const bodyPayload = { systemInstruction: {parts:[{text:masterSystemPrompt}]}, contents };
-                        if (useJsonMode) bodyPayload.generationConfig = { responseMimeType: "application/json" };
-
-                        const fetchUrl = apiUrl.includes('?') ? `${apiUrl}&key=${key}` : `${apiUrl}?key=${key}`;
-                        const r = await fetch(fetchUrl, {
-                            method: 'POST', headers: {'Content-Type':'application/json'},
-                            body: JSON.stringify(bodyPayload)
-                        });
-                        const d = await r.json(); 
-                        if(!r.ok) throw new Error(d.error?.message || 'Unbekannter Gemini API Fehler'); 
-                        resText = d.candidates[0].content.parts[0].text;
-                    } else {
-                        const payload = [
-                            {role:'system',content:masterSystemPrompt}, 
-                            ...hist.map(m=>({ role:m.sender==='user'?'user':'assistant', content: m.scratchpad ? m.scratchpad + '\n\n' + m.text : m.text })), 
-                            {role:'user',content:text}
-                        ];
-
-                        const headers = { 'Content-Type': 'application/json' };
-                        if (key) headers['Authorization'] = `Bearer ${key}`;
-
-                        const bodyPayload = { model: activeProvider.model || 'gpt-4o', messages: payload };
-                        if (useJsonMode) bodyPayload.response_format = { type: "json_object" };
-
-                        const r = await fetch(apiUrl, {
-                            method: 'POST', headers,
-                            body: JSON.stringify(bodyPayload)
-                        });
-                        const d = await r.json(); 
-                        if(!r.ok) throw new Error(d.error?.message || 'Unbekannter OpenAI API Fehler'); 
-                        resText = d.choices[0].message.content;
-                    }
-
+                    
+                    let resText = await fetchTextFromAPI(masterSystemPrompt, text, hist);
+                    
                     let finalChatText = "", finalScratch = "";
                     try {
-                        const cleanResText = resText.replace(/[\`]{3}json/gi, '').replace(/[\`]{3}/gi, '').trim();
-                        const obj = JSON.parse(cleanResText);
+                        let cleanResText = resText.replace(/[\`]{3}json/gi, '').replace(/[\`]{3}/gi, '').trim();
+                        let obj = JSON.parse(cleanResText);
+
+                        // === HELFER INTERCEPTOR (V3.12) ===
+                        if (obj.matrix?.helfer_suchauftrag && obj.matrix.helfer_suchauftrag !== "null" && obj.matrix.helfer_suchauftrag !== "") {
+                            setLoadingStatus("HELFER RECHERCHIERT: " + obj.matrix.helfer_suchauftrag.toUpperCase());
+                            const searchResult = await fetchTavily(obj.matrix.helfer_suchauftrag, tavilyKey);
+                            
+                            setLoadingStatus("MAIRA VERARBEITET FAKTEN...");
+                            const interceptorPrompt = masterSystemPrompt + `\n\n[AKTUELLER HELFER-BERICHT FÜR DIESE ANFRAGE]\nSuchauftrag: ${obj.matrix.helfer_suchauftrag}\nErgebnis:\n${searchResult}\n\nANWEISUNG: Formuliere deine finale Antwort basierend auf diesen Fakten. Setze den 'helfer_suchauftrag' nun ZWINGEND auf null!`;
+                            
+                            const secondResponse = await fetchTextFromAPI(interceptorPrompt, text, hist);
+                            const cleanSecondResText = secondResponse.replace(/[\`]{3}json/gi, '').replace(/[\`]{3}/gi, '').trim();
+                            
+                            obj = JSON.parse(cleanSecondResText);
+                            resText = cleanSecondResText;
+                        }
+                        // === ENDE INTERCEPTOR ===
                         
                         finalChatText = obj.finale_antwort || "Fehler: 'finale_antwort' fehlt im generierten JSON.";
                         finalScratch = JSON.stringify(obj, null, 2);
@@ -923,7 +1026,7 @@
                             showToast("NEUE DIREKTIVE VERANKERT");
                         }
 
-                        // --- V3.10 ROUTING-FIX (PINNED MEMORIES DESK & UPDATE) ---
+                        // --- ROUTING-FIX (STAGING AREA ONLY) ---
                         const entwurf = obj.matrix?.tagebuch_entwurf || obj.tagebuch_entwurf;
                         if(entwurf) { 
                             const modus = entwurf.modus;
@@ -951,16 +1054,8 @@
                             else if (modus === "UPDATE") {
                                 const daten = entwurf.daten;
                                 if (daten && daten.titel_technisch) {
-                                    const existing = await db.memories.where('titel_technisch').equals(daten.titel_technisch).first();
-                                    if (existing) {
-                                        // DB Update (V3.10 Fix)
-                                        await db.memories.update(existing.id, { ...daten, timestamp: Date.now() });
-                                        // Aktiven Schreibtisch updaten (UI Re-Render)
-                                        setActiveDesks(prev => prev.map(item => item.titel_technisch === daten.titel_technisch ? { ...item, ...daten } : item));
-                                        showToast("AKTE AKTUALISIERT");
-                                    } else {
-                                        console.warn("UPDATE fehlgeschlagen: Akte nicht gefunden.");
-                                    }
+                                    setActiveDesks(prev => prev.map(item => item.titel_technisch === daten.titel_technisch ? { ...item, ...daten, isDirty: true } : item));
+                                    showToast("AKTE AUF SCHREIBTISCH AKTUALISIERT");
                                 }
                             } 
                             else if (modus === "ENTWURF" || modus === "DISKUSSION" || modus === "DRAFT") {
@@ -977,24 +1072,25 @@
                                     reflexion: draftData.reflexion || "",
                                     tags: Array.isArray(draftData.tags) ? draftData.tags : [],
                                     kategorie: draftData.kategorie || "EMOTIONAL",
-                                    is_core_memory: false
+                                    is_core_memory: false,
+                                    isDirty: true
                                 };
                                 
                                 setActiveDesks(prev => {
                                     if(prev.some(d => d.titel_technisch === technicalTitle)) {
-                                        return prev.map(d => d.titel_technisch === technicalTitle ? {...d, ...newItem, id: d.id} : d);
+                                        return prev.map(d => d.titel_technisch === technicalTitle ? {...d, ...newItem, id: d.id, isDirty: true} : d);
                                     }
                                     return [...prev, newItem];
                                 });
                                 showToast('NEUER ENTWURF AUF DEM SCHREIBTISCH');
                             } else {
-                                 // Fallback
                                  const safeText = typeof entwurf === 'object' ? JSON.stringify(entwurf, null, 2) : String(entwurf);
                                  const newItem = {
                                     id: generateId(),
                                     titel_technisch: `RAW_${Date.now()}`,
                                     fakt: safeText,
-                                    kategorie: "STANDARD"
+                                    kategorie: "STANDARD",
+                                    isDirty: true
                                  };
                                  setActiveDesks(prev => [...prev, newItem]);
                                  showToast('UNFORMATIERTER ENTWURF AUF DEM SCHREIBTISCH');
@@ -1048,7 +1144,7 @@
                     setMessages(prev => [...prev.filter(m => m.id !== userMsgId), {id: generateId(), sender: 'system-error', text: errorMsg, timestamp: new Date().toISOString()}]);
                     setInputText(text);
                 }
-                finally { setIsLoading(false); }
+                finally { setLoadingStatus(null); }
             };
 
             const sysPromptPreview = `[1. DEINE IDENTITÄT UND REGELN (NUR ZUM LESEN)]\n${dna.block1_identity}\n\n[2. AKTIVER KONTEXT (NUR ZUM LESEN)]\n${latestContext}\n\n[3. DIE MATRIX-SENSOREN (DEINE LOGIK-REGELN)]\n${dna.block3_sensors}\n\n[4. DEINE AUSGABE (DAS JSON-SKELETT)]\n${dna.block4_skeleton}`.trim();
@@ -1081,20 +1177,26 @@
                 );
             }
 
-            // Helpers for settings render
             const activeTtsProvider = ttsProviders.find(p => p.id === activeTtsProviderId) || ttsProviders[0];
 
             return (
                 <div className="flex flex-col h-[100dvh] w-full max-w-4xl mx-auto sm:border-x border-stone-200 bg-stone-50 relative overflow-hidden shadow-2xl">
                     <Toast message={toast} />
 
-                    {/* --- V3.10 POPOUT EDITOR (MODAL) --- */}
+                    {/* --- POPOUT EDITOR (MODAL) --- */}
                     {editingDeskItem && (
                         <div className="absolute inset-0 z-[800] bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in">
-                            <div className="bg-white rounded-3xl w-full max-w-2xl max-h-[90vh] flex flex-col shadow-2xl border border-stone-100 overflow-hidden">
+                            <div className="bg-white rounded-3xl w-full max-w-2xl max-h-[90vh] flex flex-col shadow-2xl border border-stone-100 overflow-hidden relative">
+                                {isArchiving && (
+                                    <div className="absolute inset-0 z-10 bg-white/80 backdrop-blur-sm flex flex-col items-center justify-center animate-fade-in">
+                                        <div className="text-indigo-600 font-bold uppercase tracking-widest text-xs animate-pulse mb-2">Der Archivar arbeitet...</div>
+                                        <div className="w-1/2 h-1 bg-indigo-100 rounded-full overflow-hidden"><div className="w-1/2 h-full bg-indigo-500 animate-slide-up origin-left rounded-full"></div></div>
+                                    </div>
+                                )}
+                                
                                 <div className="p-4 border-b border-stone-100 flex justify-between items-center bg-indigo-50/50">
                                     <h3 className="font-bold text-indigo-900 uppercase text-xs tracking-widest flex items-center gap-2">📝 Akte bearbeiten</h3>
-                                    <button onClick={() => setEditingDeskItem(null)} className="text-slate-400 hover:text-rose-500 transition-colors font-bold text-sm">✕</button>
+                                    <button onClick={() => setEditingDeskItem(null)} className="text-slate-400 hover:text-rose-500 transition-colors font-bold text-sm z-20 relative">✕</button>
                                 </div>
                                 <div className="flex-1 overflow-y-auto p-5 flex flex-col gap-3">
                                     <div className="flex flex-col sm:flex-row gap-2">
@@ -1114,35 +1216,53 @@
                                         setActiveDesks(prev => prev.filter(i => i.id !== editingDeskItem.id));
                                         setEditingDeskItem(null);
                                         showToast('Vom Schreibtisch entfernt');
-                                    }} className="btn-danger whitespace-nowrap">❌ VOM SCHREIBTISCH NEHMEN</button>
+                                    }} disabled={isArchiving} className="btn-danger whitespace-nowrap disabled:opacity-50">❌ VOM SCHREIBTISCH NEHMEN</button>
+                                    
                                     <div className="flex gap-2">
-                                        <button onClick={() => setEditingDeskItem(null)} className="btn">SCHLIESSEN</button>
+                                        <button onClick={() => {
+                                            const dataToSave = {...deskItemForm};
+                                            dataToSave.tags = dataToSave.tagsString ? dataToSave.tagsString.split(',').map(t=>t.trim()).filter(Boolean) : [];
+                                            dataToSave.isDirty = true;
+                                            
+                                            setActiveDesks(prev => prev.map(i => i.id === editingDeskItem.id ? dataToSave : i));
+                                            setEditingDeskItem(dataToSave);
+                                            setDeskItemForm({...dataToSave, tagsString: dataToSave.tags.join(', ')});
+                                            showToast('Auf Schreibtisch gesichert');
+                                        }} disabled={isArchiving} className="btn whitespace-nowrap bg-amber-50 text-amber-700 border-amber-200 hover:bg-amber-100 disabled:opacity-50">📝 NUR AUF SCHREIBTISCH SICHERN</button>
+                                        
                                         <button onClick={async () => {
+                                            setIsArchiving(true);
+                                            showToast("Archivar prüft und taggt...");
                                             try {
-                                                const dataToSave = {...deskItemForm};
-                                                dataToSave.tags = dataToSave.tagsString ? dataToSave.tagsString.split(',').map(t=>t.trim()).filter(Boolean) : [];
-                                                delete dataToSave.tagsString;
-                                                dataToSave.timestamp = dataToSave.timestamp || Date.now();
+                                                const dataToProcess = {...deskItemForm};
+                                                dataToProcess.tags = dataToProcess.tagsString ? dataToProcess.tagsString.split(',').map(t=>t.trim()).filter(Boolean) : [];
                                                 
-                                                if (typeof dataToSave.id === 'string') delete dataToSave.id;
+                                                const archivedData = await processWithArchivar(dataToProcess);
+                                                
+                                                if (typeof archivedData.id === 'string') delete archivedData.id;
+                                                archivedData.timestamp = Date.now();
 
-                                                const existing = await db.memories.where('titel_technisch').equals(dataToSave.titel_technisch).first();
-                                                if(existing && existing.id !== dataToSave.id) {
-                                                    await db.memories.update(existing.id, dataToSave);
-                                                } else if (dataToSave.id) {
-                                                    await db.memories.update(dataToSave.id, dataToSave);
+                                                const existing = await db.memories.where('titel_technisch').equals(archivedData.titel_technisch).first();
+                                                if(existing) {
+                                                    await db.memories.update(existing.id, archivedData);
+                                                    archivedData.id = existing.id;
                                                 } else {
-                                                    await db.memories.add(dataToSave);
+                                                    const newId = await db.memories.add(archivedData);
+                                                    archivedData.id = newId;
                                                 }
                                                 
-                                                setActiveDesks(prev => prev.filter(i => i.id !== editingDeskItem.id));
-                                                setEditingDeskItem(null);
+                                                archivedData.isDirty = false; // Clean state on desk
+                                                setActiveDesks(prev => prev.map(i => i.id === editingDeskItem.id ? archivedData : i));
+                                                setEditingDeskItem(archivedData);
+                                                setDeskItemForm({...archivedData, tagsString: archivedData.tags.join(', ')});
                                                 loadMemories();
-                                                showToast('💾 IM SANCTUM GESPEICHERT');
+                                                showToast('💾 IM SANCTUM VEREWIGT');
                                             } catch(e) {
-                                                showToast('Fehler beim Speichern');
+                                                showToast('Fehler: ' + e.message);
+                                            } finally {
+                                                setIsArchiving(false);
                                             }
-                                        }} className="btn-primary bg-indigo-600 text-white hover:bg-indigo-700 shadow-md">💾 IM SANCTUM SPEICHERN</button>
+                                        }} disabled={isArchiving} className="btn-primary bg-indigo-600 text-white hover:bg-indigo-700 shadow-md whitespace-nowrap disabled:opacity-50">💾 IN SANCTUM VEREWIGEN</button>
                                     </div>
                                 </div>
                             </div>
@@ -1198,14 +1318,15 @@
 
                     <main className="flex-1 overflow-y-auto overflow-x-hidden relative scroll-smooth flex flex-col">
                         
-                        {/* --- CHAT VIEW WITH DYNAMIC DESK --- */}
+                        {/* --- CHAT VIEW --- */}
                         <div className={`${activeView === 'chat' ? 'flex' : 'hidden'} h-full flex-col`}>
-                            {/* V3.10 DYNAMIC DESK LEISTE */}
+                            {/* DYNAMIC DESK LEISTE (STAGING INDICATOR) */}
                             {activeDesks.length > 0 && (
                                 <div className="flex gap-2 p-2 px-4 overflow-x-auto bg-slate-50 border-b border-slate-200 shrink-0">
                                     {activeDesks.map(item => (
-                                        <button key={item.id} onClick={() => { setEditingDeskItem(item); setDeskItemForm({...item, tagsString: item.tags?.join(', ') || ''}); }} className="text-[10px] uppercase font-mono font-bold px-3 py-1.5 bg-indigo-100 text-indigo-700 rounded border border-indigo-200 flex items-center gap-2 shrink-0 hover:bg-indigo-200 transition-colors shadow-sm">
+                                        <button key={item.id} onClick={() => { setEditingDeskItem(item); setDeskItemForm({...item, tagsString: item.tags?.join(', ') || ''}); }} className="relative text-[10px] uppercase font-mono font-bold px-3 py-1.5 bg-indigo-100 text-indigo-700 rounded border border-indigo-200 flex items-center gap-2 shrink-0 hover:bg-indigo-200 transition-colors shadow-sm">
                                             📝 {item.titel_technisch || 'NEUER ENTWURF'}
+                                            {item.isDirty && <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-amber-400 rounded-full border border-white shadow-sm" title="Dirty (Ungespeichert)"></span>}
                                         </button>
                                     ))}
                                 </div>
@@ -1214,7 +1335,7 @@
                             <div className="flex-1 flex flex-col p-4 sm:p-6 overflow-y-auto">
                                 <div className="flex-1"></div>
                                 {messages.map(msg => <ChatBubble key={msg.id} message={msg} personaName={dna.persona_name} playingMsgId={playingMsgId} onPlayTTS={playMessageTTS} />)}
-                                {isLoading && <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest animate-pulse mb-6 ml-2 font-mono">[ PROCESSING_MATRIX ]</div>}
+                                {loadingStatus && <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest animate-pulse mb-6 ml-2 font-mono">[ {loadingStatus} ]</div>}
                                 <div ref={messagesEndRef} className="h-4" />
                             </div>
                         </div>
@@ -1314,6 +1435,25 @@
                                             setEditProviderId(null); setProviderForm({name:'', url:'', type:'gemini', model:'', apiKey:'', jsonMode: true}); showToast('Chat-Provider gespeichert!');
                                         }} className="btn-primary bg-indigo-600 text-white hover:bg-indigo-700">{editProviderId ? 'Aktualisieren' : 'Hinzufügen'}</button>
                                     </div>
+                                </div>
+                            </div>
+
+                            {/* TAVILY HELFER MANAGEMENT (V3.12) */}
+                            <h2 className="text-sm font-bold uppercase tracking-widest text-slate-800 border-b border-stone-200 pb-2 mt-12">🔍 HELFER (TAVILY SEARCH)</h2>
+                            <div className="panel space-y-4">
+                                <p className="text-xs text-slate-500 mb-2">Hier konfigurierst du den Tavily Search API Key. Maira kann dann bei Bedarf das Web nach aktuellen Fakten durchsuchen.</p>
+                                <div>
+                                    <label className="label">Tavily API Key</label>
+                                    <input 
+                                        type="password" 
+                                        value={tavilyKey} 
+                                        onChange={e => {
+                                            setTavilyKey(e.target.value);
+                                            localStorage.setItem('lumen_tavily_key', e.target.value);
+                                        }} 
+                                        className="input-field bg-white" 
+                                        placeholder="tvly-..." 
+                                    />
                                 </div>
                             </div>
 
@@ -1466,7 +1606,7 @@
                                 </div>
                             </div>
                             
-                            {/* STT PROVIDER MANAGEMENT (V3.10) */}
+                            {/* STT PROVIDER MANAGEMENT */}
                             <h2 className="text-sm font-bold uppercase tracking-widest text-slate-800 border-b border-stone-200 pb-2 mt-12">🎙️ STT (SPEECH-TO-TEXT)</h2>
                             <div className="panel space-y-4">
                                 <p className="text-xs text-slate-500 mb-2">Hier konfigurierst du die Spracherkennung (Whisper via Replicate). Der Cloudflare Worker leitet die Aufnahmen weiter.</p>
@@ -1670,10 +1810,9 @@
                                             {m.reflexion && <div className="mt-3 bg-indigo-50/80 p-3 rounded-2xl text-indigo-800 italic text-xs border border-indigo-100/50 whitespace-pre-wrap line-clamp-4">"{m.reflexion}"</div>}
                                             {m.tags?.length > 0 && <div className="flex gap-1 mt-3 flex-wrap">{m.tags.map((t,i)=><span key={i} className="text-slate-400 text-[10px] lowercase font-mono">#{t}</span>)}</div>}
                                             
-                                            {/* V3.10 PIN BUTTON IN SANCTUM */}
                                             <button onClick={()=>{
                                                 if(!activeDesks.find(d => d.titel_technisch === m.titel_technisch)) {
-                                                    setActiveDesks(prev => [...prev, {...m}]);
+                                                    setActiveDesks(prev => [...prev, {...m, isDirty: false}]);
                                                 }
                                                 setActiveView('chat');
                                                 showToast('Akte auf Schreibtisch gelegt');
@@ -1689,17 +1828,16 @@
                     <div className={`${activeView === 'chat' ? 'block' : 'hidden'} shrink-0 border-t border-stone-200 p-2 sm:px-4 sm:py-3 bg-white/90 backdrop-blur-md pb-safe`}>
                         <div className="max-w-4xl mx-auto flex flex-col gap-1">
                             <div className="flex gap-2 items-center">
-                                {/* V3.10 STT WHISPER BUTTON */}
                                 <button 
                                     onClick={isRecording ? stopRecording : startRecording} 
-                                    disabled={isLoading}
+                                    disabled={!!loadingStatus}
                                     className={`px-4 py-2.5 rounded-2xl border transition-all shadow-sm shrink-0 flex items-center justify-center text-lg ${isRecording ? 'bg-rose-100 text-rose-600 border-rose-300 animate-pulse' : 'bg-white text-slate-500 border-stone-200 hover:bg-stone-100 disabled:opacity-50'}`}
                                     title="Speech-to-Text (Whisper via Replicate)"
                                 >
                                     {isRecording ? '🛑' : '🎤'}
                                 </button>
-                                <input value={inputText} onChange={e=>setInputText(e.target.value)} onKeyDown={e=>{if(e.key==='Enter') handleSendMessage();}} disabled={isLoading || isRecording} className="input-field flex-1 py-3 px-4 font-sans font-medium bg-white" placeholder={isLoading ? "SYSTEM PROCESSING..." : (isRecording ? "HÖRE ZU..." : "INPUT...")} />
-                                <button onClick={handleSendMessage} disabled={!inputText.trim() || isLoading || isRecording} className="btn-primary px-6 disabled:opacity-50 py-3 shadow-indigo-200 text-sm uppercase">Send</button>
+                                <input value={inputText} onChange={e=>setInputText(e.target.value)} onKeyDown={e=>{if(e.key==='Enter') handleSendMessage();}} disabled={!!loadingStatus || isRecording} className="input-field flex-1 py-3 px-4 font-sans font-medium bg-white disabled:bg-stone-100 disabled:text-slate-400" placeholder={loadingStatus ? loadingStatus : (isRecording ? "HÖRE ZU..." : "INPUT...")} />
+                                <button onClick={handleSendMessage} disabled={!inputText.trim() || !!loadingStatus || isRecording} className="btn-primary px-6 disabled:opacity-50 py-3 shadow-indigo-200 text-sm uppercase">Send</button>
                             </div>
                         </div>
                     </div>
