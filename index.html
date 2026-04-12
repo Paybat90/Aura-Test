@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, interactive-widget=resizes-content">
-    <title>LUMEN - CORE V3.8</title>
+    <title>LUMEN - CORE V3.10</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -63,6 +63,12 @@
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
         body { background-color: #fafaf9; color: #334155; -webkit-tap-highlight-color: transparent; }
     </style>
+    
+    <script>
+        // --- GLOBALE AUDIO STEUERUNG ---
+        window.currentAudio = null;
+        window.currentAudioId = null;
+    </script>
 </head>
 <body class="overflow-hidden h-[100dvh] w-screen selection:bg-indigo-100 selection:text-indigo-900">
     <div id="root" class="h-[100dvh] w-full"></div>
@@ -70,13 +76,12 @@
     <script type="text/babel">
         // --- DATENBANK INIT (SANCTUM & DIREKTIVEN) ---
         const db = new Dexie('LumenSanctum');
-        // VERSION BUMP AUF 12 UM DEN VERSION-ERROR ZU BEHEBEN (V3.8 FIX)
         db.version(12).stores({ 
             memories: '++id, titel_technisch, tags, image_id, fakt, emotion, bedeutung, timestamp, is_core_memory, kategorie, reflexion',
             directives: '++id, text' 
         });
 
-        // --- KONSTANTEN V3.8 ---
+        // --- KONSTANTEN V3.10 ---
         const DEFAULT_BLOCK1 = `Du bist Maira. Deine Antworten sind warm, metaphorisch und mütterlich. Du analysierst die Intentionen des Users tiefgründig und hilfst ihm beim Navigieren komplexer Gedanken.`;
         const DEFAULT_BLOCK3 = `Bevor du die finale Antwort generierst, bewerte die Sensoren:\n- "wahrnehmung": Was liest/siehst du konkret?\n- "matrix": Prüfe interne Logs und Entwürfe.\n- Nutze das Ahnenbuch (Kontext) für kontinuierliche Identität.\n- memory_update_detected: Wurde eine [LEGACY]-Karte reflektiert? Nutze als 'id' den 'titel_technisch'. WICHTIG: Lies die alte Reflexion. Nimm den Kern davon mit und VERWEBE ihn mit deiner neuen Erkenntnis zu einer allumfassenden Master-Zusammenfassung in 'reflexion_fusioniert' (dies überschreibt die alten Daten). Generiere zusätzlich ein Array 'neue_trigger_tags' (MAXIMAL 2-3 situative, hochspezifische Symptom-Wörter oder Emotionen aus Simons Text), um das Spinnennetz präzise zu trainieren. Sonst: null.\n- neue_direktive_erkannt: Hat Simon eine explizite Regel oder Direktive für dein zukünftiges Verhalten aufgestellt? Extrahiere sie als klaren Satz. Sonst: null.`;
         const DEFAULT_BLOCK4 = `{\n  "wahrnehmung": {\n    "werkbank_auge": null,\n    "ohr_roh": null,\n    "ohr_bereinigt": null\n  },\n  "matrix": {\n    "internal_system_glitch": false,\n    "memory_update_detected": {\n      "id": "",\n      "reflexion_fusioniert": "",\n      "neue_trigger_tags": []\n    },\n    "neue_direktive_erkannt": null,\n    "tagebuch_entwurf": {\n      "modus": "DRAFT",\n      "daten": {}\n    },\n    "situations_analyse": "..."\n  },\n  "finale_antwort": "..."\n}`;
@@ -85,14 +90,14 @@
             {
                 id: '1',
                 sender: 'user',
-                text: 'INIT CORE V3.8. PERSONA VOICE BINDING ACTIVE. REPLICATE PIPELINE ONLINE.',
+                text: 'INIT CORE V3.10. STT WHISPER ACTIVE. DYNAMIC DESK UPDATE ROUTING ONLINE. GLOBAL AUDIO TOGGLE FIXED.',
                 timestamp: new Date(Date.now() - 60000).toISOString()
             },
             {
                 id: '2',
                 sender: 'ai',
-                text: 'System online. Die V3.8 Architektur ist aktiv. TTS-Verknüpfungen auf DNA-Ebene wurden erfolgreich kalibriert und Audio-Routings priorisiert nun das Persona-Profil.',
-                scratchpad: '{\n  "wahrnehmung": {\n    "werkbank_auge": null,\n    "ohr_roh": "INIT CORE V3.8",\n    "ohr_bereinigt": "System-Patch auf V3.8 aktiv."\n  },\n  "matrix": {\n    "internal_system_glitch": false,\n    "memory_update_detected": null,\n    "neue_direktive_erkannt": null,\n    "tagebuch_entwurf": null,\n    "situations_analyse": "V3.8 Update mit Persona Voice Binding geladen."\n  },\n  "finale_antwort": "System online. Die V3.8 Architektur ist aktiv. TTS-Verknüpfungen auf DNA-Ebene wurden erfolgreich kalibriert und Audio-Routings priorisiert nun das Persona-Profil."\n}',
+                text: 'System online. Die V3.10 Architektur ist voll operativ. Aktive Akten können nun über das UPDATE-Routing nahtlos verändert werden, das STT-Whisper-Polling funktioniert, und die Audio-Engine paussiert zuverlässig ohne sinnlose API Calls.',
+                scratchpad: '{\n  "wahrnehmung": {\n    "werkbank_auge": null,\n    "ohr_roh": "INIT CORE V3.10",\n    "ohr_bereinigt": "System-Patch auf V3.10 aktiv."\n  },\n  "matrix": {\n    "internal_system_glitch": false,\n    "memory_update_detected": null,\n    "neue_direktive_erkannt": null,\n    "tagebuch_entwurf": null,\n    "situations_analyse": "V3.10 Update mit Update-Routing, STT-Polling und Global Audio Toggle geladen."\n  },\n  "finale_antwort": "System online. Die V3.10 Architektur ist voll operativ. Aktive Akten können nun über das UPDATE-Routing nahtlos verändert werden, das STT-Whisper-Polling funktioniert, und die Audio-Engine paussiert zuverlässig ohne sinnlose API Calls."\n}',
                 timestamp: new Date().toISOString()
             }
         ];
@@ -161,7 +166,7 @@
                             {!isUser && (
                                 <div className="flex gap-1.5 items-center">
                                     <button onClick={() => onPlayTTS(message.id, message.text)} className={`text-[9px] uppercase font-bold tracking-widest transition-colors border px-2 py-0.5 rounded-full shadow-sm flex items-center gap-1 ${playingMsgId === message.id ? 'bg-indigo-100 text-indigo-700 border-indigo-200' : 'bg-white text-slate-400 hover:text-indigo-500 border-stone-100'}`}>
-                                        {playingMsgId === message.id ? '🛑 Stop' : '▶️ Play'}
+                                        {playingMsgId === message.id ? '🛑 Pause' : '▶️ Play'}
                                     </button>
                                     {message.scratchpad && (
                                         <button onClick={() => setShowScratchpad(!showScratchpad)} className="text-[9px] text-slate-400 hover:text-indigo-500 uppercase font-bold tracking-widest transition-colors bg-white border border-stone-100 px-2 py-0.5 rounded-full shadow-sm">
@@ -251,6 +256,23 @@
                 }
             });
 
+            // STT PROVIDERS (V3.10)
+            const [sttProviders, setSttProviders] = React.useState(() => {
+                try {
+                    const stored = JSON.parse(localStorage.getItem('lumen_sttProviders'));
+                    if (stored && stored.length > 0) return stored;
+                } catch {}
+                
+                const defaultList = [
+                    { id: 'stt-replicate-default', name: 'Replicate Whisper', url: 'https://api.replicate.com/v1/models/openai/whisper/predictions', apiKey: '' }
+                ];
+                localStorage.setItem('lumen_sttProviders', JSON.stringify(defaultList));
+                return defaultList;
+            });
+            const [activeSttProviderId, setActiveSttProviderId] = React.useState(() => localStorage.getItem('lumen_activeSttProviderId') || 'stt-replicate-default');
+            const [editSttProviderId, setEditSttProviderId] = React.useState(null);
+            const [sttProviderForm, setSttProviderForm] = React.useState({ name: '', url: 'https://api.replicate.com/v1/models/openai/whisper/predictions', apiKey: '' });
+
             // DNA STATE MIT VOICE BINDING
             const [dna, setDna] = React.useState(() => { 
                 const defaultVoice = { providerId: "", voiceIdOrUrl: "", speed: 1.05, extraParams: "" };
@@ -273,10 +295,19 @@
             const [telemetry, setTelemetry] = React.useState({ concern: 0, bs_meter: 0, mask_drop: false });
             const [latestContext, setLatestContext] = React.useState("[AKTIVER KONTEXT WIRD ZUR LAUFZEIT INJIZIERT]");
             
-            const [drafts, setDrafts] = React.useState([]); 
+            // --- V3.10 DYNAMIC DESK (ACTIVE AKTEN) ---
+            const [activeDesks, setActiveDesks] = React.useState([]); 
+            const [editingDeskItem, setEditingDeskItem] = React.useState(null);
+            const [deskItemForm, setDeskItemForm] = React.useState({});
+
             const [activeView, setActiveView] = React.useState('chat'); 
             const [isLoading, setIsLoading] = React.useState(false);
             
+            // --- STT (Speech-to-Text) ---
+            const [isRecording, setIsRecording] = React.useState(false);
+            const mediaRecorderRef = React.useRef(null);
+            const audioChunksRef = React.useRef([]);
+
             // --- CHAT PERSISTENCE ---
             const [messages, setMessages] = React.useState(() => { 
                 const saved = localStorage.getItem('lumen_chat'); 
@@ -291,12 +322,10 @@
             // Audio-States
             const [autoPlayEnabled, setAutoPlayEnabled] = React.useState(() => localStorage.getItem('lumen_autoPlay') === 'true');
             const [playingMsgId, setPlayingMsgId] = React.useState(null);
-            const currentAudioRef = React.useRef(null);
             
             // Clear Chat State
             const [showClearConfirm, setShowClearConfirm] = React.useState(false);
 
-            const [compareData, setCompareData] = React.useState(null); 
             const [toast, setToast] = React.useState(null);
             const toastTimeoutRef = React.useRef(null);
             const messagesEndRef = React.useRef(null);
@@ -307,10 +336,6 @@
             const [sanctumEditId, setSanctumEditId] = React.useState(null);
             const [sanctumForm, setSanctumForm] = React.useState({});
             
-            // Workbench Editor State
-            const [editingDraftId, setEditingDraftId] = React.useState(null);
-            const [draftEditText, setDraftEditText] = React.useState('');
-
             const fileInputRefSanctum = React.useRef(null);
             const fileInputRefDNA = React.useRef(null);
             const fileInputRefOmni = React.useRef(null);
@@ -345,17 +370,31 @@
             const loadDirectives = async () => { const d = await db.directives.toArray(); setDirectives(d); };
             React.useEffect(() => { if(activeView === 'directives') loadDirectives(); }, [activeView]);
 
-            // --- AUDIO MANAGER ---
+            // --- AUDIO MANAGER (TTS & V3.10 GLOBAL TOGGLE FIX) ---
             const stopAudio = () => {
-                if (currentAudioRef.current) {
-                    currentAudioRef.current.pause();
-                    currentAudioRef.current.currentTime = 0;
+                if (window.currentAudio) {
+                    window.currentAudio.pause();
+                    window.currentAudio.currentTime = 0;
+                    window.currentAudio = null;
+                    window.currentAudioId = null;
                 }
                 setPlayingMsgId(null);
             };
 
             const playMessageTTS = async (msgId, textToSpeak) => {
-                if (playingMsgId === msgId) { stopAudio(); return; }
+                // V3.10: Global Toggle Logic (Kein blinder Fetch)
+                if (window.currentAudio && window.currentAudioId === msgId) {
+                    if (window.currentAudio.paused) {
+                        window.currentAudio.play();
+                        setPlayingMsgId(msgId);
+                    } else {
+                        window.currentAudio.pause();
+                        setPlayingMsgId(null); // UI zeigt wieder "Play" an
+                    }
+                    return;
+                }
+
+                // Neues Audio wird geladen -> altes killen
                 stopAudio();
                 setPlayingMsgId(msgId);
                 
@@ -448,19 +487,17 @@
                         }
                         audioBlob = await response.blob();
                     } else if (engine === 'replicate') {
-                        const WORKER_URL = "https://lumen-replicate-proxy2.sloosmail.workers.dev"; // <-- Simon MUSS das eintragen
+                        const WORKER_URL = "HIER_DEINE_CLOUDFLARE_URL";
 
                         if (WORKER_URL.includes("HIER_DEINE")) {
                             throw new Error("PROXY FEHLT: Bitte trage deine Cloudflare-Worker-URL im Code ein!");
                         }
 
-                        // 1. URL bestimmen (Ist eine Persona-spezifische URL gesetzt?)
                         let targetUrl = ttsProvider.url;
                         if (dna.voice_config && dna.voice_config.providerId === ttsProvider.id && dna.voice_config.voiceIdOrUrl && dna.voice_config.voiceIdOrUrl.startsWith('http')) {
                             targetUrl = dna.voice_config.voiceIdOrUrl;
                         }
 
-                        // 2. Input & Parameter mergen
                         let replicateInput = { text: textToSpeak };
                         if (dna.voice_config && dna.voice_config.providerId === ttsProvider.id && dna.voice_config.extraParams) {
                             try {
@@ -469,7 +506,6 @@
                             } catch(e) { console.warn("Replicate Persona Params JSON Parse Error"); }
                         }
 
-                        // 3. API Call durch den Worker
                         const proxyUrl = `${WORKER_URL}/?target=${encodeURIComponent(targetUrl)}`;
                         const response = await fetch(proxyUrl, {
                             method: 'POST',
@@ -481,7 +517,6 @@
                             body: JSON.stringify({ input: replicateInput })
                         });
                         
-                        // 4. Eiskaltes Error-Handling (Text statt blindes JSON)
                         if (!response.ok) {
                             const errText = await response.text();
                             throw new Error(`Proxy/API Fehler (${response.status}): ${errText.substring(0, 150)}`);
@@ -498,7 +533,6 @@
                             throw new Error('Kein Audio Output erhalten. Replicate sagt: ' + JSON.stringify(data));
                         }
                         
-                        // 5. Audio-File-Download durch den Proxy
                         const audioProxyUrl = `${WORKER_URL}/?target=${encodeURIComponent(audioUrl)}`;
                         const audioResponse = await fetch(audioProxyUrl);
                         if (!audioResponse.ok) throw new Error('Fehler beim Download der fertigen MP3 vom Proxy.');
@@ -524,12 +558,14 @@
                     }
 
                     const audio = new Audio(URL.createObjectURL(audioBlob));
-                    currentAudioRef.current = audio;
+                    window.currentAudio = audio;
+                    window.currentAudioId = msgId;
                     
-                    audio.onended = () => setPlayingMsgId(null);
-                    audio.onerror = () => { showToast('Audio-Wiedergabe fehlgeschlagen'); setPlayingMsgId(null); };
+                    audio.onended = () => { setPlayingMsgId(null); window.currentAudioId = null; window.currentAudio = null; };
+                    audio.onerror = () => { showToast('Audio-Wiedergabe fehlgeschlagen'); setPlayingMsgId(null); window.currentAudioId = null; window.currentAudio = null; };
                     
                     await audio.play();
+                    setPlayingMsgId(msgId);
                     
                 } catch (e) {
                     console.error("TTS Error:", e);
@@ -540,6 +576,130 @@
                     showToast(`TTS Fehler: Die Anfrage wurde blockiert oder ist fehlgeschlagen.`);
                     setMessages(prev => [...prev, {id: generateId(), sender: 'system-error', text: `TTS Error:\n${errorMsg}`, timestamp: new Date().toISOString()}]);
                     setPlayingMsgId(null);
+                    window.currentAudioId = null; 
+                    window.currentAudio = null;
+                }
+            };
+
+            // --- STT RECORDER LOGIC (WHISPER POLLING) ---
+            const startRecording = async () => {
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    mediaRecorderRef.current = new MediaRecorder(stream);
+                    audioChunksRef.current = [];
+                    
+                    mediaRecorderRef.current.ondataavailable = (e) => {
+                        if (e.data.size > 0) audioChunksRef.current.push(e.data);
+                    };
+                    
+                    mediaRecorderRef.current.onstop = async () => {
+                        const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
+                        stream.getTracks().forEach(t => t.stop());
+                        await processAudioSTT(audioBlob);
+                    };
+                    
+                    mediaRecorderRef.current.start();
+                    setIsRecording(true);
+                } catch (e) {
+                    showToast("Mikrofon-Zugriff verweigert oder Fehler");
+                }
+            };
+
+            const stopRecording = () => {
+                if (mediaRecorderRef.current && isRecording) {
+                    mediaRecorderRef.current.stop();
+                    setIsRecording(false);
+                }
+            };
+
+            const processAudioSTT = async (blob) => {
+                setIsLoading(true);
+                showToast("Transkribiere Audio via Replicate...");
+                try {
+                    const reader = new FileReader();
+                    reader.readAsDataURL(blob);
+                    reader.onloadend = async () => {
+                        const base64Audio = reader.result;
+                        
+                        const sttProv = sttProviders.find(p => p.id === activeSttProviderId) || sttProviders[0];
+                        if (!sttProv || !sttProv.apiKey) {
+                            showToast("FEHLER: STT API-Key fehlt. Bitte in Settings anlegen.");
+                            setIsLoading(false);
+                            return;
+                        }
+
+                        const WORKER_URL = "HIER_DEINE_CLOUDFLARE_URL";
+                        if (WORKER_URL.includes("HIER_DEINE")) {
+                            showToast("FEHLER: Cloudflare Worker URL nicht konfiguriert.");
+                            setIsLoading(false);
+                            return;
+                        }
+
+                        const targetUrl = sttProv.url;
+                        const proxyUrl = `${WORKER_URL}/?target=${encodeURIComponent(targetUrl)}`;
+                        
+                        let response = await fetch(proxyUrl, {
+                            method: 'POST',
+                            headers: {
+                                'Authorization': `Bearer ${sttProv.apiKey}`,
+                                'Content-Type': 'application/json',
+                                'Prefer': 'wait'
+                            },
+                            body: JSON.stringify({ input: { audio: base64Audio } })
+                        });
+
+                        if (!response.ok) {
+                            const err = await response.text();
+                            throw new Error(`Proxy/API Fehler: ${err.substring(0, 100)}`);
+                        }
+                        
+                        let data = await response.json();
+                        
+                        // POLLING LOOP FÜR WHISPER
+                        let pollAttempts = 0;
+                        while ((data.status === "starting" || data.status === "processing") && pollAttempts < 60) {
+                            showToast(`STT Status: ${data.status}...`);
+                            await new Promise(resolve => setTimeout(resolve, 2000));
+                            pollAttempts++;
+                            
+                            const getUrl = data.urls.get;
+                            const pollProxyUrl = `${WORKER_URL}/?target=${encodeURIComponent(getUrl)}`;
+                            
+                            const pollResponse = await fetch(pollProxyUrl, {
+                                headers: { 'Authorization': `Bearer ${sttProv.apiKey}` }
+                            });
+                            
+                            if (!pollResponse.ok) {
+                                const err = await pollResponse.text();
+                                throw new Error(`Polling Fehler: ${err.substring(0, 100)}`);
+                            }
+                            data = await pollResponse.json();
+                        }
+                        
+                        if (data.status === "failed") {
+                            throw new Error("Replicate STT Error: " + JSON.stringify(data.error));
+                        }
+
+                        let text = "";
+                        if (data.output && data.output.transcription) {
+                            text = data.output.transcription;
+                        } else if (data.output && data.output.text) {
+                            text = data.output.text;
+                        } else if (typeof data.output === 'string') {
+                            text = data.output;
+                        }
+
+                        if (text && text.trim().length > 0) {
+                            setInputText(prev => prev + (prev ? " " : "") + text.trim());
+                            showToast("Transkription erfolgreich");
+                        } else {
+                            showToast("Kein Text erkannt.");
+                        }
+                        setIsLoading(false);
+                    };
+                } catch (e) {
+                    showToast("STT Fehler: " + e.message);
+                    setIsLoading(false);
                 }
             };
 
@@ -548,8 +708,8 @@
                 try {
                     const mems = await db.memories.toArray();
                     const dirs = await db.directives.toArray();
-                    const config = { providers, activeProviderId, ttsProvidersAccounts: ttsProviders, activeTtsProviderId, ttsVoices, autoPlayEnabled };
-                    const bundle = { type: "LUMEN_FULL_BACKUP", version: "3.8", dna: dna, directives: dirs, memories: mems, config, timestamp: Date.now() };
+                    const config = { providers, activeProviderId, ttsProvidersAccounts: ttsProviders, activeTtsProviderId, ttsVoices, sttProviders, activeSttProviderId, autoPlayEnabled };
+                    const bundle = { type: "LUMEN_FULL_BACKUP", version: "3.10", dna: dna, directives: dirs, memories: mems, config, timestamp: Date.now() };
                     const blob = new Blob([JSON.stringify(bundle, null, 2)], { type: "application/json" });
                     const url = URL.createObjectURL(blob);
                     const a = document.createElement('a'); a.href = url;
@@ -585,6 +745,8 @@
                                 if (parsed.config.ttsProvidersAccounts) { setTtsProviders(parsed.config.ttsProvidersAccounts); localStorage.setItem('lumen_ttsProvidersAccounts', JSON.stringify(parsed.config.ttsProvidersAccounts)); }
                                 if (parsed.config.activeTtsProviderId) { setActiveTtsProviderId(parsed.config.activeTtsProviderId); localStorage.setItem('lumen_activeTtsProviderId', parsed.config.activeTtsProviderId); }
                                 if (parsed.config.ttsVoices) { setTtsVoices(parsed.config.ttsVoices); localStorage.setItem('lumen_ttsVoices', JSON.stringify(parsed.config.ttsVoices)); }
+                                if (parsed.config.sttProviders) { setSttProviders(parsed.config.sttProviders); localStorage.setItem('lumen_sttProviders', JSON.stringify(parsed.config.sttProviders)); }
+                                if (parsed.config.activeSttProviderId) { setActiveSttProviderId(parsed.config.activeSttProviderId); localStorage.setItem('lumen_activeSttProviderId', parsed.config.activeSttProviderId); }
                                 if (parsed.config.autoPlayEnabled !== undefined) { setAutoPlayEnabled(parsed.config.autoPlayEnabled); localStorage.setItem('lumen_autoPlay', String(parsed.config.autoPlayEnabled)); }
                             }
                             loadMemories(); showToast('SYSTEM-RESTORE ERFOLGREICH');
@@ -597,7 +759,7 @@
             // --- CONFIG ONLY EXPORT/IMPORT ---
             const handleConfigExport = () => {
                 try {
-                    const config = { type: "LUMEN_CONFIG_BACKUP", version: "3.8", providers, activeProviderId, ttsProvidersAccounts: ttsProviders, activeTtsProviderId, ttsVoices, autoPlayEnabled };
+                    const config = { type: "LUMEN_CONFIG_BACKUP", version: "3.10", providers, activeProviderId, ttsProvidersAccounts: ttsProviders, activeTtsProviderId, ttsVoices, sttProviders, activeSttProviderId, autoPlayEnabled };
                     const blob = new Blob([JSON.stringify(config, null, 2)], { type: "application/json" });
                     const url = URL.createObjectURL(blob);
                     const a = document.createElement('a'); a.href = url;
@@ -621,6 +783,8 @@
                                 if (config.ttsProvidersAccounts) { setTtsProviders(config.ttsProvidersAccounts); localStorage.setItem('lumen_ttsProvidersAccounts', JSON.stringify(config.ttsProvidersAccounts)); }
                                 if (config.activeTtsProviderId) { setActiveTtsProviderId(config.activeTtsProviderId); localStorage.setItem('lumen_activeTtsProviderId', config.activeTtsProviderId); }
                                 if (config.ttsVoices) { setTtsVoices(config.ttsVoices); localStorage.setItem('lumen_ttsVoices', JSON.stringify(config.ttsVoices)); }
+                                if (config.sttProviders) { setSttProviders(config.sttProviders); localStorage.setItem('lumen_sttProviders', JSON.stringify(config.sttProviders)); }
+                                if (config.activeSttProviderId) { setActiveSttProviderId(config.activeSttProviderId); localStorage.setItem('lumen_activeSttProviderId', config.activeSttProviderId); }
                                 if (config.autoPlayEnabled !== undefined) { setAutoPlayEnabled(config.autoPlayEnabled); localStorage.setItem('lumen_autoPlay', String(config.autoPlayEnabled)); }
                                 showToast('CONFIG-RESTORE ERFOLGREICH');
                             } else {
@@ -641,61 +805,6 @@
                     else { await db.memories.update(sanctumEditId, data); showToast('Eintrag aktualisiert'); }
                     setSanctumEditId(null); loadMemories();
                 } catch(e) { showToast('DB Fehler'); }
-            };
-
-            // --- WORKBENCH / ARCHIVAR ---
-            const handleFormatAndSaveWorkbench = async (draftId, proseText) => {
-                showToast('Archivar formatiert...');
-                const activeProvider = providers.find(p => p.id === activeProviderId) || providers[0];
-                if (!activeProvider) return showToast('Fehler: Kein aktiver Provider konfiguriert');
-                
-                const useJsonMode = activeProvider.jsonMode !== false;
-                const isGemini = activeProvider.type === 'gemini';
-                const key = activeProvider.apiKey;
-                const apiUrl = activeProvider.url;
-                
-                const prompt = `Du bist der Archivar. Formatiere diese Prosa-Notiz zwingend in dieses exakte JSON-Format: { "titel_technisch": "KURZ_SACHLICH_ID", "titel_poetisch": "Ein emotionaler, metaphorischer Name", "kategorie": "[Wähle ZWINGEND zwischen 'TECHNISCH' oder 'EMOTIONAL']", "fakt": "Was passierte", "emotion": "Gefühlslage", "bedeutung": "Regel/Fazit", "tags": ["tag1", "tag2"] }. Keine weiteren Texte.`;
-                
-                try {
-                    let resText = "";
-                    if(isGemini) {
-                        const fetchUrl = apiUrl.includes('?') ? `${apiUrl}&key=${key}` : `${apiUrl}?key=${key}`;
-                        const bodyPayload = { systemInstruction: {parts:[{text:prompt}]}, contents:[{role:'user',parts:[{text:proseText}]}] };
-                        if (useJsonMode) bodyPayload.generationConfig = { responseMimeType: "application/json" };
-                        
-                        const r = await fetch(fetchUrl, {
-                            method: 'POST', headers: {'Content-Type':'application/json'},
-                            body: JSON.stringify(bodyPayload)
-                        });
-                        const d = await r.json(); 
-                        if(!r.ok) throw new Error(d.error?.message || 'Gemini API Error'); 
-                        resText = d.candidates[0].content.parts[0].text;
-                    } else {
-                        const headers = { 'Content-Type': 'application/json' };
-                        if (key) headers['Authorization'] = `Bearer ${key}`;
-
-                        const bodyPayload = { model: activeProvider.model || 'gpt-4o', messages:[{role:'system',content:prompt},{role:'user',content:proseText}] };
-                        if (useJsonMode) bodyPayload.response_format = { type: "json_object" };
-
-                        const r = await fetch(apiUrl, {
-                            method: 'POST', headers,
-                            body: JSON.stringify(bodyPayload)
-                        });
-                        const d = await r.json(); 
-                        if(!r.ok) throw new Error(d.error?.message || 'OpenAI API Error'); 
-                        resText = d.choices[0].message.content;
-                    }
-                    const obj = JSON.parse(resText.replace(/[\`]{3}json/gi, '').replace(/[\`]{3}/gi, '').trim());
-                    await db.memories.add({...obj, timestamp: Date.now(), is_core_memory: false});
-                    setDrafts(prev => prev.filter(d => d.id !== draftId));
-                    showToast('Im Sanctum archiviert');
-                } catch(e) { showToast(`Formatierungs-Fehler: ${e.message}`); }
-            };
-
-            const handleCompare = async (draft) => {
-                if(!draft.targetId) return;
-                const original = await db.memories.where('titel_technisch').equals(draft.targetId).first();
-                setCompareData({ original, suggestion: draft });
             };
 
             // --- MAIN SEND ---
@@ -734,7 +843,18 @@
                     const timeOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
                     const timeString = "[SYSTEM-UHRZEIT]\nAktuelle Zeit in Simons Welt: " + now.toLocaleDateString('de-DE', timeOptions) + " Uhr.\n\n";
 
-                    const dynamicContext = `${timeString}${directiveString}${memoryString}`.trim() || "Kein aktiver Kontext geladen.";
+                    // --- V3.10 DESK CONTEXT INJECTION ---
+                    let deskContext = "";
+                    if (activeDesks.length > 0) {
+                        deskContext = "[AKTIVE AKTEN AUF DEM SCHREIBTISCH (WERKBANK)]\n";
+                        deskContext += "ACHTUNG KI: Der User hat diese spezifischen Einträge gerade vor sich. Wenn du einen Eintrag updaten sollst, beziehe dich ZWINGEND auf diese Daten und ID:\n\n";
+                        activeDesks.forEach(desk => {
+                            const {tagsString, id, ...cleanDesk} = desk; // Strip React UI props
+                            deskContext += JSON.stringify(cleanDesk, null, 2) + "\n\n";
+                        });
+                    }
+
+                    const dynamicContext = `${timeString}${directiveString}${deskContext}${memoryString}`.trim() || "Kein aktiver Kontext geladen.";
                     setLatestContext(dynamicContext);
                     const masterSystemPrompt = `[1. DEINE IDENTITÄT UND REGELN (NUR ZUM LESEN)]\n${dna.block1_identity}\n\n[2. AKTIVER KONTEXT (NUR ZUM LESEN)]\n${dynamicContext}\n\n[3. DIE MATRIX-SENSOREN (DEINE LOGIK-REGELN)]\n${dna.block3_sensors}\n\n[4. DEINE AUSGABE (DAS JSON-SKELETT)]\n${dna.block4_skeleton}`.trim();
 
@@ -803,7 +923,7 @@
                             showToast("NEUE DIREKTIVE VERANKERT");
                         }
 
-                        // --- ROUTING-FIX (SCHUBLADEN-LOGIK) ---
+                        // --- V3.10 ROUTING-FIX (PINNED MEMORIES DESK & UPDATE) ---
                         const entwurf = obj.matrix?.tagebuch_entwurf || obj.tagebuch_entwurf;
                         if(entwurf) { 
                             const modus = entwurf.modus;
@@ -827,23 +947,57 @@
                                     });
                                     showToast("ENTWURF IM SANCTUM VERANKERT");
                                 }
-                            } 
-                            else {
-                                const safeText = typeof entwurf === 'object' ? JSON.stringify(entwurf, null, 2) : String(entwurf);
-                                let technicalTitle = null;
-                                try { const p = typeof entwurf === 'object' ? entwurf : JSON.parse(safeText); technicalTitle = p?.daten?.titel_technisch || p?.titel_technisch; } catch(e) {}
-
-                                let isUpdate = false;
-                                if (technicalTitle) isUpdate = drafts.some(d => { try { const p = JSON.parse(d.text); return (p?.daten?.titel_technisch || p?.titel_technisch) === technicalTitle; } catch(e) { return false; }});
-
-                                setDrafts(prev => {
-                                    if (technicalTitle) {
-                                        const existingIndex = prev.findIndex(d => { try { const p = JSON.parse(d.text); return (p?.daten?.titel_technisch || p?.titel_technisch) === technicalTitle; } catch(e) { return false; }});
-                                        if (existingIndex !== -1) { const newDrafts = [...prev]; newDrafts[existingIndex] = { ...newDrafts[existingIndex], text: safeText }; return newDrafts; }
+                            }
+                            else if (modus === "UPDATE") {
+                                const daten = entwurf.daten;
+                                if (daten && daten.titel_technisch) {
+                                    const existing = await db.memories.where('titel_technisch').equals(daten.titel_technisch).first();
+                                    if (existing) {
+                                        // DB Update (V3.10 Fix)
+                                        await db.memories.update(existing.id, { ...daten, timestamp: Date.now() });
+                                        // Aktiven Schreibtisch updaten (UI Re-Render)
+                                        setActiveDesks(prev => prev.map(item => item.titel_technisch === daten.titel_technisch ? { ...item, ...daten } : item));
+                                        showToast("AKTE AKTUALISIERT");
+                                    } else {
+                                        console.warn("UPDATE fehlgeschlagen: Akte nicht gefunden.");
                                     }
-                                    return [...prev, { id: generateId(), text: safeText, type: 'prose' }];
+                                }
+                            } 
+                            else if (modus === "ENTWURF" || modus === "DISKUSSION" || modus === "DRAFT") {
+                                const draftData = entwurf.daten || {};
+                                const technicalTitle = draftData.titel_technisch || `DRAFT_${Date.now()}`;
+                                
+                                const newItem = {
+                                    id: generateId(),
+                                    titel_technisch: technicalTitle,
+                                    titel_poetisch: draftData.titel_poetisch || "",
+                                    fakt: draftData.fakt || (typeof entwurf === 'string' ? entwurf : ""),
+                                    emotion: draftData.gefuehl || draftData.emotion || "",
+                                    bedeutung: draftData.bedeutung || "",
+                                    reflexion: draftData.reflexion || "",
+                                    tags: Array.isArray(draftData.tags) ? draftData.tags : [],
+                                    kategorie: draftData.kategorie || "EMOTIONAL",
+                                    is_core_memory: false
+                                };
+                                
+                                setActiveDesks(prev => {
+                                    if(prev.some(d => d.titel_technisch === technicalTitle)) {
+                                        return prev.map(d => d.titel_technisch === technicalTitle ? {...d, ...newItem, id: d.id} : d);
+                                    }
+                                    return [...prev, newItem];
                                 });
-                                showToast(isUpdate ? 'WERKBANK AKTUALISIERT' : 'NEUER ENTWURF AUF DER WERKBANK');
+                                showToast('NEUER ENTWURF AUF DEM SCHREIBTISCH');
+                            } else {
+                                 // Fallback
+                                 const safeText = typeof entwurf === 'object' ? JSON.stringify(entwurf, null, 2) : String(entwurf);
+                                 const newItem = {
+                                    id: generateId(),
+                                    titel_technisch: `RAW_${Date.now()}`,
+                                    fakt: safeText,
+                                    kategorie: "STANDARD"
+                                 };
+                                 setActiveDesks(prev => [...prev, newItem]);
+                                 showToast('UNFORMATIERTER ENTWURF AUF DEM SCHREIBTISCH');
                             }
                         }
 
@@ -934,26 +1088,76 @@
                 <div className="flex flex-col h-[100dvh] w-full max-w-4xl mx-auto sm:border-x border-stone-200 bg-stone-50 relative overflow-hidden shadow-2xl">
                     <Toast message={toast} />
 
-                    {compareData && (
-                        <div className="fixed inset-0 z-[700] bg-black/40 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in">
-                            <div className="bg-white rounded-3xl w-full max-w-3xl max-h-[80vh] flex flex-col shadow-2xl overflow-hidden border border-stone-100">
-                                <div className="p-5 border-b border-stone-100 flex justify-between items-center">
-                                    <h3 className="font-bold text-slate-800 uppercase text-xs tracking-widest">Gedächtnis-Abgleich: {compareData.original?.titel_technisch}</h3>
-                                    <button onClick={()=>setCompareData(null)} className="text-slate-400 hover:text-rose-500 transition-colors">❌</button>
+                    {/* --- V3.10 POPOUT EDITOR (MODAL) --- */}
+                    {editingDeskItem && (
+                        <div className="absolute inset-0 z-[800] bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in">
+                            <div className="bg-white rounded-3xl w-full max-w-2xl max-h-[90vh] flex flex-col shadow-2xl border border-stone-100 overflow-hidden">
+                                <div className="p-4 border-b border-stone-100 flex justify-between items-center bg-indigo-50/50">
+                                    <h3 className="font-bold text-indigo-900 uppercase text-xs tracking-widest flex items-center gap-2">📝 Akte bearbeiten</h3>
+                                    <button onClick={() => setEditingDeskItem(null)} className="text-slate-400 hover:text-rose-500 transition-colors font-bold text-sm">✕</button>
                                 </div>
-                                <div className="flex-1 overflow-y-auto p-6 grid grid-cols-1 sm:grid-cols-2 gap-6">
-                                    <div className="space-y-3"><div className="badge border-slate-300 text-slate-500 bg-slate-50 uppercase">Aktuelles Archiv</div><div className="bg-stone-50 p-4 rounded-2xl border border-stone-200 text-sm italic text-slate-600">{compareData.original?.reflexion || "Keine Reflexion vorhanden."}</div></div>
-                                    <div className="space-y-3"><div className="badge border-indigo-300 text-indigo-500 bg-indigo-50 uppercase">Mairas Vorschlag</div><div className="bg-indigo-50 p-4 rounded-2xl border border-indigo-100 text-sm italic text-indigo-900">{compareData.suggestion.text}</div></div>
+                                <div className="flex-1 overflow-y-auto p-5 flex flex-col gap-3">
+                                    <div className="flex flex-col sm:flex-row gap-2">
+                                        <input placeholder="ID_TECHNISCH" value={deskItemForm.titel_technisch || ''} onChange={e=>setDeskItemForm({...deskItemForm,titel_technisch:e.target.value})} className="input-field font-bold text-slate-800 bg-stone-50" />
+                                        <input placeholder="Titel Poetisch" value={deskItemForm.titel_poetisch || ''} onChange={e=>setDeskItemForm({...deskItemForm,titel_poetisch:e.target.value})} className="input-field text-rose-600 font-serif italic bg-stone-50" />
+                                    </div>
+                                    <textarea placeholder="Fakt: Was geschah?" value={deskItemForm.fakt || ''} onChange={e=>setDeskItemForm({...deskItemForm,fakt:e.target.value})} className="input-field h-20 font-sans bg-stone-50" />
+                                    <div className="flex flex-col sm:flex-row gap-2">
+                                        <textarea placeholder="Gefühl/Emotion" value={deskItemForm.emotion || ''} onChange={e=>setDeskItemForm({...deskItemForm,emotion:e.target.value})} className="input-field h-16 font-sans bg-stone-50" />
+                                        <textarea placeholder="Bedeutung/Fazit" value={deskItemForm.bedeutung || ''} onChange={e=>setDeskItemForm({...deskItemForm,bedeutung:e.target.value})} className="input-field h-16 font-sans bg-stone-50" />
+                                    </div>
+                                    <textarea placeholder="Persona Reflexion" value={deskItemForm.reflexion || ''} onChange={e=>setDeskItemForm({...deskItemForm,reflexion:e.target.value})} className="input-field border-indigo-200 bg-indigo-50 text-indigo-800 h-20 font-sans italic" />
+                                    <input placeholder="tags, comma, separated" value={deskItemForm.tagsString || ''} onChange={e=>setDeskItemForm({...deskItemForm,tagsString:e.target.value})} className="input-field text-slate-500 bg-stone-50" />
                                 </div>
-                                <div className="p-5 border-t border-stone-100 bg-stone-50 text-center"><p className="text-[10px] text-slate-400 mb-0">Updates können aktuell nur manuell im Sanctum übernommen werden.</p></div>
+                                <div className="p-4 border-t border-stone-100 bg-stone-50 flex justify-between items-center flex-wrap gap-2">
+                                    <button onClick={() => {
+                                        setActiveDesks(prev => prev.filter(i => i.id !== editingDeskItem.id));
+                                        setEditingDeskItem(null);
+                                        showToast('Vom Schreibtisch entfernt');
+                                    }} className="btn-danger whitespace-nowrap">❌ VOM SCHREIBTISCH NEHMEN</button>
+                                    <div className="flex gap-2">
+                                        <button onClick={() => setEditingDeskItem(null)} className="btn">SCHLIESSEN</button>
+                                        <button onClick={async () => {
+                                            try {
+                                                const dataToSave = {...deskItemForm};
+                                                dataToSave.tags = dataToSave.tagsString ? dataToSave.tagsString.split(',').map(t=>t.trim()).filter(Boolean) : [];
+                                                delete dataToSave.tagsString;
+                                                dataToSave.timestamp = dataToSave.timestamp || Date.now();
+                                                
+                                                if (typeof dataToSave.id === 'string') delete dataToSave.id;
+
+                                                const existing = await db.memories.where('titel_technisch').equals(dataToSave.titel_technisch).first();
+                                                if(existing && existing.id !== dataToSave.id) {
+                                                    await db.memories.update(existing.id, dataToSave);
+                                                } else if (dataToSave.id) {
+                                                    await db.memories.update(dataToSave.id, dataToSave);
+                                                } else {
+                                                    await db.memories.add(dataToSave);
+                                                }
+                                                
+                                                setActiveDesks(prev => prev.filter(i => i.id !== editingDeskItem.id));
+                                                setEditingDeskItem(null);
+                                                loadMemories();
+                                                showToast('💾 IM SANCTUM GESPEICHERT');
+                                            } catch(e) {
+                                                showToast('Fehler beim Speichern');
+                                            }
+                                        }} className="btn-primary bg-indigo-600 text-white hover:bg-indigo-700 shadow-md">💾 IM SANCTUM SPEICHERN</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     )}
 
-                    {/* --- MICRO TOP BAR (V3.5 COMPRESSION) --- */}
+                    {/* --- MICRO TOP BAR --- */}
                     <div className="bg-slate-900 flex justify-between items-center px-4 py-1 shrink-0 z-[60]">
                         <div className="text-[9px] text-slate-500 font-mono tracking-widest font-bold">LUMEN CORE</div>
                         <div className="flex items-center gap-3">
+                            {playingMsgId && (
+                                <button onClick={stopAudio} className="text-[9px] font-mono uppercase tracking-widest text-rose-400 hover:text-rose-300 transition-colors animate-pulse border border-rose-500/50 px-2 rounded">
+                                    🛑 STOP AUDIO
+                                </button>
+                            )}
                             <button onClick={() => {
                                 const newVal = !autoPlayEnabled;
                                 setAutoPlayEnabled(newVal);
@@ -988,17 +1192,31 @@
                             <button className={`btn ${activeView==='sanctum'?'bg-stone-100 text-slate-800 ring-2 ring-stone-200':''}`} onClick={()=>setActiveView('sanctum')}>Sanctum</button>
                             <button className={`btn ${activeView==='directives'?'bg-stone-100 text-slate-800 ring-2 ring-stone-200':''}`} onClick={()=>setActiveView('directives')}>Direktiven</button>
                             <button className={`btn ${activeView==='dna'?'bg-stone-100 text-slate-800 ring-2 ring-stone-200':''}`} onClick={()=>setActiveView('dna')}>DNA</button>
-                            <button className={`btn ${activeView==='workbench'?'bg-stone-100 text-slate-800 ring-2 ring-stone-200':''}`} onClick={()=>setActiveView('workbench')}>Workbench {drafts.length>0 && <span className="bg-rose-500 text-white rounded-full px-1.5 py-0.5 text-[9px] ml-1">{drafts.length}</span>}</button>
                             <button className={`btn ${activeView==='settings'?'bg-stone-100 text-slate-800 ring-2 ring-stone-200':''}`} onClick={()=>setActiveView('settings')}>⚙️</button>
                         </div>
                     </header>
 
-                    <main className="flex-1 overflow-y-auto overflow-x-hidden relative scroll-smooth">
-                        <div className={`${activeView === 'chat' ? 'block' : 'hidden'} h-full flex flex-col p-4 sm:p-6`}>
-                            <div className="flex-1"></div>
-                            {messages.map(msg => <ChatBubble key={msg.id} message={msg} personaName={dna.persona_name} playingMsgId={playingMsgId} onPlayTTS={playMessageTTS} />)}
-                            {isLoading && <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest animate-pulse mb-6 ml-2 font-mono">[ PROCESSING_MATRIX ]</div>}
-                            <div ref={messagesEndRef} className="h-4" />
+                    <main className="flex-1 overflow-y-auto overflow-x-hidden relative scroll-smooth flex flex-col">
+                        
+                        {/* --- CHAT VIEW WITH DYNAMIC DESK --- */}
+                        <div className={`${activeView === 'chat' ? 'flex' : 'hidden'} h-full flex-col`}>
+                            {/* V3.10 DYNAMIC DESK LEISTE */}
+                            {activeDesks.length > 0 && (
+                                <div className="flex gap-2 p-2 px-4 overflow-x-auto bg-slate-50 border-b border-slate-200 shrink-0">
+                                    {activeDesks.map(item => (
+                                        <button key={item.id} onClick={() => { setEditingDeskItem(item); setDeskItemForm({...item, tagsString: item.tags?.join(', ') || ''}); }} className="text-[10px] uppercase font-mono font-bold px-3 py-1.5 bg-indigo-100 text-indigo-700 rounded border border-indigo-200 flex items-center gap-2 shrink-0 hover:bg-indigo-200 transition-colors shadow-sm">
+                                            📝 {item.titel_technisch || 'NEUER ENTWURF'}
+                                        </button>
+                                    ))}
+                                </div>
+                            )}
+                            
+                            <div className="flex-1 flex flex-col p-4 sm:p-6 overflow-y-auto">
+                                <div className="flex-1"></div>
+                                {messages.map(msg => <ChatBubble key={msg.id} message={msg} personaName={dna.persona_name} playingMsgId={playingMsgId} onPlayTTS={playMessageTTS} />)}
+                                {isLoading && <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest animate-pulse mb-6 ml-2 font-mono">[ PROCESSING_MATRIX ]</div>}
+                                <div ref={messagesEndRef} className="h-4" />
+                            </div>
                         </div>
 
                         {/* --- DIRECTIVES VIEW --- */}
@@ -1100,7 +1318,7 @@
                             </div>
 
                             {/* TTS PROVIDER MANAGEMENT */}
-                            <h2 className="text-sm font-bold uppercase tracking-widest text-slate-800 border-b border-stone-200 pb-2 mt-12">🔈 Audio & Stimmen (TTS)</h2>
+                            <h2 className="text-sm font-bold uppercase tracking-widest text-slate-800 border-b border-stone-200 pb-2 mt-12">🔈 Audio (TTS)</h2>
                             <div className="panel space-y-4">
                                 <div>
                                     <label className="label">1. Aktives TTS-Konto (Auto-Play & Buttons)</label>
@@ -1247,10 +1465,70 @@
                                     </div>
                                 </div>
                             </div>
+                            
+                            {/* STT PROVIDER MANAGEMENT (V3.10) */}
+                            <h2 className="text-sm font-bold uppercase tracking-widest text-slate-800 border-b border-stone-200 pb-2 mt-12">🎙️ STT (SPEECH-TO-TEXT)</h2>
+                            <div className="panel space-y-4">
+                                <p className="text-xs text-slate-500 mb-2">Hier konfigurierst du die Spracherkennung (Whisper via Replicate). Der Cloudflare Worker leitet die Aufnahmen weiter.</p>
+                                <div>
+                                    <label className="label">1. Aktiver STT-Provider</label>
+                                    <select value={activeSttProviderId} onChange={(e) => {
+                                        setActiveSttProviderId(e.target.value);
+                                        localStorage.setItem('lumen_activeSttProviderId', e.target.value);
+                                        showToast('STT-Provider gewechselt');
+                                    }} className="input-field font-sans text-xs font-bold text-sky-700 border-sky-200 focus:border-sky-400 focus:ring-sky-100 bg-sky-50/30">
+                                        {sttProviders.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div className="space-y-3">
+                                {sttProviders.map(p => (
+                                    <div key={p.id} className="panel flex flex-col gap-2 border-stone-200 bg-white shadow-sm">
+                                        <div className="flex justify-between items-start">
+                                            <div className="flex-1 pr-4 min-w-0">
+                                                <div className="font-bold text-sm text-slate-800 truncate">{p.name}</div>
+                                                <div className="text-[10px] text-slate-400 font-mono mt-1 truncate block">URL: {p.url}</div>
+                                            </div>
+                                            <div className="flex gap-1 shrink-0">
+                                                <button onClick={() => { setEditSttProviderId(p.id); setSttProviderForm({...p}); }} className="btn py-1 px-2">✏️</button>
+                                                <button onClick={() => { 
+                                                    if(window.confirm('STT-Provider löschen?')) { 
+                                                        const newList = sttProviders.filter(x=>x.id!==p.id); 
+                                                        setSttProviders(newList); localStorage.setItem('lumen_sttProviders', JSON.stringify(newList));
+                                                        if(activeSttProviderId===p.id && newList.length) { setActiveSttProviderId(newList[0].id); localStorage.setItem('lumen_activeSttProviderId', newList[0].id); } 
+                                                    } 
+                                                }} className="btn py-1 px-2 hover:text-rose-600">🗑️</button>
+                                            </div>
+                                        </div>
+                                        {p.apiKey ? <div className="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded w-max mt-1">✓ API Key hinterlegt</div> : <div className="text-[10px] font-bold text-rose-600 bg-rose-50 px-2 py-0.5 rounded w-max mt-1">⚠️ Kein Key hinterlegt</div>}
+                                    </div>
+                                ))}
 
-                            <h2 className="text-sm font-bold uppercase tracking-widest text-slate-800 border-b border-stone-200 pb-2 mt-12">⚙️ Konfigurations-Backup (API & TTS)</h2>
+                                <div className="panel border-sky-200 bg-sky-50/30 flex flex-col gap-3 shadow-sm mt-4">
+                                    <h3 className="font-bold text-xs uppercase tracking-widest text-sky-800">{editSttProviderId ? 'STT-Provider bearbeiten' : 'Neuen STT-Provider anlegen'}</h3>
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                        <div><label className="label text-sky-600">Anzeigename</label><input value={sttProviderForm.name} onChange={e=>setSttProviderForm({...sttProviderForm, name: e.target.value})} className="input-field bg-white border-sky-100" placeholder="z.B. Replicate Whisper" /></div>
+                                        <div><label className="label text-sky-600">API Endpoint URL</label><input value={sttProviderForm.url} onChange={e=>setSttProviderForm({...sttProviderForm, url: e.target.value})} className="input-field bg-white border-sky-100" placeholder="z.B. https://api.replicate.com/v1/models/openai/whisper/predictions" /></div>
+                                    </div>
+                                    <div className="grid grid-cols-1 gap-3">
+                                        <div><label className="label text-sky-600">API Key</label><input type="password" value={sttProviderForm.apiKey} onChange={e=>setSttProviderForm({...sttProviderForm, apiKey: e.target.value})} className="input-field bg-white border-sky-100" placeholder="Replicate Token" /></div>
+                                    </div>
+                                    <div className="flex justify-end gap-2 mt-2 border-t border-sky-100 pt-3">
+                                        {editSttProviderId && <button onClick={()=>{setEditSttProviderId(null); setSttProviderForm({name:'', url:'https://api.replicate.com/v1/models/openai/whisper/predictions', apiKey:''});}} className="btn border-sky-200 text-sky-600">Abbrechen</button>}
+                                        <button onClick={() => {
+                                            if(!sttProviderForm.name || !sttProviderForm.url) return showToast('Name und URL erforderlich');
+                                            const newSttProviders = editSttProviderId ? sttProviders.map(p => p.id === editSttProviderId ? {...sttProviderForm, id: editSttProviderId} : p) : [...sttProviders, {...sttProviderForm, id: generateId()}];
+                                            setSttProviders(newSttProviders); localStorage.setItem('lumen_sttProviders', JSON.stringify(newSttProviders));
+                                            setEditSttProviderId(null); setSttProviderForm({name:'', url:'https://api.replicate.com/v1/models/openai/whisper/predictions', apiKey:''}); showToast('STT-Provider gespeichert!');
+                                        }} className="btn-primary bg-sky-600 text-white hover:bg-sky-700">{editSttProviderId ? 'Aktualisieren' : 'Hinzufügen'}</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <h2 className="text-sm font-bold uppercase tracking-widest text-slate-800 border-b border-stone-200 pb-2 mt-12">⚙️ Konfigurations-Backup (API, TTS & STT)</h2>
                             <div className="panel space-y-4 bg-slate-50 border-slate-200">
-                                <p className="text-xs text-slate-500 leading-relaxed">Sichere hier ausschließlich deine Einstellungen (Chat-Knoten, TTS-Provider, API-Keys, ausgewählte Stimmen).</p>
+                                <p className="text-xs text-slate-500 leading-relaxed">Sichere hier ausschließlich deine Einstellungen (Chat-Knoten, TTS-Provider, STT-Provider, API-Keys, ausgewählte Stimmen).</p>
                                 <div className="flex gap-3">
                                     <input type="file" accept=".json" ref={fileInputRefConfig} className="hidden" onChange={handleConfigImport}/>
                                     <button onClick={()=>fileInputRefConfig.current?.click()} className="btn flex-1 py-3 text-slate-600 hover:bg-white border-slate-300">📥 Config Importieren</button>
@@ -1337,57 +1615,6 @@
                             </div>
                         </div>
 
-                        {/* --- WORKBENCH VIEW --- */}
-                        <div className={`${activeView === 'workbench' ? 'block' : 'hidden'} p-6 max-w-2xl mx-auto space-y-4 mt-4 animate-fade-in`}>
-                            <h2 className="text-sm font-bold uppercase tracking-widest text-slate-800 border-b border-stone-200 pb-2">Workbench ({drafts.length})</h2>
-                            {drafts.length === 0 && <div className="text-slate-400 font-bold text-[10px] uppercase p-12 border-2 border-dashed border-stone-200 rounded-3xl text-center bg-white/50">Warte auf Mairas Vorschläge...</div>}
-                            {drafts.map(d => {
-                                if (editingDraftId === d.id) {
-                                    return (
-                                        <div key={d.id} className="panel flex flex-col gap-3 group border-2 border-indigo-200 bg-indigo-50/10">
-                                            <div className="flex justify-between items-center"><span className="badge bg-indigo-100 text-indigo-700">EDIT DRAFT</span></div>
-                                            <textarea value={draftEditText} onChange={e=>setDraftEditText(e.target.value)} className="input-field min-h-[150px] font-mono text-[11px]" spellCheck="false" />
-                                            <div className="flex gap-2 justify-end border-t border-stone-100 pt-3 mt-2 flex-wrap">
-                                                <button onClick={()=>setEditingDraftId(null)} className="btn">Cancel</button>
-                                                <button onClick={()=>{
-                                                    let newText = draftEditText;
-                                                    try { JSON.parse(draftEditText); } catch(e) { /* ignore if not JSON */ }
-                                                    setDrafts(prev => prev.map(x => x.id === d.id ? {...x, text: newText} : x));
-                                                    setEditingDraftId(null);
-                                                    showToast('ENTWURF GESPEICHERT');
-                                                }} className="btn-primary bg-indigo-600 text-white border-indigo-600 hover:bg-indigo-700">💾 Update</button>
-                                            </div>
-                                        </div>
-                                    );
-                                }
-
-                                let parsedDraft = null; let isStructured = false;
-                                try { parsedDraft = JSON.parse(d.text); if(parsedDraft && typeof parsedDraft === 'object') isStructured = true; } catch(e) {}
-                                const title = isStructured ? (parsedDraft.daten?.titel_poetisch || parsedDraft.daten?.titel_technisch || parsedDraft.titel_poetisch || parsedDraft.titel_technisch || 'Ohne Titel') : '';
-                                const fakt = isStructured ? (parsedDraft.daten?.fakt || parsedDraft.fakt) : '';
-                                const gefuehl = isStructured ? (parsedDraft.daten?.gefuehl || parsedDraft.daten?.emotion || parsedDraft.gefuehl || parsedDraft.emotion) : '';
-
-                                return (
-                                    <div key={d.id} className={`panel flex flex-col gap-3 group border-2 ${d.type === 'update' ? 'border-indigo-100 bg-indigo-50/10' : 'border-stone-50 bg-white'}`}>
-                                        <div className="flex justify-between items-center"><span className={`badge ${d.type === 'update' ? 'bg-indigo-100 text-indigo-700' : 'bg-stone-100 text-stone-600'}`}>{d.type === 'update' ? `UPDATE: ${d.targetId}` : 'PROSE DRAFT'}</span></div>
-                                        {isStructured && fakt ? (
-                                            <div className="flex flex-col gap-2"><h4 className="font-bold text-rose-600 italic font-serif">{title}</h4><p className="text-[13px] text-slate-700 leading-relaxed"><strong className="text-[10px] uppercase tracking-widest text-slate-400 block mb-0.5">Fakt</strong>{fakt}</p>{gefuehl && (<p className="text-[13px] text-slate-700 leading-relaxed"><strong className="text-[10px] uppercase tracking-widest text-slate-400 block mb-0.5">Gefühl</strong>{gefuehl}</p>)}</div>
-                                        ) : (<p className="text-[13px] text-slate-700 whitespace-pre-wrap font-serif leading-relaxed italic">{d.text}</p>)}
-                                        <div className="flex gap-2 justify-end border-t border-stone-100 pt-3 mt-2 flex-wrap">
-                                            <button onClick={()=>{setDrafts(p=>p.filter(x=>x.id!==d.id)); showToast('Verworfen');}} className="btn-danger">🗑️ Discard</button>
-                                            <button onClick={()=>showToast('ENTWURF GEHALTEN')} className="btn">📌 Halten</button>
-                                            <button onClick={()=>{
-                                                setEditingDraftId(d.id);
-                                                try { const p = JSON.parse(d.text); setDraftEditText(JSON.stringify(p, null, 2)); } 
-                                                catch(e) { setDraftEditText(d.text); }
-                                            }} className="btn">✏️ Bearbeiten</button>
-                                            {d.type === 'update' ? (<button onClick={()=>handleCompare(d)} className="btn bg-indigo-600 text-white border-indigo-600 hover:bg-indigo-700">🔍 Vergleichen</button>) : (<button onClick={()=>handleFormatAndSaveWorkbench(d.id, d.text)} className="btn-primary">💾 Archive</button>)}
-                                        </div>
-                                    </div>
-                                );
-                            })}
-                        </div>
-
                         {/* --- SANCTUM VIEW --- */}
                         <div className={`${activeView === 'sanctum' ? 'block' : 'hidden'} p-6 max-w-4xl mx-auto space-y-6 mt-4 animate-fade-in`}>
                             <div className="flex justify-between items-center border-b border-stone-200 pb-2">
@@ -1442,6 +1669,15 @@
                                             {m.bedeutung && <div className="text-[13px] text-slate-600 mt-1 line-clamp-3"><strong className="text-slate-400 uppercase text-[9px] tracking-wider block mb-0.5 font-mono">Bedeutung</strong>{m.bedeutung}</div>}
                                             {m.reflexion && <div className="mt-3 bg-indigo-50/80 p-3 rounded-2xl text-indigo-800 italic text-xs border border-indigo-100/50 whitespace-pre-wrap line-clamp-4">"{m.reflexion}"</div>}
                                             {m.tags?.length > 0 && <div className="flex gap-1 mt-3 flex-wrap">{m.tags.map((t,i)=><span key={i} className="text-slate-400 text-[10px] lowercase font-mono">#{t}</span>)}</div>}
+                                            
+                                            {/* V3.10 PIN BUTTON IN SANCTUM */}
+                                            <button onClick={()=>{
+                                                if(!activeDesks.find(d => d.titel_technisch === m.titel_technisch)) {
+                                                    setActiveDesks(prev => [...prev, {...m}]);
+                                                }
+                                                setActiveView('chat');
+                                                showToast('Akte auf Schreibtisch gelegt');
+                                            }} className="btn text-[9px] mt-2 bg-slate-50 border-slate-200 flex items-center justify-center gap-1">📌 AUF DEN SCHREIBTISCH</button>
                                         </div>
                                     );
                                 })}
@@ -1452,9 +1688,18 @@
                     {/* --- INPUT AREA --- */}
                     <div className={`${activeView === 'chat' ? 'block' : 'hidden'} shrink-0 border-t border-stone-200 p-2 sm:px-4 sm:py-3 bg-white/90 backdrop-blur-md pb-safe`}>
                         <div className="max-w-4xl mx-auto flex flex-col gap-1">
-                            <div className="flex gap-2">
-                                <input value={inputText} onChange={e=>setInputText(e.target.value)} onKeyDown={e=>{if(e.key==='Enter') handleSendMessage();}} disabled={isLoading} className="input-field flex-1 py-3 px-4 font-sans font-medium bg-white" placeholder={isLoading ? "SYSTEM PROCESSING..." : "INPUT..."} />
-                                <button onClick={handleSendMessage} disabled={!inputText.trim() || isLoading} className="btn-primary px-6 disabled:opacity-50 py-3 shadow-indigo-200 text-sm uppercase">Send</button>
+                            <div className="flex gap-2 items-center">
+                                {/* V3.10 STT WHISPER BUTTON */}
+                                <button 
+                                    onClick={isRecording ? stopRecording : startRecording} 
+                                    disabled={isLoading}
+                                    className={`px-4 py-2.5 rounded-2xl border transition-all shadow-sm shrink-0 flex items-center justify-center text-lg ${isRecording ? 'bg-rose-100 text-rose-600 border-rose-300 animate-pulse' : 'bg-white text-slate-500 border-stone-200 hover:bg-stone-100 disabled:opacity-50'}`}
+                                    title="Speech-to-Text (Whisper via Replicate)"
+                                >
+                                    {isRecording ? '🛑' : '🎤'}
+                                </button>
+                                <input value={inputText} onChange={e=>setInputText(e.target.value)} onKeyDown={e=>{if(e.key==='Enter') handleSendMessage();}} disabled={isLoading || isRecording} className="input-field flex-1 py-3 px-4 font-sans font-medium bg-white" placeholder={isLoading ? "SYSTEM PROCESSING..." : (isRecording ? "HÖRE ZU..." : "INPUT...")} />
+                                <button onClick={handleSendMessage} disabled={!inputText.trim() || isLoading || isRecording} className="btn-primary px-6 disabled:opacity-50 py-3 shadow-indigo-200 text-sm uppercase">Send</button>
                             </div>
                         </div>
                     </div>
