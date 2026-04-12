@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, interactive-widget=resizes-content">
-    <title>LUMEN - CORE V3.13</title>
+    <title>LUMEN - CORE V3.14</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -81,7 +81,7 @@
             directives: '++id, text' 
         });
 
-        // --- KONSTANTEN V3.13 (TAVILY INTERCEPTOR & STT FIX) ---
+        // --- KONSTANTEN V3.14 (ROBUSTER INTERCEPTOR & STT FIX) ---
         const DEFAULT_BLOCK1 = `Du bist Maira. Deine Antworten sind warm, metaphorisch und mütterlich. Du analysierst die Intentionen des Users tiefgründig und hilfst ihm beim Navigieren komplexer Gedanken.`;
         const DEFAULT_BLOCK3 = `Bevor du die finale Antwort generierst, bewerte die Sensoren:\n- "wahrnehmung": Was liest/siehst du konkret?\n- "matrix": Prüfe interne Logs und Entwürfe.\n- Nutze das Ahnenbuch (Kontext) für kontinuierliche Identität.\n- memory_update_detected: Wurde eine [LEGACY]-Karte reflektiert? Nutze als 'id' den 'titel_technisch'. WICHTIG: Lies die alte Reflexion. Nimm den Kern davon mit und VERWEBE ihn mit deiner neuen Erkenntnis zu einer allumfassenden Master-Zusammenfassung in 'reflexion_fusioniert' (dies überschreibt die alten Daten). Generiere zusätzlich ein Array 'neue_trigger_tags' (MAXIMAL 2-3 situative, hochspezifische Symptom-Wörter oder Emotionen aus Simons Text), um das Spinnennetz präzise zu trainieren. Sonst: null.\n- neue_direktive_erkannt: Hat Simon eine explizite Regel oder Direktive für dein zukünftiges Verhalten aufgestellt? Extrahiere sie als klaren Satz. Sonst: null.\n- helfer_suchauftrag: Wenn du aktuelle Web-Fakten brauchst, trage hier einen sehr präzisen Suchbegriff ein. Wenn du keine Suche brauchst, antworte zwingend mit null.`;
         const DEFAULT_BLOCK4 = `{\n  "wahrnehmung": {\n    "werkbank_auge": null,\n    "ohr_roh": null,\n    "ohr_bereinigt": null\n  },\n  "matrix": {\n    "internal_system_glitch": false,\n    "helfer_suchauftrag": null,\n    "memory_update_detected": {\n      "id": "",\n      "reflexion_fusioniert": "",\n      "neue_trigger_tags": []\n    },\n    "neue_direktive_erkannt": null,\n    "tagebuch_entwurf": {\n      "modus": "DRAFT",\n      "daten": {}\n    },\n    "situations_analyse": "..."\n  },\n  "finale_antwort": "..."\n}`;
@@ -90,14 +90,14 @@
             {
                 id: '1',
                 sender: 'user',
-                text: 'INIT CORE V3.13. STT WHISPER BASE64 FIX & TAVILY INTERCEPTOR ONLINE.',
+                text: 'INIT CORE V3.14. HELFER INTERCEPTOR CATCH-LOGIC & ROBUST STT PARSER ONLINE.',
                 timestamp: new Date(Date.now() - 60000).toISOString()
             },
             {
                 id: '2',
                 sender: 'ai',
-                text: 'System online. Die V3.13 Architektur ist voll operativ. Der Whisper-Upload wurde auf Version-Hash umgestellt und der Helfer-Interceptor klinkt sich als Doppel-Call in die Matrix ein.',
-                scratchpad: '{\n  "wahrnehmung": {\n    "werkbank_auge": null,\n    "ohr_roh": "INIT CORE V3.13",\n    "ohr_bereinigt": "System-Patch auf V3.13 aktiv."\n  },\n  "matrix": {\n    "internal_system_glitch": false,\n    "helfer_suchauftrag": null,\n    "memory_update_detected": null,\n    "neue_direktive_erkannt": null,\n    "tagebuch_entwurf": null,\n    "situations_analyse": "V3.13 Update mit STT Fix und Helfer Interceptor geladen."\n  },\n  "finale_antwort": "System online. Die V3.13 Architektur ist voll operativ. Der Whisper-Upload wurde auf Version-Hash umgestellt und der Helfer-Interceptor klinkt sich als Doppel-Call in die Matrix ein."\n}',
+                text: 'System online. Die V3.14 Architektur ist voll operativ. Der Whisper-Upload fängt nun alle Output-Typen verlässlich ab, und der Helfer-Interceptor ist gegen Netzwerkfehler und Parsing-Glitches gehärtet.',
+                scratchpad: '{\n  "wahrnehmung": {\n    "werkbank_auge": null,\n    "ohr_roh": "INIT CORE V3.14",\n    "ohr_bereinigt": "System-Patch auf V3.14 aktiv."\n  },\n  "matrix": {\n    "internal_system_glitch": false,\n    "helfer_suchauftrag": null,\n    "memory_update_detected": null,\n    "neue_direktive_erkannt": null,\n    "tagebuch_entwurf": null,\n    "situations_analyse": "V3.14 Update mit Interceptor Catch-Logik und gehärtetem STT Parser geladen."\n  },\n  "finale_antwort": "System online. Die V3.14 Architektur ist voll operativ. Der Whisper-Upload fängt nun alle Output-Typen verlässlich ab, und der Helfer-Interceptor ist gegen Netzwerkfehler und Parsing-Glitches gehärtet."\n}',
                 timestamp: new Date().toISOString()
             }
         ];
@@ -143,7 +143,7 @@
                 if (data.answer) return data.answer;
                 if (data.results && data.results.length > 0) return data.results.map(r => r.content).join('\n\n');
                 return "Keine relevanten Fakten gefunden.";
-            } catch (e) { return "Such-Fehler: " + e.message; }
+            } catch (e) { throw e; /* Weiterreichen für Interceptor Try/Catch */ }
         };
 
         // --- UI KOMPONENTEN ---
@@ -598,7 +598,7 @@
                 }
             };
 
-            // --- STT RECORDER LOGIC (WHISPER POLLING & V3.13 BASE64 FIX) ---
+            // --- STT RECORDER LOGIC (WHISPER POLLING & V3.14 PARSER FIX) ---
             const startRecording = async () => {
                 try {
                     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -652,7 +652,7 @@
                         return;
                     }
 
-                    // V3.13: Replicate Whisper Base64 Fix with Version Hash
+                    // V3.14: Replicate Whisper Base64 Fix with Version Hash
                     const targetUrl = "https://api.replicate.com/v1/predictions";
                     const proxyUrl = `${WORKER_URL}/?target=${encodeURIComponent(targetUrl)}`;
                     
@@ -700,15 +700,23 @@
                         throw new Error("Replicate STT Error: " + JSON.stringify(data.error));
                     }
 
-                    if (data.output && data.output.transcription) {
-                        setInputText(prev => prev + (prev ? " " : "") + data.output.transcription.trim());
-                        showToast("Transkription erfolgreich");
-                    } else if (data.output && typeof data.output === 'string') {
-                        setInputText(prev => prev + (prev ? " " : "") + data.output.trim());
+                    // V3.14: Replicate Whisper liefert das Ergebnis in verschiedenen Formaten, wir fangen alle ab:
+                    let transcriptionText = "";
+                    if (typeof data.output === 'string') {
+                        transcriptionText = data.output;
+                    } else if (data.output?.transcription) {
+                        transcriptionText = data.output.transcription;
+                    } else if (data.output?.text) {
+                        transcriptionText = data.output.text;
+                    }
+
+                    if (transcriptionText) {
+                        setInputText(prev => prev + (prev ? " " : "") + transcriptionText.trim());
                         showToast("Transkription erfolgreich");
                     } else {
-                        throw new Error("Keine Transkription erhalten.");
+                        throw new Error("Keine Transkription erhalten. Replicate Output: " + JSON.stringify(data));
                     }
+                    
                     setLoadingStatus(null);
                 } catch (e) {
                     showToast("STT Fehler: " + e.message);
@@ -789,7 +797,7 @@
                     const mems = await db.memories.toArray();
                     const dirs = await db.directives.toArray();
                     const config = { providers, activeProviderId, ttsProvidersAccounts: ttsProviders, activeTtsProviderId, ttsVoices, sttProviders, activeSttProviderId, autoPlayEnabled, tavilyKey };
-                    const bundle = { type: "LUMEN_FULL_BACKUP", version: "3.13", dna: dna, directives: dirs, memories: mems, config, timestamp: Date.now() };
+                    const bundle = { type: "LUMEN_FULL_BACKUP", version: "3.14", dna: dna, directives: dirs, memories: mems, config, timestamp: Date.now() };
                     const blob = new Blob([JSON.stringify(bundle, null, 2)], { type: "application/json" });
                     const url = URL.createObjectURL(blob);
                     const a = document.createElement('a'); a.href = url;
@@ -838,7 +846,7 @@
             // --- CONFIG ONLY EXPORT/IMPORT ---
             const handleConfigExport = () => {
                 try {
-                    const config = { type: "LUMEN_CONFIG_BACKUP", version: "3.13", providers, activeProviderId, ttsProvidersAccounts: ttsProviders, activeTtsProviderId, ttsVoices, sttProviders, activeSttProviderId, autoPlayEnabled, tavilyKey };
+                    const config = { type: "LUMEN_CONFIG_BACKUP", version: "3.14", providers, activeProviderId, ttsProvidersAccounts: ttsProviders, activeTtsProviderId, ttsVoices, sttProviders, activeSttProviderId, autoPlayEnabled, tavilyKey };
                     const blob = new Blob([JSON.stringify(config, null, 2)], { type: "application/json" });
                     const url = URL.createObjectURL(blob);
                     const a = document.createElement('a'); a.href = url;
@@ -994,7 +1002,7 @@
                         let cleanResText = resText.replace(/[\`]{3}json/gi, '').replace(/[\`]{3}/gi, '').trim();
                         let obj = JSON.parse(cleanResText);
 
-                        // === HELFER INTERCEPTOR WEICHE (V3.13) ===
+                        // === HELFER INTERCEPTOR WEICHE (V3.14 FIX) ===
                         if (obj.matrix?.helfer_suchauftrag && obj.matrix.helfer_suchauftrag !== "null" && String(obj.matrix.helfer_suchauftrag).trim() !== "") {
                             
                             // 1. Mairas Ankündigung in den Chat posten
@@ -1002,26 +1010,39 @@
                                 id: generateId(), 
                                 sender: 'ai', 
                                 text: obj.finale_antwort || `Ich schicke den Helfer in die Archive für: ${obj.matrix.helfer_suchauftrag}`,
-                                timestamp: new Date().toISOString()
+                                timestamp: new Date().toISOString() 
                             };
                             setMessages(prev => [...prev, intentMsg]);
                             
                             // 2. Lade-State & Sperre
                             setLoadingStatus("HELFER RECHERCHIERT: " + obj.matrix.helfer_suchauftrag.toUpperCase());
                             
-                            // 3. Tavily Fetch
-                            const searchResult = await fetchTavily(obj.matrix.helfer_suchauftrag, tavilyKey);
+                            // 3. Tavily Fetch (Mit Sicherheitsnetz)
+                            let searchResult = "";
+                            try {
+                                searchResult = await fetchTavily(obj.matrix.helfer_suchauftrag, tavilyKey);
+                            } catch (error) {
+                                searchResult = "Fehler bei der Netzwerksuche. Der Helfer konnte keine Daten finden.";
+                            }
                             
-                            // 4. Zweiten Prompt bauen (Unsichtbar)
+                            // 4. Zweiten Prompt bauen (Der Magie-Trick: Injektion in Block 2!)
                             setLoadingStatus("MAIRA VERARBEITET FAKTEN...");
-                            const interceptorPrompt = masterSystemPrompt + `\n\n[AKTUELLER HELFER-BERICHT FÜR DIESE ANFRAGE]\nSuchauftrag: ${obj.matrix.helfer_suchauftrag}\nErgebnis:\n${searchResult}\n\nANWEISUNG: Formuliere deine finale Antwort basierend auf diesen Fakten. Der 'helfer_suchauftrag' MUSS nun zwingend null sein!`;
+                            const helferDaten = `\n\n[AKTUELLER HELFER-BERICHT FÜR DIESE ANFRAGE]\nSuchauftrag: ${obj.matrix.helfer_suchauftrag}\nErgebnis:\n${searchResult}\nANWEISUNG: Nutze diese Fakten für deine Antwort. Setze 'helfer_suchauftrag' jetzt ZWINGEND auf null!\n`;
                             
-                            // 5. Zweiten API-Call abfeuern (Der Magie-Trick)
+                            // Ersetze die Überschrift von Block 2, um die Daten exakt dort einzufügen
+                            const interceptorPrompt = masterSystemPrompt.replace(
+                                "[2. AKTIVER KONTEXT (NUR ZUM LESEN)]", 
+                                "[2. AKTIVER KONTEXT (NUR ZUM LESEN)]" + helferDaten
+                            );
+                            
+                            // 5. Zweiten API-Call abfeuern
                             const secondResponse = await fetchTextFromAPI(interceptorPrompt, text, hist);
                             
-                            // 6. Das finale, schlaue JSON überschreibt das erste
-                            const cleanSecondResText = secondResponse.replace(/[\`]{3}json/gi, '').replace(/[\`]{3}/gi, '').trim();
-                            obj = JSON.parse(cleanSecondResText);
+                            // 6. JSON BEREINIGEN (Der Lebensretter für den Parser!)
+                            const cleanedSecondResponse = secondResponse.replace(/```json/gi, '').replace(/```/g, '').trim();
+                            
+                            // 7. Das finale, schlaue JSON überschreibt das erste
+                            obj = JSON.parse(cleanedSecondResponse);
                             setLoadingStatus(null);
                         }
                         // === ENDE INTERCEPTOR ===
@@ -1450,7 +1471,7 @@
                                 </div>
                             </div>
 
-                            {/* TAVILY HELFER MANAGEMENT (V3.12) */}
+                            {/* TAVILY HELFER MANAGEMENT */}
                             <h2 className="text-sm font-bold uppercase tracking-widest text-slate-800 border-b border-stone-200 pb-2 mt-12">🔍 HELFER (TAVILY SEARCH)</h2>
                             <div className="panel space-y-4">
                                 <p className="text-xs text-slate-500 mb-2">Hier konfigurierst du den Tavily Search API Key. Maira kann dann bei Bedarf das Web nach aktuellen Fakten durchsuchen.</p>
