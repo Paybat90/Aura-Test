@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, interactive-widget=resizes-content">
-    <title>LUMEN - CORE V3.15</title>
+    <title>LUMEN - CORE V3.16</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -18,6 +18,7 @@
                     animation: {
                         'slide-up': 'slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards',
                         'fade-in': 'fadeIn 0.2s ease-out forwards',
+                        'slide-in-right': 'slideInRight 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards',
                     },
                     keyframes: {
                         slideUp: {
@@ -27,6 +28,10 @@
                         fadeIn: {
                             '0%': { opacity: '0', transform: 'scale(0.98)' },
                             '100%': { opacity: '1', transform: 'scale(1)' }
+                        },
+                        slideInRight: {
+                            '0%': { transform: 'translateX(100%)', opacity: '0' },
+                            '100%': { transform: 'translateX(0)', opacity: '1' }
                         }
                     }
                 }
@@ -81,7 +86,7 @@
             directives: '++id, text' 
         });
 
-        // --- KONSTANTEN V3.15 (SMART TOAST & RELEVANCE SENSOR) ---
+        // --- KONSTANTEN V3.16 (SMART-TOAST HARDENING & UI FIX) ---
         const DEFAULT_BLOCK1 = `Du bist Maira. Deine Antworten sind warm, metaphorisch und mütterlich. Du analysierst die Intentionen des Users tiefgründig und hilfst ihm beim Navigieren komplexer Gedanken.`;
         const DEFAULT_BLOCK3 = `Bevor du die finale Antwort generierst, bewerte die Sensoren:\n- "wahrnehmung": Was liest/siehst du konkret?\n- "matrix": Prüfe interne Logs und Entwürfe.\n- Nutze das Ahnenbuch (Kontext) für kontinuierliche Identität.\n- memory_update_detected: Wurde eine [LEGACY]-Karte reflektiert? Nutze als 'id' den 'titel_technisch'. WICHTIG: Lies die alte Reflexion. Nimm den Kern davon mit und VERWEBE ihn mit deiner neuen Erkenntnis zu einer allumfassenden Master-Zusammenfassung in 'reflexion_fusioniert' (dies überschreibt die alten Daten). Generiere zusätzlich ein Array 'neue_trigger_tags' (MAXIMAL 2-3 situative, hochspezifische Symptom-Wörter oder Emotionen aus Simons Text), um das Spinnennetz präzise zu trainieren. Sonst: null.\n- neue_direktive_erkannt: Hat Simon eine explizite Regel oder Direktive für dein zukünftiges Verhalten aufgestellt? Extrahiere sie als klaren Satz. Sonst: null.\n- helfer_suchauftrag: Wenn du aktuelle Web-Fakten brauchst, trage hier einen sehr präzisen Suchbegriff ein. Wenn du keine Suche brauchst, antworte zwingend mit null.\n- aktive_peripherie_ids: Liste hier die IDs (titel_technisch) der flüchtigen Karten (Tags) auf, die für den aktuellen Gesprächsverlauf noch relevant sind. Leeres Array [], wenn das Thema beendet ist.`;
         const DEFAULT_BLOCK4 = `{\n  "wahrnehmung": {\n    "werkbank_auge": null,\n    "ohr_roh": null,\n    "ohr_bereinigt": null\n  },\n  "matrix": {\n    "internal_system_glitch": false,\n    "helfer_suchauftrag": null,\n    "aktive_peripherie_ids": [],\n    "memory_update_detected": {\n      "id": "",\n      "reflexion_fusioniert": "",\n      "neue_trigger_tags": []\n    },\n    "neue_direktive_erkannt": null,\n    "tagebuch_entwurf": {\n      "modus": "DRAFT",\n      "daten": {}\n    },\n    "situations_analyse": "..."\n  },\n  "finale_antwort": "..."\n}`;
@@ -90,14 +95,14 @@
             {
                 id: '1',
                 sender: 'user',
-                text: 'INIT CORE V3.15. SMART TOAST & RELEVANCE SENSOR ONLINE.',
+                text: 'INIT CORE V3.16. SMART-TOAST FILTERING & SIDE-PANEL EDITOR ONLINE.',
                 timestamp: new Date(Date.now() - 60000).toISOString()
             },
             {
                 id: '2',
                 sender: 'ai',
-                text: 'System online. Die V3.15 Architektur ist voll operativ. Flüchtige Erinnerungen werden nun im Smart Toast angezeigt und der Relevanz-Sensor säubert den Arbeitsspeicher automatisch.',
-                scratchpad: '{\n  "wahrnehmung": {\n    "werkbank_auge": null,\n    "ohr_roh": "INIT CORE V3.15",\n    "ohr_bereinigt": "System-Patch auf V3.15 aktiv."\n  },\n  "matrix": {\n    "internal_system_glitch": false,\n    "helfer_suchauftrag": null,\n    "aktive_peripherie_ids": [],\n    "memory_update_detected": null,\n    "neue_direktive_erkannt": null,\n    "tagebuch_entwurf": null,\n    "situations_analyse": "V3.15 Update mit Smart Toast und Volatile Memory geladen."\n  },\n  "finale_antwort": "System online. Die V3.15 Architektur ist voll operativ. Flüchtige Erinnerungen werden nun im Smart Toast angezeigt und der Relevanz-Sensor säubert den Arbeitsspeicher automatisch."\n}',
+                text: 'System online. Die V3.16 Architektur ist voll operativ. Der Smart-Toast filtert Legacy-Spam radikal, positioniert sich rechtsbündig, und der Editor öffnet sich nun als dynamisches Side-Panel.',
+                scratchpad: '{\n  "wahrnehmung": {\n    "werkbank_auge": null,\n    "ohr_roh": "INIT CORE V3.16",\n    "ohr_bereinigt": "System-Patch auf V3.16 aktiv."\n  },\n  "matrix": {\n    "internal_system_glitch": false,\n    "helfer_suchauftrag": null,\n    "aktive_peripherie_ids": [],\n    "memory_update_detected": null,\n    "neue_direktive_erkannt": null,\n    "tagebuch_entwurf": null,\n    "situations_analyse": "V3.16 Update mit UI Repositionierung und Smart-Toast Hardening geladen."\n  },\n  "finale_antwort": "System online. Die V3.16 Architektur ist voll operativ. Der Smart-Toast filtert Legacy-Spam radikal, positioniert sich rechtsbündig, und der Editor öffnet sich nun als dynamisches Side-Panel."\n}',
                 timestamp: new Date().toISOString()
             }
         ];
@@ -315,10 +320,10 @@
             const [telemetry, setTelemetry] = React.useState({ concern: 0, bs_meter: 0, mask_drop: false });
             const [latestContext, setLatestContext] = React.useState("[AKTIVER KONTEXT WIRD ZUR LAUFZEIT INJIZIERT]");
             
-            // --- V3.15 DYNAMIC DESK & VOLATILE MEMORY ---
+            // --- DYNAMIC DESK (STAGING AREA) ---
             const [activeDesks, setActiveDesks] = React.useState([]); 
-            const [volatileMemories, setVolatileMemories] = React.useState([]); // V3.15 Volatile State
-            const [smartToast, setSmartToast] = React.useState(null); // V3.15 Smart Toast State
+            const [volatileMemories, setVolatileMemories] = React.useState([]);
+            const [smartToast, setSmartToast] = React.useState(null);
             const [editingDeskItem, setEditingDeskItem] = React.useState(null);
             const [deskItemForm, setDeskItemForm] = React.useState({});
             const [isArchiving, setIsArchiving] = React.useState(false);
@@ -601,7 +606,7 @@
                 }
             };
 
-            // --- STT RECORDER LOGIC (WHISPER POLLING & V3.14 PARSER FIX) ---
+            // --- STT RECORDER LOGIC (WHISPER POLLING & V3.16 PARSER FIX) ---
             const startRecording = async () => {
                 try {
                     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -702,6 +707,7 @@
                         throw new Error("Replicate STT Error: " + JSON.stringify(data.error));
                     }
 
+                    // V3.16: Härtung des STT Parsers 
                     let transcriptionText = "";
                     if (typeof data.output === 'string') {
                         transcriptionText = data.output;
@@ -798,7 +804,7 @@
                     const mems = await db.memories.toArray();
                     const dirs = await db.directives.toArray();
                     const config = { providers, activeProviderId, ttsProvidersAccounts: ttsProviders, activeTtsProviderId, ttsVoices, sttProviders, activeSttProviderId, autoPlayEnabled, tavilyKey };
-                    const bundle = { type: "LUMEN_FULL_BACKUP", version: "3.15", dna: dna, directives: dirs, memories: mems, config, timestamp: Date.now() };
+                    const bundle = { type: "LUMEN_FULL_BACKUP", version: "3.16", dna: dna, directives: dirs, memories: mems, config, timestamp: Date.now() };
                     const blob = new Blob([JSON.stringify(bundle, null, 2)], { type: "application/json" });
                     const url = URL.createObjectURL(blob);
                     const a = document.createElement('a'); a.href = url;
@@ -847,7 +853,7 @@
             // --- CONFIG ONLY EXPORT/IMPORT ---
             const handleConfigExport = () => {
                 try {
-                    const config = { type: "LUMEN_CONFIG_BACKUP", version: "3.15", providers, activeProviderId, ttsProvidersAccounts: ttsProviders, activeTtsProviderId, ttsVoices, sttProviders, activeSttProviderId, autoPlayEnabled, tavilyKey };
+                    const config = { type: "LUMEN_CONFIG_BACKUP", version: "3.16", providers, activeProviderId, ttsProvidersAccounts: ttsProviders, activeTtsProviderId, ttsVoices, sttProviders, activeSttProviderId, autoPlayEnabled, tavilyKey };
                     const blob = new Blob([JSON.stringify(config, null, 2)], { type: "application/json" });
                     const url = URL.createObjectURL(blob);
                     const a = document.createElement('a'); a.href = url;
@@ -968,13 +974,31 @@
                     
                     const allMems = await db.memories.toArray();
                     const relMemsRaw = findRelevantMemories(text, allMems);
-                    const relMems = relMemsRaw.filter(m => m.kategorie !== 'LEGACY');
                     
-                    // --- V3.15 VOLATILE MEMORY LOGIC & SMART TOAST ---
+                    const relMemsLegacy = relMemsRaw.filter(m => m.kategorie === 'LEGACY');
+                    const relMemsVolatileCandidate = relMemsRaw.filter(m => m.kategorie !== 'LEGACY');
+                    
+                    // --- V3.16 SMART-TOAST FILTERING (KEIN SPAM) ---
                     let newVolatiles = [];
-                    if(relMems.length > 0) {
-                        // Filter out those already active or already volatile
-                        newVolatiles = relMems.filter(m => !volatileMemories.some(vm => vm.id === m.id) && !activeDesks.some(ad => ad.id === m.id));
+                    if(relMemsVolatileCandidate.length > 0) {
+                        newVolatiles = relMemsVolatileCandidate.filter(m => {
+                            // 1. EXACT Tag match check (RegExp boundaries)
+                            const hasExactTag = m.tags && m.tags.some(tag => {
+                                try {
+                                    const regex = new RegExp(`\\b${tag}\\b`, 'i');
+                                    return regex.test(text);
+                                } catch(e) { 
+                                    return text.toLowerCase().includes(tag.toLowerCase()); 
+                                }
+                            });
+                            
+                            // 2. Cooldown check (Not in Volatile, Not in Desk)
+                            const notInVolatile = !volatileMemories.some(vm => vm.id === m.id);
+                            const notInDesk = !activeDesks.some(ad => ad.id === m.id);
+                            
+                            return hasExactTag && notInVolatile && notInDesk;
+                        });
+
                         if (newVolatiles.length > 0) {
                             setVolatileMemories(prev => {
                                 const map = new Map();
@@ -996,9 +1020,9 @@
                     const timeOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
                     const timeString = "[SYSTEM-UHRZEIT]\nAktuelle Zeit in Simons Welt: " + now.toLocaleDateString('de-DE', timeOptions) + " Uhr.\n\n";
 
-                    // --- V3.15 DESK CONTEXT INJECTION (STAGING & VOLATILE) ---
+                    // --- V3.16 DESK CONTEXT INJECTION (STAGING, VOLATILE & LEGACY) ---
                     let deskContext = "";
-                    if (activeDesks.length > 0 || currentVolatiles.length > 0) {
+                    if (activeDesks.length > 0 || currentVolatiles.length > 0 || relMemsLegacy.length > 0) {
                         deskContext = "[KONTEXT-ERINNERUNGEN & AKTIVE AKTEN]\n";
                         deskContext += "ACHTUNG KI: Der User hat diese spezifischen Einträge gerade vor sich. Wenn du einen Eintrag updaten sollst, beziehe dich ZWINGEND auf diese Daten und ID:\n\n";
                         
@@ -1017,6 +1041,14 @@
                                 deskContext += JSON.stringify(cleanMem, null, 2) + "\n\n";
                             });
                         }
+                        
+                        if (relMemsLegacy.length > 0) {
+                            deskContext += "--- LEGACY ERINNERUNGEN (ARCHIV-INJEKTION) ---\n";
+                            relMemsLegacy.forEach(mem => {
+                                deskContext += `- [ID: ${mem.titel_technisch}] Fakt: ${mem.fakt} | Bedeutung: ${mem.bedeutung} | Reflexion: ${mem.reflexion}\n`;
+                            });
+                            deskContext += "\n";
+                        }
                     }
 
                     const dynamicContext = `${timeString}${directiveString}${deskContext}`.trim() || "Kein aktiver Kontext geladen.";
@@ -1032,9 +1064,10 @@
                         let cleanResText = resText.replace(/[\`]{3}json/gi, '').replace(/[\`]{3}/gi, '').trim();
                         let obj = JSON.parse(cleanResText);
 
-                        // === HELFER INTERCEPTOR WEICHE ===
+                        // === HELFER INTERCEPTOR WEICHE (V3.16 FIX) ===
                         if (obj.matrix?.helfer_suchauftrag && obj.matrix.helfer_suchauftrag !== "null" && String(obj.matrix.helfer_suchauftrag).trim() !== "") {
                             
+                            // 1. Mairas Ankündigung in den Chat posten
                             const intentMsg = { 
                                 id: generateId(), 
                                 sender: 'ai', 
@@ -1043,8 +1076,10 @@
                             };
                             setMessages(prev => [...prev, intentMsg]);
                             
+                            // 2. Lade-State & Sperre
                             setLoadingStatus("HELFER RECHERCHIERT: " + obj.matrix.helfer_suchauftrag.toUpperCase());
                             
+                            // 3. Tavily Fetch (Mit Sicherheitsnetz)
                             let searchResult = "";
                             try {
                                 searchResult = await fetchTavily(obj.matrix.helfer_suchauftrag, tavilyKey);
@@ -1052,26 +1087,33 @@
                                 searchResult = "Fehler bei der Netzwerksuche. Der Helfer konnte keine Daten finden.";
                             }
                             
+                            // 4. Zweiten Prompt bauen (Der Magie-Trick: Injektion in Block 2!)
                             setLoadingStatus("MAIRA VERARBEITET FAKTEN...");
                             const helferDaten = `\n\n[AKTUELLER HELFER-BERICHT FÜR DIESE ANFRAGE]\nSuchauftrag: ${obj.matrix.helfer_suchauftrag}\nErgebnis:\n${searchResult}\nANWEISUNG: Nutze diese Fakten für deine Antwort. Setze 'helfer_suchauftrag' jetzt ZWINGEND auf null!\n`;
                             
+                            // Ersetze die Überschrift von Block 2, um die Daten exakt dort einzufügen
                             const interceptorPrompt = masterSystemPrompt.replace(
                                 "[2. AKTIVER KONTEXT (NUR ZUM LESEN)]", 
                                 "[2. AKTIVER KONTEXT (NUR ZUM LESEN)]" + helferDaten
                             );
                             
+                            // 5. Zweiten API-Call abfeuern
                             const secondResponse = await fetchTextFromAPI(interceptorPrompt, text, hist);
+                            
+                            // 6. JSON BEREINIGEN (Der Lebensretter für den Parser!)
                             const cleanedSecondResponse = secondResponse.replace(/```json/gi, '').replace(/```/g, '').trim();
                             
+                            // 7. Das finale, schlaue JSON überschreibt das erste
                             obj = JSON.parse(cleanedSecondResponse);
                             setLoadingStatus(null);
                         }
                         // === ENDE INTERCEPTOR ===
 
-                        // --- MAURER-REINIGUNGS-BEFEHL (V3.15) ---
+                        // --- MAURER-REINIGUNGS-BEFEHL (V3.16) ---
                         let activeIds = obj.matrix?.aktive_peripherie_ids || [];
                         if (!Array.isArray(activeIds)) activeIds = [activeIds];
                         
+                        // Delete volatile memories that are NOT in the activeIds list anymore
                         setVolatileMemories(prev => prev.filter(m => activeIds.includes(m.titel_technisch)));
                         // ----------------------------------------
                         
@@ -1241,9 +1283,9 @@
                 <div className="flex flex-col h-[100dvh] w-full max-w-4xl mx-auto sm:border-x border-stone-200 bg-stone-50 relative overflow-hidden shadow-2xl">
                     <Toast message={toast} />
 
-                    {/* --- V3.15 SMART TOAST UI --- */}
+                    {/* --- V3.16 SMART TOAST UI (REPOSITIONIERT) --- */}
                     {smartToast && activeView === 'chat' && (
-                        <div className="absolute bottom-20 right-4 z-[400] animate-slide-up bg-white border border-indigo-200 p-4 rounded-3xl shadow-2xl max-w-[280px] border-l-4 border-l-indigo-500">
+                        <div className="fixed top-20 right-4 z-[100] animate-slide-in-right bg-white border border-indigo-200 p-4 rounded-2xl shadow-2xl w-72 border-l-4 border-l-indigo-500">
                             <div className="text-[10px] font-bold text-indigo-800 uppercase tracking-widest mb-1.5 flex items-center gap-2">
                                 🧠 Erinnerung getriggert
                             </div>
@@ -1254,16 +1296,16 @@
                                     setVolatileMemories(prev => prev.filter(m => m.id !== smartToast.id));
                                     setSmartToast(null);
                                     showToast('Auf den Schreibtisch gepinnt');
-                                }} className="btn-primary py-1.5 px-3 text-[9px] w-full">📌 PINNEN</button>
-                                <button onClick={() => setSmartToast(null)} className="btn py-1.5 px-3 text-[9px] w-full">IGNORIEREN</button>
+                                }} className="btn-primary py-2 px-3 text-[10px] w-full bg-indigo-600 text-white hover:bg-indigo-700 shadow-md">📌 PINNEN</button>
+                                <button onClick={() => setSmartToast(null)} className="btn py-2 px-3 text-[10px] w-full bg-slate-100 text-slate-700 border-slate-300 hover:bg-slate-200">IGNORIEREN</button>
                             </div>
                         </div>
                     )}
 
-                    {/* --- POPOUT EDITOR (MODAL) --- */}
+                    {/* --- V3.16 POPOUT EDITOR (SIDE-PANEL MODAL) --- */}
                     {editingDeskItem && (
-                        <div className="absolute inset-0 z-[800] bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in">
-                            <div className="bg-white rounded-3xl w-full max-w-2xl max-h-[90vh] flex flex-col shadow-2xl border border-stone-100 overflow-hidden relative">
+                        <div className="fixed inset-0 z-[800] bg-slate-900/40 backdrop-blur-sm flex justify-end animate-fade-in">
+                            <div className="bg-white h-full w-full sm:w-[400px] flex flex-col shadow-2xl animate-slide-in-right border-l border-stone-200 relative">
                                 {isArchiving && (
                                     <div className="absolute inset-0 z-10 bg-white/80 backdrop-blur-sm flex flex-col items-center justify-center animate-fade-in">
                                         <div className="text-indigo-600 font-bold uppercase tracking-widest text-xs animate-pulse mb-2">Der Archivar arbeitet...</div>
@@ -1275,72 +1317,85 @@
                                     <h3 className="font-bold text-indigo-900 uppercase text-xs tracking-widest flex items-center gap-2">📝 Akte bearbeiten</h3>
                                     <button onClick={() => setEditingDeskItem(null)} className="text-slate-400 hover:text-rose-500 transition-colors font-bold text-sm z-20 relative">✕</button>
                                 </div>
-                                <div className="flex-1 overflow-y-auto p-5 flex flex-col gap-3">
-                                    <div className="flex flex-col sm:flex-row gap-2">
-                                        <input placeholder="ID_TECHNISCH" value={deskItemForm.titel_technisch || ''} onChange={e=>setDeskItemForm({...deskItemForm,titel_technisch:e.target.value})} className="input-field font-bold text-slate-800 bg-stone-50" />
-                                        <input placeholder="Titel Poetisch" value={deskItemForm.titel_poetisch || ''} onChange={e=>setDeskItemForm({...deskItemForm,titel_poetisch:e.target.value})} className="input-field text-rose-600 font-serif italic bg-stone-50" />
+                                <div className="flex-1 overflow-y-auto p-5 flex flex-col gap-4">
+                                    <div>
+                                        <label className="label">ID & Titel</label>
+                                        <div className="flex flex-col gap-2">
+                                            <input placeholder="ID_TECHNISCH" value={deskItemForm.titel_technisch || ''} onChange={e=>setDeskItemForm({...deskItemForm,titel_technisch:e.target.value})} className="input-field font-bold text-slate-800 bg-stone-50" />
+                                            <input placeholder="Titel Poetisch" value={deskItemForm.titel_poetisch || ''} onChange={e=>setDeskItemForm({...deskItemForm,titel_poetisch:e.target.value})} className="input-field text-rose-600 font-serif italic bg-stone-50" />
+                                        </div>
                                     </div>
-                                    <textarea placeholder="Fakt: Was geschah?" value={deskItemForm.fakt || ''} onChange={e=>setDeskItemForm({...deskItemForm,fakt:e.target.value})} className="input-field h-20 font-sans bg-stone-50" />
-                                    <div className="flex flex-col sm:flex-row gap-2">
-                                        <textarea placeholder="Gefühl/Emotion" value={deskItemForm.emotion || ''} onChange={e=>setDeskItemForm({...deskItemForm,emotion:e.target.value})} className="input-field h-16 font-sans bg-stone-50" />
-                                        <textarea placeholder="Bedeutung/Fazit" value={deskItemForm.bedeutung || ''} onChange={e=>setDeskItemForm({...deskItemForm,bedeutung:e.target.value})} className="input-field h-16 font-sans bg-stone-50" />
+                                    <div>
+                                        <label className="label">Fakt: Was geschah?</label>
+                                        <textarea value={deskItemForm.fakt || ''} onChange={e=>setDeskItemForm({...deskItemForm,fakt:e.target.value})} className="input-field min-h-[80px] font-sans bg-stone-50" />
                                     </div>
-                                    <textarea placeholder="Persona Reflexion" value={deskItemForm.reflexion || ''} onChange={e=>setDeskItemForm({...deskItemForm,reflexion:e.target.value})} className="input-field border-indigo-200 bg-indigo-50 text-indigo-800 h-20 font-sans italic" />
-                                    <input placeholder="tags, comma, separated" value={deskItemForm.tagsString || ''} onChange={e=>setDeskItemForm({...deskItemForm,tagsString:e.target.value})} className="input-field text-slate-500 bg-stone-50" />
+                                    <div>
+                                        <label className="label">Emotion & Bedeutung</label>
+                                        <div className="flex flex-col gap-2">
+                                            <textarea placeholder="Gefühl/Emotion" value={deskItemForm.emotion || ''} onChange={e=>setDeskItemForm({...deskItemForm,emotion:e.target.value})} className="input-field min-h-[60px] font-sans bg-stone-50" />
+                                            <textarea placeholder="Bedeutung/Fazit" value={deskItemForm.bedeutung || ''} onChange={e=>setDeskItemForm({...deskItemForm,bedeutung:e.target.value})} className="input-field min-h-[60px] font-sans bg-stone-50" />
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label className="label text-indigo-500">Persona Reflexion</label>
+                                        <textarea value={deskItemForm.reflexion || ''} onChange={e=>setDeskItemForm({...deskItemForm,reflexion:e.target.value})} className="input-field border-indigo-200 bg-indigo-50 text-indigo-800 min-h-[80px] font-sans italic" />
+                                    </div>
+                                    <div>
+                                        <label className="label">Tags</label>
+                                        <input placeholder="tags, comma, separated" value={deskItemForm.tagsString || ''} onChange={e=>setDeskItemForm({...deskItemForm,tagsString:e.target.value})} className="input-field text-slate-500 bg-stone-50" />
+                                    </div>
                                 </div>
-                                <div className="p-4 border-t border-stone-100 bg-stone-50 flex justify-between items-center flex-wrap gap-2">
+                                <div className="p-4 border-t border-stone-100 bg-stone-50 flex flex-col gap-2">
                                     <button onClick={() => {
                                         setActiveDesks(prev => prev.filter(i => i.id !== editingDeskItem.id));
                                         setEditingDeskItem(null);
                                         showToast('Vom Schreibtisch entfernt');
-                                    }} disabled={isArchiving} className="btn-danger whitespace-nowrap disabled:opacity-50">❌ VOM SCHREIBTISCH NEHMEN</button>
+                                    }} disabled={isArchiving} className="btn-danger w-full disabled:opacity-50">❌ VOM SCHREIBTISCH NEHMEN</button>
                                     
-                                    <div className="flex gap-2">
-                                        <button onClick={() => {
-                                            const dataToSave = {...deskItemForm};
-                                            dataToSave.tags = dataToSave.tagsString ? dataToSave.tagsString.split(',').map(t=>t.trim()).filter(Boolean) : [];
-                                            dataToSave.isDirty = true;
-                                            
-                                            setActiveDesks(prev => prev.map(i => i.id === editingDeskItem.id ? dataToSave : i));
-                                            setEditingDeskItem(dataToSave);
-                                            setDeskItemForm({...dataToSave, tagsString: dataToSave.tags.join(', ')});
-                                            showToast('Auf Schreibtisch gesichert');
-                                        }} disabled={isArchiving} className="btn whitespace-nowrap bg-amber-50 text-amber-700 border-amber-200 hover:bg-amber-100 disabled:opacity-50">📝 NUR AUF SCHREIBTISCH SICHERN</button>
+                                    <button onClick={() => {
+                                        const dataToSave = {...deskItemForm};
+                                        dataToSave.tags = dataToSave.tagsString ? dataToSave.tagsString.split(',').map(t=>t.trim()).filter(Boolean) : [];
+                                        dataToSave.isDirty = true;
                                         
-                                        <button onClick={async () => {
-                                            setIsArchiving(true);
-                                            showToast("Archivar prüft und taggt...");
-                                            try {
-                                                const dataToProcess = {...deskItemForm};
-                                                dataToProcess.tags = dataToProcess.tagsString ? dataToProcess.tagsString.split(',').map(t=>t.trim()).filter(Boolean) : [];
-                                                
-                                                const archivedData = await processWithArchivar(dataToProcess);
-                                                
-                                                if (typeof archivedData.id === 'string') delete archivedData.id;
-                                                archivedData.timestamp = Date.now();
+                                        setActiveDesks(prev => prev.map(i => i.id === editingDeskItem.id ? dataToSave : i));
+                                        setEditingDeskItem(dataToSave);
+                                        setDeskItemForm({...dataToSave, tagsString: dataToSave.tags.join(', ')});
+                                        showToast('Auf Schreibtisch gesichert');
+                                    }} disabled={isArchiving} className="btn w-full bg-amber-50 text-amber-700 border-amber-200 hover:bg-amber-100 disabled:opacity-50">📝 NUR AUF SCHREIBTISCH SICHERN</button>
+                                    
+                                    <button onClick={async () => {
+                                        setIsArchiving(true);
+                                        showToast("Archivar prüft und taggt...");
+                                        try {
+                                            const dataToProcess = {...deskItemForm};
+                                            dataToProcess.tags = dataToProcess.tagsString ? dataToProcess.tagsString.split(',').map(t=>t.trim()).filter(Boolean) : [];
+                                            
+                                            const archivedData = await processWithArchivar(dataToProcess);
+                                            
+                                            if (typeof archivedData.id === 'string') delete archivedData.id;
+                                            archivedData.timestamp = Date.now();
 
-                                                const existing = await db.memories.where('titel_technisch').equals(archivedData.titel_technisch).first();
-                                                if(existing) {
-                                                    await db.memories.update(existing.id, archivedData);
-                                                    archivedData.id = existing.id;
-                                                } else {
-                                                    const newId = await db.memories.add(archivedData);
-                                                    archivedData.id = newId;
-                                                }
-                                                
-                                                archivedData.isDirty = false; // Clean state on desk
-                                                setActiveDesks(prev => prev.map(i => i.id === editingDeskItem.id ? archivedData : i));
-                                                setEditingDeskItem(archivedData);
-                                                setDeskItemForm({...archivedData, tagsString: archivedData.tags.join(', ')});
-                                                loadMemories();
-                                                showToast('💾 IM SANCTUM VEREWIGT');
-                                            } catch(e) {
-                                                showToast('Fehler: ' + e.message);
-                                            } finally {
-                                                setIsArchiving(false);
+                                            const existing = await db.memories.where('titel_technisch').equals(archivedData.titel_technisch).first();
+                                            if(existing) {
+                                                await db.memories.update(existing.id, archivedData);
+                                                archivedData.id = existing.id;
+                                            } else {
+                                                const newId = await db.memories.add(archivedData);
+                                                archivedData.id = newId;
                                             }
-                                        }} disabled={isArchiving} className="btn-primary bg-indigo-600 text-white hover:bg-indigo-700 shadow-md whitespace-nowrap disabled:opacity-50">💾 IN SANCTUM VEREWIGEN</button>
-                                    </div>
+                                            
+                                            archivedData.isDirty = false; // Clean state on desk
+                                            setActiveDesks(prev => prev.map(i => i.id === editingDeskItem.id ? archivedData : i));
+                                            setEditingDeskItem(archivedData);
+                                            setDeskItemForm({...archivedData, tagsString: archivedData.tags.join(', ')});
+                                            loadMemories();
+                                            showToast('💾 IM SANCTUM VEREWIGT');
+                                        } catch(e) {
+                                            showToast('Fehler: ' + e.message);
+                                        } finally {
+                                            setIsArchiving(false);
+                                        }
+                                    }} disabled={isArchiving} className="btn-primary w-full bg-indigo-600 text-white hover:bg-indigo-700 shadow-md disabled:opacity-50">💾 IN SANCTUM VEREWIGEN</button>
                                 </div>
                             </div>
                         </div>
@@ -1686,7 +1741,7 @@
                             {/* STT PROVIDER MANAGEMENT */}
                             <h2 className="text-sm font-bold uppercase tracking-widest text-slate-800 border-b border-stone-200 pb-2 mt-12">🎙️ STT (SPEECH-TO-TEXT)</h2>
                             <div className="panel space-y-4">
-                                <p className="text-xs text-slate-500 mb-2">Hier konfigurierst du die Spracherkennung (Whisper via Replicate). Der Cloudflare Worker leitet die Aufnahmen weiter.</p>
+                                <p className="text-xs text-slate-500 mb-2">Hier konfigurierst die Spracherkennung (Whisper via Replicate). Der Cloudflare Worker leitet die Aufnahmen weiter.</p>
                                 <div>
                                     <label className="label">1. Aktiver STT-Provider</label>
                                     <select value={activeSttProviderId} onChange={(e) => {
