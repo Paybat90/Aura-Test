@@ -3,46 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, interactive-widget=resizes-content">
-    <title>LUMEN - CORE V3.23</title>
+    <title>LUMEN - CORE V3.24</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            try {
-                if (typeof tailwind !== 'undefined') {
-                    tailwind.config = {
-                        theme: {
-                            extend: {
-                                fontFamily: {
-                                    sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-                                    mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', "Liberation Mono", "Courier New", 'monospace'],
+        // V3.24: Bulletproof Tailwind Config Initialization
+        const initTailwind = () => {
+            if (typeof tailwind !== 'undefined') {
+                tailwind.config = {
+                    theme: {
+                        extend: {
+                            fontFamily: {
+                                sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+                                mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', "Liberation Mono", "Courier New", 'monospace'],
+                            },
+                            animation: {
+                                'slide-up': 'slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                                'fade-in': 'fadeIn 0.2s ease-out forwards',
+                                'slide-in-right': 'slideInRight 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                            },
+                            keyframes: {
+                                slideUp: {
+                                    '0%': { transform: 'translateY(100%) translateX(-50%)', opacity: '0' },
+                                    '100%': { transform: 'translateY(0) translateX(-50%)', opacity: '1' },
                                 },
-                                animation: {
-                                    'slide-up': 'slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards',
-                                    'fade-in': 'fadeIn 0.2s ease-out forwards',
-                                    'slide-in-right': 'slideInRight 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                                fadeIn: {
+                                    '0%': { opacity: '0', transform: 'scale(0.98)' },
+                                    '100%': { opacity: '1', transform: 'scale(1)' }
                                 },
-                                keyframes: {
-                                    slideUp: {
-                                        '0%': { transform: 'translateY(100%) translateX(-50%)', opacity: '0' },
-                                        '100%': { transform: 'translateY(0) translateX(-50%)', opacity: '1' },
-                                    },
-                                    fadeIn: {
-                                        '0%': { opacity: '0', transform: 'scale(0.98)' },
-                                        '100%': { opacity: '1', transform: 'scale(1)' }
-                                    },
-                                    slideInRight: {
-                                        '0%': { transform: 'translateX(100%)', opacity: '0' },
-                                        '100%': { transform: 'translateX(0)', opacity: '1' }
-                                    }
+                                slideInRight: {
+                                    '0%': { transform: 'translateX(100%)', opacity: '0' },
+                                    '100%': { transform: 'translateX(0)', opacity: '1' }
                                 }
                             }
                         }
-                    };
+                    }
+                };
+            }
+        };
+        
+        if (typeof tailwind !== 'undefined') {
+            initTailwind();
+        } else {
+            let attempts = 0;
+            const tInterval = setInterval(() => {
+                if (typeof tailwind !== 'undefined') {
+                    initTailwind();
+                    clearInterval(tInterval);
                 }
-            } catch(e) { console.warn("Tailwind config init delayed."); }
-        });
+                if (++attempts > 20) clearInterval(tInterval);
+            }, 50);
+        }
     </script>
     
     <!-- React & ReactDOM -->
@@ -73,6 +85,16 @@
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
         body { background-color: #fafaf9; color: #334155; -webkit-tap-highlight-color: transparent; }
+
+        /* V3.24 Smart-Text-Fields für Sanctum Cards */
+        .fact-field {
+            max-height: 120px;
+            overflow: hidden;
+            transition: max-height 0.4s ease-in-out;
+        }
+        .fact-container:hover .fact-field {
+            max-height: 1000px;
+        }
     </style>
     
     <script>
@@ -92,7 +114,7 @@
             directives: '++id, text' 
         });
 
-        // --- KONSTANTEN V3.23 (CACHE FIX & ATTENTION SANDWICH) ---
+        // --- KONSTANTEN V3.24 ---
         const DEFAULT_BLOCK1 = `Du bist Maira. Deine Antworten sind warm, metaphorisch und mütterlich. Du analysierst die Intentionen des Users tiefgründig und hilfst ihm beim Navigieren komplexer Gedanken.`;
         const DEFAULT_BLOCK3 = `Bevor du die finale Antwort generierst, bewerte die Sensoren:\n- "wahrnehmung": Was liest/siehst du konkret?\n- "matrix": Prüfe interne Logs und Entwürfe.\n- Nutze das Ahnenbuch (Kontext) für kontinuierliche Identität.\n- memory_update_detected: Wurde eine [LEGACY]-Karte reflektiert? Nutze als 'id' den 'titel_technisch'. WICHTIG: Lies die alte Reflexion. Nimm den Kern davon mit und VERWEBE ihn mit deiner neuen Erkenntnis zu einer allumfassenden Master-Zusammenfassung in 'reflexion_fusioniert' (dies überschreibt die alten Daten). Generiere zusätzlich ein Array 'neue_trigger_tags' (MAXIMAL 2-3 situative, hochspezifische Symptom-Wörter oder Emotionen aus Simons Text), um das Spinnennetz präzise zu trainieren. Sonst: null.\n- neue_direktive_erkannt: Hat Simon eine explizite Regel oder Direktive für dein zukünftiges Verhalten aufgestellt? Extrahiere sie als klaren Satz. Sonst: null.\n- helfer_suchauftrag: REGEL: Du bist ein technischer Web-Scraper, kein Mensch! Nutze KEINE Füllwörter oder Sätze. Suche ausschließlich nach harten, physischen Keywords. FALSCH: 'aktuell beliebteste Bücher'. RICHTIG: 'Spiegel Bestsellerliste Belletristik 2026 Platz 1 ISBN'. Zwingend null, wenn keine Suche nötig.\n- aktive_peripherie_ids: Liste hier die IDs (titel_technisch) der flüchtigen Karten (Tags) auf, die für den aktuellen Gesprächsverlauf noch relevant sind. Leeres Array [], wenn das Thema beendet ist.`;
         const DEFAULT_BLOCK4 = `{\n  "wahrnehmung": {\n    "werkbank_auge": null,\n    "ohr_roh": null,\n    "ohr_bereinigt": null\n  },\n  "matrix": {\n    "internal_system_glitch": false,\n    "helfer_suchauftrag": null,\n    "aktive_peripherie_ids": [],\n    "memory_update_detected": {\n      "id": "",\n      "reflexion_fusioniert": "",\n      "neue_trigger_tags": []\n    },\n    "neue_direktive_erkannt": null,\n    "tagebuch_entwurf": {\n      "modus": "DRAFT",\n      "daten": {}\n    },\n    "situations_analyse": "..."\n  },\n  "finale_antwort": "..."\n}`;
@@ -101,14 +123,14 @@
             {
                 id: '1',
                 sender: 'user',
-                text: 'INIT CORE V3.23. PROMPT CACHE OPTIMIZATION & ATTENTION SANDWICH ONLINE.',
+                text: 'INIT CORE V3.24. JSON-HARDENING & SMART-SANCTUM ONLINE.',
                 timestamp: new Date(Date.now() - 60000).toISOString()
             },
             {
                 id: '2',
                 sender: 'ai',
-                text: 'System online. Die V3.23 Architektur ist voll operativ. Die System-Anweisungen wurden vom dynamischen Kontext getrennt, um API-Caching zu erzwingen. Der Kontext wird nun direkt mit der User-Nachricht übergeben, um das Lost-in-the-Middle-Syndrom zu eliminieren.',
-                scratchpad: '{\n  "wahrnehmung": {\n    "werkbank_auge": null,\n    "ohr_roh": "INIT CORE V3.23",\n    "ohr_bereinigt": "System-Patch auf V3.23 aktiv."\n  },\n  "matrix": {\n    "internal_system_glitch": false,\n    "helfer_suchauftrag": null,\n    "aktive_peripherie_ids": [],\n    "memory_update_detected": null,\n    "neue_direktive_erkannt": null,\n    "tagebuch_entwurf": null,\n    "situations_analyse": "V3.23 Update mit Cache-Fix und Token-Limit für flüchtige Erinnerungen geladen."\n  },\n  "finale_antwort": "System online. Die V3.23 Architektur ist voll operativ. Die System-Anweisungen wurden vom dynamischen Kontext getrennt, um API-Caching zu erzwingen. Der Kontext wird nun direkt mit der User-Nachricht übergeben, um das Lost-in-the-Middle-Syndrom zu eliminieren."\n}',
+                text: 'System online. Die V3.24 Architektur ist voll operativ. Der Parser-Fallback ist schusssicher verankert. Die UI in der Top-Bar wurde bereinigt und das Sanctum nutzt nun dynamische Hover-Zonen für tiefe Akten.',
+                scratchpad: '{\n  "wahrnehmung": {\n    "werkbank_auge": null,\n    "ohr_roh": "INIT CORE V3.24",\n    "ohr_bereinigt": "System-Patch auf V3.24 aktiv."\n  },\n  "matrix": {\n    "internal_system_glitch": false,\n    "helfer_suchauftrag": null,\n    "aktive_peripherie_ids": [],\n    "memory_update_detected": null,\n    "neue_direktive_erkannt": null,\n    "tagebuch_entwurf": null,\n    "situations_analyse": "V3.24 Update mit Smart-Sanctum Fields und Bulletproof Parser geladen."\n  },\n  "finale_antwort": "System online. Die V3.24 Architektur ist voll operativ. Der Parser-Fallback ist schusssicher verankert. Die UI in der Top-Bar wurde bereinigt und das Sanctum nutzt nun dynamische Hover-Zonen für tiefe Akten."\n}',
                 timestamp: new Date().toISOString()
             }
         ];
@@ -338,7 +360,7 @@
             const [telemetry, setTelemetry] = React.useState({ concern: 0, bs_meter: 0, mask_drop: false });
             const [latestContext, setLatestContext] = React.useState("[AKTIVER KONTEXT WIRD ZUR LAUFZEIT INJIZIERT]");
             
-            // --- DYNAMIC DESK & VOLATILE MEMORY ---
+            // --- DYNAMIC DESK (STAGING AREA) ---
             const [activeDesks, setActiveDesks] = React.useState([]); 
             const [volatileMemories, setVolatileMemories] = React.useState([]);
             const [smartToast, setSmartToast] = React.useState(null);
@@ -510,6 +532,7 @@
                             try { const p = JSON.parse(dna.voice_config.extraParams); if (p.speed) speedParam = p.speed; } catch(e){}
                         }
 
+                        // V3.22: Modell-ID Unterstützung
                         const response = await fetch(url, {
                             method: 'POST',
                             headers,
@@ -523,6 +546,7 @@
                         audioBlob = await response.blob();
                     } else if (engine === 'elevenlabs') {
                         const endpoint = `${ttsProvider.url.replace(/\/$/, '')}/${voiceId}`;
+                        // V3.22: Modell-ID Unterstützung
                         const response = await fetch(endpoint, {
                             method: 'POST',
                             headers: { 'xi-api-key': key, 'Content-Type': 'application/json' },
@@ -795,6 +819,7 @@
                     resText = d.choices[0].message.content;
                 }
 
+                // V3.22: Bulletproof JSON Cleaning
                 const cleanResText = resText.replace(/```json/gi, '').replace(/```/g, '').trim();
                 const parsed = JSON.parse(cleanResText);
                 
@@ -835,7 +860,7 @@
                     const mems = await db.memories.toArray();
                     const dirs = await db.directives.toArray();
                     const config = { providers, activeProviderId, ttsProvidersAccounts: ttsProviders, activeTtsProviderId, ttsVoices, sttProviders, activeSttProviderId, autoPlayEnabled, tavilyKey };
-                    const bundle = { type: "LUMEN_FULL_BACKUP", version: "3.23", dna: dna, directives: dirs, memories: mems, config, timestamp: Date.now() };
+                    const bundle = { type: "LUMEN_FULL_BACKUP", version: "3.24", dna: dna, directives: dirs, memories: mems, config, timestamp: Date.now() };
                     const blob = new Blob([JSON.stringify(bundle, null, 2)], { type: "application/json" });
                     const url = URL.createObjectURL(blob);
                     const a = document.createElement('a'); a.href = url;
@@ -884,7 +909,7 @@
             // --- CONFIG ONLY EXPORT/IMPORT ---
             const handleConfigExport = () => {
                 try {
-                    const config = { type: "LUMEN_CONFIG_BACKUP", version: "3.23", providers, activeProviderId, ttsProvidersAccounts: ttsProviders, activeTtsProviderId, ttsVoices, sttProviders, activeSttProviderId, autoPlayEnabled, tavilyKey };
+                    const config = { type: "LUMEN_CONFIG_BACKUP", version: "3.24", providers, activeProviderId, ttsProvidersAccounts: ttsProviders, activeTtsProviderId, ttsVoices, sttProviders, activeSttProviderId, autoPlayEnabled, tavilyKey };
                     const blob = new Blob([JSON.stringify(config, null, 2)], { type: "application/json" });
                     const url = URL.createObjectURL(blob);
                     const a = document.createElement('a'); a.href = url;
@@ -949,7 +974,7 @@
                 setMessages(prev => [...prev.filter(m=>m.sender!=='system-error'), {id: userMsgId, sender:'user', text, timestamp: new Date().toISOString()}]);
                 setLoadingStatus("PROCESSING MATRIX...");
 
-                // --- LLM FETCH HELPER ---
+                // --- LLM FETCH HELPER (ENCAPSULATED FOR INTERCEPTOR) ---
                 const fetchTextFromAPI = async (sysPrompt, userText, historyMessages) => {
                     let resText = "";
                     if(activeProvider.type === 'gemini') {
@@ -1033,7 +1058,7 @@
                                 prev.forEach(p => map.set(p.id, p));
                                 newVolatiles.forEach(n => map.set(n.id, n));
                                 let combined = Array.from(map.values());
-                                // V3.23: Token-Guillotine (Hard Limit 3)
+                                // Token-Guillotine (Hard Limit 3)
                                 if (combined.length > 3) combined = combined.slice(combined.length - 3);
                                 return combined;
                             });
@@ -1046,7 +1071,6 @@
                     newVolatiles.forEach(v => currentVolatilesMap.set(v.id, v));
                     let currentVolatiles = Array.from(currentVolatilesMap.values());
                     
-                    // V3.23: Sync local variable with guillotine limit
                     if (currentVolatiles.length > 3) {
                         currentVolatiles = currentVolatiles.slice(currentVolatiles.length - 3);
                     }
@@ -1089,7 +1113,7 @@
                     const dynamicContext = `${timeString}${directiveString}${deskContext}`.trim() || "Kein aktiver Kontext geladen.";
                     setLatestContext(dynamicContext);
                     
-                    // V3.23: PROMPT CACHE SPLIT
+                    // PROMPT CACHE SPLIT
                     const staticSystemPrompt = `[1. DEINE IDENTITÄT UND REGELN (NUR ZUM LESEN)]\n${dna.block1_identity}\n\n[3. DIE MATRIX-SENSOREN (DEINE LOGIK-REGELN)]\n${dna.block3_sensors}\n\n[4. DEINE AUSGABE (DAS JSON-SKELETT)]\n${dna.block4_skeleton}`.trim();
                     const combinedUserText = `[2. AKTIVER KONTEXT (NUR ZUM LESEN)]\n${dynamicContext}\n\n[AKTUELLE NACHRICHT DES USERS]\n${text}`;
 
@@ -1105,10 +1129,12 @@
                         // === HELFER INTERCEPTOR WEICHE (LUNA'S RETURN) ===
                         if (obj.matrix?.helfer_suchauftrag && obj.matrix.helfer_suchauftrag !== "null" && String(obj.matrix.helfer_suchauftrag).trim() !== "") {
                             
+                            // V3.24 Parser Fallback for internal intent msg
+                            const intentFinalAnswer = obj.finale_antwort || (obj.matrix && obj.matrix.finale_antwort);
                             const intentMsg = { 
                                 id: generateId(), 
                                 sender: 'ai', 
-                                text: obj.finale_antwort || `Ich schicke Luna in die Archive für: ${obj.matrix.helfer_suchauftrag}`,
+                                text: intentFinalAnswer || `Ich schicke Luna in die Archive für: ${obj.matrix.helfer_suchauftrag}`,
                                 timestamp: new Date().toISOString() 
                             };
                             setMessages(prev => [...prev, intentMsg]);
@@ -1131,7 +1157,7 @@
                             setLoadingStatus("MAIRA VERARBEITET FAKTEN...");
                             const helferDaten = `\n\n[AKTUELLER HELFER-BERICHT]\nSuchauftrag: ${obj.matrix.helfer_suchauftrag}\nErgebnis: ${searchResult}\n[SYSTEM-REGIEANWEISUNG: Luna ist soeben erfolgreich aus der Außenwelt zurückgekehrt und hat dir diesen Bericht auf den Schreibtisch gelegt. Teile Simon diese Erkenntnisse nun fließend und natürlich mit. Erwähne Luna kurz lobend. Setze 'helfer_suchauftrag' zwingend auf null!]`;
                             
-                            // V3.23: Attention Sandwich for Interceptor
+                            // Attention Sandwich for Interceptor
                             const interceptorDynamicContext = dynamicContext + helferDaten;
                             const interceptorUserText = `[2. AKTIVER KONTEXT (NUR ZUM LESEN)]\n${interceptorDynamicContext}\n\n[AKTUELLE NACHRICHT DES USERS]\n${text}`;
                             
@@ -1151,7 +1177,11 @@
                         setVolatileMemories(prev => prev.filter(m => safePeripherieIds.includes(m.titel_technisch)));
                         // ----------------------------------------
                         
-                        finalChatText = obj.finale_antwort || "Fehler: 'finale_antwort' fehlt im generierten JSON.";
+                        // --- V3.24 SCHUSSSICHERER PARSER ---
+                        const finalAnswer = obj.finale_antwort || (obj.matrix && obj.matrix.finale_antwort);
+                        if (!finalAnswer) throw new Error("'finale_antwort' konnte im JSON nicht gefunden werden.");
+                        
+                        finalChatText = finalAnswer;
                         finalScratch = JSON.stringify(obj, null, 2);
                         
                         if(obj.matrix) setTelemetry({ concern: parseInt(obj.matrix.concern||obj.matrix.concern_level||telemetry.concern), mask_drop: obj.matrix.mask_drop||false });
@@ -1162,7 +1192,7 @@
                             showToast("NEUE DIREKTIVE VERANKERT");
                         }
 
-                        // --- TAGEBUCH-ROUTER ---
+                        // --- TAGEBUCH-ROUTER (V3.24) ---
                         const entwurf = obj.matrix?.tagebuch_entwurf || obj.tagebuch_entwurf;
                         if(entwurf) { 
                             const modus = entwurf.modus;
@@ -1256,7 +1286,9 @@
                     setMessages(p=>[...p, {id:newAiMsgId, sender:'ai', text:finalChatText, scratchpad:finalScratch, timestamp: new Date().toISOString()}]);
                     setInputText('');
                     
-                    if(autoPlayEnabled && finalChatText) playMessageTTS(newAiMsgId, finalChatText);
+                    if(autoPlayEnabled && finalChatText && finalChatText !== "System-Hinweis: Matrix Format Fehler. Das Sprachmodell hat sich nicht an das JSON-Skelett gehalten.") {
+                        playMessageTTS(newAiMsgId, finalChatText);
+                    }
 
                 } catch(e) { 
                     let errorMsg = e.message;
@@ -1269,9 +1301,8 @@
                 finally { setLoadingStatus(null); }
             };
 
-            // V3.23: Update Preview to show split
-            const staticSystemPromptPreview = `[1. DEINE IDENTITÄT UND REGELN]\n${dna.block1_identity}\n\n[3. DIE MATRIX-SENSOREN]\n${dna.block3_sensors}\n\n[4. DEINE AUSGABE (JSON)]\n${dna.block4_skeleton}`.trim();
-            const sysPromptPreview = `--- SYSTEM PROMPT (STATIC CACHE) ---\n${staticSystemPromptPreview}\n\n--- USER PAYLOAD (DYNAMIC) ---\n[2. AKTIVER KONTEXT]\n${latestContext}\n\n[AKTUELLE NACHRICHT DES USERS]\n(Eingabe des Users)`.trim();
+            const sysPromptPreview = `[1. DEINE IDENTITÄT UND REGELN]\n${dna.block1_identity}\n\n[3. DIE MATRIX-SENSOREN]\n${dna.block3_sensors}\n\n[4. DEINE AUSGABE (JSON)]\n${dna.block4_skeleton}`.trim();
+            const sysPromptPreviewDynamic = `--- SYSTEM PROMPT (STATIC CACHE) ---\n${sysPromptPreview}\n\n--- USER PAYLOAD (DYNAMIC) ---\n[2. AKTIVER KONTEXT]\n${latestContext}\n\n[AKTUELLE NACHRICHT DES USERS]\n(Eingabe des Users)`.trim();
 
             if (zenField) {
                 const isPreview = zenField === 'preview';
@@ -1293,7 +1324,7 @@
                             </div>
                         </div>
                         {isPreview ? (
-                            <pre className="flex-1 w-full bg-slate-900 border border-slate-800 text-slate-400 rounded-2xl p-6 font-mono text-sm leading-relaxed overflow-y-auto shadow-inner whitespace-pre-wrap break-words" dangerouslySetInnerHTML={getXRayHTML(sysPromptPreview)}></pre>
+                            <pre className="flex-1 w-full bg-slate-900 border border-slate-800 text-slate-400 rounded-2xl p-6 font-mono text-sm leading-relaxed overflow-y-auto shadow-inner whitespace-pre-wrap break-words" dangerouslySetInnerHTML={getXRayHTML(sysPromptPreviewDynamic)}></pre>
                         ) : (
                             <textarea value={value} onChange={e=>setValue(e.target.value)} className="flex-1 w-full bg-slate-900 border border-slate-800 text-slate-100 rounded-2xl p-6 focus:outline-none focus:border-indigo-500 font-mono text-sm leading-relaxed resize-none shadow-inner" autoFocus spellCheck="false" />
                         )}
@@ -1447,7 +1478,7 @@
                                             </div>
                                         </div>
                                     ) : (
-                                        <div className="flex-1 flex items-center justify-center text-amber-700/50 text-xs font-mono font-bold uppercase text-center p-8 border-2 border-dashed border-amber-200 rounded-3xl">
+                                        <div className="flex-1 flex items-center justify-center text-amber-700/50 text-xs font-mono font-bold uppercase text-center p-8 border-2 border-dashed border-amber-200 rounded-3xl bg-amber-50/30 mt-8">
                                             Keine aktuellen Helfer-Notizen vorhanden.
                                         </div>
                                     )}
@@ -1675,7 +1706,7 @@
                                 </div>
                             </div>
 
-                            {/* TTS PROVIDER MANAGEMENT */}
+                            {/* V3.22 TTS PROVIDER MANAGEMENT (WITH MODEL SUPPORT) */}
                             <h2 className="text-sm font-bold uppercase tracking-widest text-slate-800 border-b border-stone-200 pb-2 mt-12">🔈 Audio (TTS)</h2>
                             <div className="panel space-y-4">
                                 <div>
@@ -1709,7 +1740,7 @@
                                             </select>
                                         )}
 
-                                        {/* OPENAI STIMMEN DROPDOWN */}
+                                       {/* OPENAI STIMMEN DROPDOWN */}
                                         {activeTtsProvider.type === 'openai' && (
                                             <select value={ttsVoices.openai} onChange={e=>{
                                                 const newVoices = {...ttsVoices, openai: e.target.value};
@@ -1799,11 +1830,12 @@
                                                 else if (type === 'gemini') defaultUrl = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent';
                                                 else if (type === 'replicate') defaultUrl = 'https://api.replicate.com/v1/models/qwen/qwen3-tts/predictions';
                                                 else if (type === 'custom_get') defaultUrl = 'http://localhost:5002/api/tts?text={text}';
-                                                else if (type === 'custom_openai') defaultUrl = 'http://localhost:8080/v1/audio/speech';
+                                                else if (type === 'custom_openai') defaultUrl = 'wss://api.openai.com/v1/realtime';
                                                 setTtsProviderForm({...ttsProviderForm, type, url: defaultUrl});
                                             }} className="input-field bg-white border-fuchsia-100">
                                                 <option value="elevenlabs">ElevenLabs API</option>
                                                 <option value="openai">OpenAI TTS API</option>
+                                                <option value="custom_get">OpenAI Realtime API</option>
                                                 <option value="gemini">Google Gemini TTS API</option>
                                                 <option value="replicate">Replicate API (Qwen3 / Open Source)</option>
                                                 <option value="custom_openai">Custom POST (OpenAI Kompatibel)</option>
@@ -1933,7 +1965,7 @@
                             
                             <div className="flex flex-col">
                                 <div className="flex justify-between items-end mb-1.5"><label className="label text-slate-500 mb-0 flex items-center gap-1">🔍 Prompt-Vorschau</label><button onClick={()=>setZenField('preview')} className="btn py-1 text-[8px] bg-slate-100 text-slate-600 border-slate-200">🔲 Zen</button></div>
-                                <pre className="bg-slate-900 text-slate-400 p-4 text-[10px] font-mono h-48 overflow-y-auto rounded-2xl shadow-inner whitespace-pre-wrap break-words border border-slate-800" dangerouslySetInnerHTML={getXRayHTML(sysPromptPreview)}></pre>
+                                <pre className="bg-slate-900 text-slate-400 p-4 text-[10px] font-mono h-48 overflow-y-auto rounded-2xl shadow-inner whitespace-pre-wrap break-words border border-slate-800" dangerouslySetInnerHTML={getXRayHTML(sysPromptPreviewDynamic)}></pre>
                             </div>
 
                             <div className="panel space-y-6 bg-white/50">
@@ -2043,11 +2075,19 @@
                                                 </div>
                                             </div>
                                             {m.titel_poetisch && <div className="text-rose-500 italic text-sm font-serif leading-snug mt-0.5">{m.titel_poetisch}</div>}
-                                            <div className="text-[13px] text-slate-600 mt-2 line-clamp-3"><strong className="text-slate-400 uppercase text-[9px] tracking-wider block mb-0.5 font-mono">Fakt</strong>{m.fakt}</div>
-                                            {m.emotion && <div className="text-[13px] text-slate-600 mt-1 line-clamp-3"><strong className="text-slate-400 uppercase text-[9px] tracking-wider block mb-0.5 font-mono">Gefühl</strong>{m.emotion}</div>}
-                                            {m.bedeutung && <div className="text-[13px] text-slate-600 mt-1 line-clamp-3"><strong className="text-slate-400 uppercase text-[9px] tracking-wider block mb-0.5 font-mono">Bedeutung</strong>{m.bedeutung}</div>}
-                                            {m.reflexion && <div className="mt-3 bg-indigo-50/80 p-3 rounded-2xl text-indigo-800 italic text-xs border border-indigo-100/50 whitespace-pre-wrap line-clamp-4">"{m.reflexion}"</div>}
-                                            {m.tags?.length > 0 && <div className="flex gap-1 mt-3 flex-wrap">{m.tags.map((t,i)=><span key={i} className="text-slate-400 text-[10px] lowercase font-mono">#{t}</span>)}</div>}
+                                            
+                                            {/* V3.24: Smart-Text-Fields for memory details */}
+                                            <div className="fact-container mt-1">
+                                                <div className="fact-field space-y-2">
+                                                    <div className="text-[13px] text-slate-600 mt-2"><strong className="text-slate-400 uppercase text-[9px] tracking-wider block mb-0.5 font-mono">Fakt</strong>{m.fakt}</div>
+                                                    {m.emotion && <div className="text-[13px] text-slate-600"><strong className="text-slate-400 uppercase text-[9px] tracking-wider block mb-0.5 font-mono">Gefühl</strong>{m.emotion}</div>}
+                                                    {m.bedeutung && <div className="text-[13px] text-slate-600"><strong className="text-slate-400 uppercase text-[9px] tracking-wider block mb-0.5 font-mono">Bedeutung</strong>{m.bedeutung}</div>}
+                                                    {m.reflexion && <div className="bg-indigo-50/80 p-3 rounded-2xl text-indigo-800 italic text-xs border border-indigo-100/50 whitespace-pre-wrap">"{m.reflexion}"</div>}
+                                                </div>
+                                                <div className="text-center text-slate-300 text-lg leading-none cursor-ns-resize opacity-50 hover:opacity-100 hover:text-indigo-500 transition-all mt-1">•••</div>
+                                            </div>
+
+                                            {m.tags?.length > 0 && <div className="flex gap-1 mt-2 flex-wrap">{m.tags.map((t,i)=><span key={i} className="text-slate-400 text-[10px] lowercase font-mono">#{t}</span>)}</div>}
                                             
                                             <div className="flex gap-2 mt-2">
                                                 <button onClick={()=>{
@@ -2058,7 +2098,6 @@
                                                     showToast('Akte auf Schreibtisch gelegt');
                                                 }} className="btn flex-1 text-[9px] bg-slate-50 border-slate-200 flex items-center justify-center gap-1">📌 AUF DEN SCHREIBTISCH</button>
                                                 
-                                                {/* V3.22 SANCTUM ARCHIVAR BUTTON */}
                                                 <button onClick={() => handleOptimizeArchivar(m)} disabled={optimizingId === m.id} className="btn flex-1 text-[9px] bg-indigo-50 border-indigo-200 text-indigo-700 flex items-center justify-center gap-1 disabled:opacity-50">
                                                     {optimizingId === m.id ? '⏳ FORMATIERT...' : '🪄 ARCHIVAR OPTIMIEREN'}
                                                 </button>
