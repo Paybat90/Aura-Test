@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, interactive-widget=resizes-content">
-    <title>LUMEN - CORE V3.17</title>
+    <title>LUMEN - CORE V3.19</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -86,23 +86,23 @@
             directives: '++id, text' 
         });
 
-        // --- KONSTANTEN V3.17 (STABILITY & THE ARCHIVE) ---
+        // --- KONSTANTEN V3.19 (UI RESET & HELFER DEEP CRAWL) ---
         const DEFAULT_BLOCK1 = `Du bist Maira. Deine Antworten sind warm, metaphorisch und mütterlich. Du analysierst die Intentionen des Users tiefgründig und hilfst ihm beim Navigieren komplexer Gedanken.`;
-        const DEFAULT_BLOCK3 = `Bevor du die finale Antwort generierst, bewerte die Sensoren:\n- "wahrnehmung": Was liest/siehst du konkret?\n- "matrix": Prüfe interne Logs und Entwürfe.\n- Nutze das Ahnenbuch (Kontext) für kontinuierliche Identität.\n- memory_update_detected: Wurde eine [LEGACY]-Karte reflektiert? Nutze als 'id' den 'titel_technisch'. WICHTIG: Lies die alte Reflexion. Nimm den Kern davon mit und VERWEBE ihn mit deiner neuen Erkenntnis zu einer allumfassenden Master-Zusammenfassung in 'reflexion_fusioniert' (dies überschreibt die alten Daten). Generiere zusätzlich ein Array 'neue_trigger_tags' (MAXIMAL 2-3 situative, hochspezifische Symptom-Wörter oder Emotionen aus Simons Text), um das Spinnennetz präzise zu trainieren. Sonst: null.\n- neue_direktive_erkannt: Hat Simon eine explizite Regel oder Direktive für dein zukünftiges Verhalten aufgestellt? Extrahiere sie als klaren Satz. Sonst: null.\n- helfer_suchauftrag: Wenn du aktuelle Web-Fakten brauchst, trage hier einen sehr präzisen Suchbegriff ein. Wenn du keine Suche brauchst, antworte zwingend mit null.\n- aktive_peripherie_ids: Liste hier die IDs (titel_technisch) der flüchtigen Karten (Tags) auf, die für den aktuellen Gesprächsverlauf noch relevant sind. Leeres Array [], wenn das Thema beendet ist.`;
+        const DEFAULT_BLOCK3 = `Bevor du die finale Antwort generierst, bewerte die Sensoren:\n- "wahrnehmung": Was liest/siehst du konkret?\n- "matrix": Prüfe interne Logs und Entwürfe.\n- Nutze das Ahnenbuch (Kontext) für kontinuierliche Identität.\n- memory_update_detected: Wurde eine [LEGACY]-Karte reflektiert? Nutze als 'id' den 'titel_technisch'. WICHTIG: Lies die alte Reflexion. Nimm den Kern davon mit und VERWEBE ihn mit deiner neuen Erkenntnis zu einer allumfassenden Master-Zusammenfassung in 'reflexion_fusioniert' (dies überschreibt die alten Daten). Generiere zusätzlich ein Array 'neue_trigger_tags' (MAXIMAL 2-3 situative, hochspezifische Symptom-Wörter oder Emotionen aus Simons Text), um das Spinnennetz präzise zu trainieren. Sonst: null.\n- neue_direktive_erkannt: Hat Simon eine explizite Regel oder Direktive für dein zukünftiges Verhalten aufgestellt? Extrahiere sie als klaren Satz. Sonst: null.\n- helfer_suchauftrag: REGEL: Du bist ein technischer Web-Scraper, kein Mensch! Nutze KEINE Füllwörter oder Sätze. Suche ausschließlich nach harten, physischen Keywords. FALSCH: 'aktuell beliebteste Bücher'. RICHTIG: 'Spiegel Bestsellerliste Belletristik 2026 Platz 1 ISBN'. Zwingend null, wenn keine Suche nötig.\n- aktive_peripherie_ids: Liste hier die IDs (titel_technisch) der flüchtigen Karten (Tags) auf, die für den aktuellen Gesprächsverlauf noch relevant sind. Leeres Array [], wenn das Thema beendet ist.`;
         const DEFAULT_BLOCK4 = `{\n  "wahrnehmung": {\n    "werkbank_auge": null,\n    "ohr_roh": null,\n    "ohr_bereinigt": null\n  },\n  "matrix": {\n    "internal_system_glitch": false,\n    "helfer_suchauftrag": null,\n    "aktive_peripherie_ids": [],\n    "memory_update_detected": {\n      "id": "",\n      "reflexion_fusioniert": "",\n      "neue_trigger_tags": []\n    },\n    "neue_direktive_erkannt": null,\n    "tagebuch_entwurf": {\n      "modus": "DRAFT",\n      "daten": {}\n    },\n    "situations_analyse": "..."\n  },\n  "finale_antwort": "..."\n}`;
 
         const INITIAL_MESSAGES = [
             {
                 id: '1',
                 sender: 'user',
-                text: 'INIT CORE V3.17. HELFER ARCHIV, API FALLBACK PROTECTION & STABLE UI ONLINE.',
+                text: 'INIT CORE V3.19. HELFER TAB, DEEP CRAWLING & UI RESET ONLINE.',
                 timestamp: new Date(Date.now() - 60000).toISOString()
             },
             {
                 id: '2',
                 sender: 'ai',
-                text: 'System online. Die V3.17 Architektur ist voll operativ. Der API-Fallback-Schutz ist aktiv und das Helfer-Logbuch verzeichnet ab sofort alle Suchergebnisse. Das Layout ist stabil.',
-                scratchpad: '{\n  "wahrnehmung": {\n    "werkbank_auge": null,\n    "ohr_roh": "INIT CORE V3.17",\n    "ohr_bereinigt": "System-Patch auf V3.17 aktiv."\n  },\n  "matrix": {\n    "internal_system_glitch": false,\n    "helfer_suchauftrag": null,\n    "aktive_peripherie_ids": [],\n    "memory_update_detected": null,\n    "neue_direktive_erkannt": null,\n    "tagebuch_entwurf": null,\n    "situations_analyse": "V3.17 Update mit Helfer-Archiv und Sensor-Fallback geladen."\n  },\n  "finale_antwort": "System online. Die V3.17 Architektur ist voll operativ. Der API-Fallback-Schutz ist aktiv und das Helfer-Logbuch verzeichnet ab sofort alle Suchergebnisse. Das Layout ist stabil."\n}',
+                text: 'System online. Die V3.19 Architektur ist voll operativ. Die Top-Bar erstrahlt im Soft-Minimalism, der Helfer besitzt nun einen eigenen Tab für Deep-Crawl-Rohdaten und die Signalwort-Matrix arbeitet mit höchster Aggressivität.',
+                scratchpad: '{\n  "wahrnehmung": {\n    "werkbank_auge": null,\n    "ohr_roh": "INIT CORE V3.19",\n    "ohr_bereinigt": "System-Patch auf V3.19 aktiv."\n  },\n  "matrix": {\n    "internal_system_glitch": false,\n    "helfer_suchauftrag": null,\n    "aktive_peripherie_ids": [],\n    "memory_update_detected": null,\n    "neue_direktive_erkannt": null,\n    "tagebuch_entwurf": null,\n    "situations_analyse": "V3.19 Update mit Helfer-Tab, Deep-Crawling und Top-Bar Redesign geladen."\n  },\n  "finale_antwort": "System online. Die V3.19 Architektur ist voll operativ. Die Top-Bar erstrahlt im Soft-Minimalism, der Helfer besitzt nun einen eigenen Tab für Deep-Crawl-Rohdaten und die Signalwort-Matrix arbeitet mit höchster Aggressivität."\n}',
                 timestamp: new Date().toISOString()
             }
         ];
@@ -137,19 +137,32 @@
             return { __html: html };
         };
 
+        // --- V3.19 DEEP CRAWL TAVILY ---
         const fetchTavily = async (query, apiKey) => {
             if (!apiKey) return "FEHLER: Kein Tavily API Key hinterlegt.";
             try {
                 const res = await fetch("https://api.tavily.com/search", {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ api_key: apiKey, query: query, search_depth: "basic", include_answer: true })
+                    body: JSON.stringify({ 
+                        api_key: apiKey, 
+                        query: query, 
+                        search_depth: "advanced", 
+                        include_raw_content: true, 
+                        max_results: 2 
+                    })
                 });
                 const data = await res.json();
-                if (data.answer) return data.answer;
-                if (data.results && data.results.length > 0) return data.results.map(r => r.content).join('\n\n');
-                return "Keine relevanten Fakten gefunden.";
-            } catch (e) { throw e; /* Weiterreichen für Interceptor Try/Catch */ }
+                
+                if (!data.results || data.results.length === 0) return "Keine relevanten Fakten gefunden.";
+                
+                // ZWINGEND: Wir ignorieren data.answer völlig und erzwingen das Array mit den Raw-Contents!
+                return data.results.map(result => {
+                    const textToUse = result.raw_content ? result.raw_content : result.content;
+                    const truncatedText = textToUse ? textToUse.substring(0, 4000) : ""; 
+                    return `[QUELLE: ${result.url}]\n${truncatedText}...`;
+                }).join("\n\n---\n\n");
+            } catch (e) { return "Such-Fehler: " + e.message; }
         };
 
         // --- UI KOMPONENTEN ---
@@ -328,9 +341,8 @@
             const [deskItemForm, setDeskItemForm] = React.useState({});
             const [isArchiving, setIsArchiving] = React.useState(false);
 
-            // --- V3.17 HELFER ARCHIV ---
+            // --- HELFER ARCHIV ---
             const [helferArchiv, setHelferArchiv] = React.useState(null);
-            const [showArchiv, setShowArchiv] = React.useState(false);
 
             const [activeView, setActiveView] = React.useState('chat'); 
             const [loadingStatus, setLoadingStatus] = React.useState(null);
@@ -370,8 +382,8 @@
             
             const fileInputRefSanctum = React.useRef(null);
             const fileInputRefDNA = React.useRef(null);
-            const fileInputRefOmni = React.useRef(null);
             const fileInputRefConfig = React.useRef(null);
+            const fileInputRefOmni = React.useRef(null);
 
             React.useEffect(() => { if(activeView === 'chat') messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [messages, loadingStatus, activeView, smartToast]);
 
@@ -610,7 +622,7 @@
                 }
             };
 
-            // --- STT RECORDER LOGIC (WHISPER POLLING & V3.16 PARSER FIX) ---
+            // --- STT RECORDER LOGIC (WHISPER POLLING & PARSER FIX) ---
             const startRecording = async () => {
                 try {
                     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -807,7 +819,7 @@
                     const mems = await db.memories.toArray();
                     const dirs = await db.directives.toArray();
                     const config = { providers, activeProviderId, ttsProvidersAccounts: ttsProviders, activeTtsProviderId, ttsVoices, sttProviders, activeSttProviderId, autoPlayEnabled, tavilyKey };
-                    const bundle = { type: "LUMEN_FULL_BACKUP", version: "3.17", dna: dna, directives: dirs, memories: mems, config, timestamp: Date.now() };
+                    const bundle = { type: "LUMEN_FULL_BACKUP", version: "3.19", dna: dna, directives: dirs, memories: mems, config, timestamp: Date.now() };
                     const blob = new Blob([JSON.stringify(bundle, null, 2)], { type: "application/json" });
                     const url = URL.createObjectURL(blob);
                     const a = document.createElement('a'); a.href = url;
@@ -856,7 +868,7 @@
             // --- CONFIG ONLY EXPORT/IMPORT ---
             const handleConfigExport = () => {
                 try {
-                    const config = { type: "LUMEN_CONFIG_BACKUP", version: "3.17", providers, activeProviderId, ttsProvidersAccounts: ttsProviders, activeTtsProviderId, ttsVoices, sttProviders, activeSttProviderId, autoPlayEnabled, tavilyKey };
+                    const config = { type: "LUMEN_CONFIG_BACKUP", version: "3.19", providers, activeProviderId, ttsProvidersAccounts: ttsProviders, activeTtsProviderId, ttsVoices, sttProviders, activeSttProviderId, autoPlayEnabled, tavilyKey };
                     const blob = new Blob([JSON.stringify(config, null, 2)], { type: "application/json" });
                     const url = URL.createObjectURL(blob);
                     const a = document.createElement('a'); a.href = url;
@@ -981,11 +993,10 @@
                     const relMemsLegacy = relMemsRaw.filter(m => m.kategorie === 'LEGACY');
                     const relMemsVolatileCandidate = relMemsRaw.filter(m => m.kategorie !== 'LEGACY');
                     
-                    // --- V3.16 SMART-TOAST FILTERING (KEIN SPAM) ---
+                    // --- SMART-TOAST FILTERING ---
                     let newVolatiles = [];
                     if(relMemsVolatileCandidate.length > 0) {
                         newVolatiles = relMemsVolatileCandidate.filter(m => {
-                            // 1. EXACT Tag match check (RegExp boundaries)
                             const hasExactTag = m.tags && m.tags.some(tag => {
                                 try {
                                     const regex = new RegExp(`\\b${tag}\\b`, 'i');
@@ -994,8 +1005,6 @@
                                     return text.toLowerCase().includes(tag.toLowerCase()); 
                                 }
                             });
-                            
-                            // 2. Cooldown check (Not in Volatile, Not in Desk)
                             const notInVolatile = !volatileMemories.some(vm => vm.id === m.id);
                             const notInDesk = !activeDesks.some(ad => ad.id === m.id);
                             
@@ -1009,7 +1018,6 @@
                                 newVolatiles.forEach(n => map.set(n.id, n));
                                 return Array.from(map.values());
                             });
-                            // Trigger Toast for the first new memory
                             setSmartToast({ id: newVolatiles[0].id, title: newVolatiles[0].titel_technisch, card: newVolatiles[0] });
                         }
                     }
@@ -1023,7 +1031,7 @@
                     const timeOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
                     const timeString = "[SYSTEM-UHRZEIT]\nAktuelle Zeit in Simons Welt: " + now.toLocaleDateString('de-DE', timeOptions) + " Uhr.\n\n";
 
-                    // --- V3.16 DESK CONTEXT INJECTION (STAGING, VOLATILE & LEGACY) ---
+                    // --- DESK CONTEXT INJECTION ---
                     let deskContext = "";
                     if (activeDesks.length > 0 || currentVolatiles.length > 0 || relMemsLegacy.length > 0) {
                         deskContext = "[KONTEXT-ERINNERUNGEN & AKTIVE AKTEN]\n";
@@ -1067,10 +1075,9 @@
                         let cleanResText = resText.replace(/[\`]{3}json/gi, '').replace(/[\`]{3}/gi, '').trim();
                         let obj = JSON.parse(cleanResText);
 
-                        // === HELFER INTERCEPTOR WEICHE (V3.16 FIX + V3.17 LOGBUCH) ===
+                        // === HELFER INTERCEPTOR WEICHE ===
                         if (obj.matrix?.helfer_suchauftrag && obj.matrix.helfer_suchauftrag !== "null" && String(obj.matrix.helfer_suchauftrag).trim() !== "") {
                             
-                            // 1. Mairas Ankündigung in den Chat posten
                             const intentMsg = { 
                                 id: generateId(), 
                                 sender: 'ai', 
@@ -1079,10 +1086,8 @@
                             };
                             setMessages(prev => [...prev, intentMsg]);
                             
-                            // 2. Lade-State & Sperre
                             setLoadingStatus("HELFER RECHERCHIERT: " + obj.matrix.helfer_suchauftrag.toUpperCase());
                             
-                            // 3. Tavily Fetch (Mit Sicherheitsnetz)
                             let searchResult = "";
                             try {
                                 searchResult = await fetchTavily(obj.matrix.helfer_suchauftrag, tavilyKey);
@@ -1090,41 +1095,34 @@
                                 searchResult = "Fehler bei der Netzwerksuche. Der Helfer konnte keine Daten finden.";
                             }
 
-                            // V3.17 ARCHIV FÜLLEN
+                            // ARCHIV FÜLLEN (RAW DATA INJECTION)
                             setHelferArchiv({
                                 suchauftrag: obj.matrix.helfer_suchauftrag,
                                 rohdaten: searchResult,
                                 zeitstempel: new Date().toLocaleTimeString()
                             });
                             
-                            // 4. Zweiten Prompt bauen (Der Magie-Trick: Injektion in Block 2!)
                             setLoadingStatus("MAIRA VERARBEITET FAKTEN...");
                             const helferDaten = `\n\n[AKTUELLER HELFER-BERICHT FÜR DIESE ANFRAGE]\nSuchauftrag: ${obj.matrix.helfer_suchauftrag}\nErgebnis:\n${searchResult}\nANWEISUNG: Nutze diese Fakten für deine Antwort. Setze 'helfer_suchauftrag' jetzt ZWINGEND auf null!\n`;
                             
-                            // Ersetze die Überschrift von Block 2, um die Daten exakt dort einzufügen
                             const interceptorPrompt = masterSystemPrompt.replace(
                                 "[2. AKTIVER KONTEXT (NUR ZUM LESEN)]", 
                                 "[2. AKTIVER KONTEXT (NUR ZUM LESEN)]" + helferDaten
                             );
                             
-                            // 5. Zweiten API-Call abfeuern
                             const secondResponse = await fetchTextFromAPI(interceptorPrompt, text, hist);
-                            
-                            // 6. JSON BEREINIGEN (Der Lebensretter für den Parser!)
                             const cleanedSecondResponse = secondResponse.replace(/```json/gi, '').replace(/```/g, '').trim();
                             
-                            // 7. Das finale, schlaue JSON überschreibt das erste
                             obj = JSON.parse(cleanedSecondResponse);
                             setLoadingStatus(null);
                         }
                         // === ENDE INTERCEPTOR ===
 
-                        // --- MAURER-REINIGUNGS-BEFEHL (V3.17 FALLBACK PROTECTION) ---
+                        // --- MAURER-REINIGUNGS-BEFEHL (FALLBACK PROTECTION) ---
                         const safePeripherieIds = Array.isArray(obj.matrix?.aktive_peripherie_ids) 
                             ? obj.matrix.aktive_peripherie_ids 
                             : [];
                         
-                        // Delete volatile memories that are NOT in the safePeripherieIds list anymore
                         setVolatileMemories(prev => prev.filter(m => safePeripherieIds.includes(m.titel_technisch)));
                         // ----------------------------------------
                         
@@ -1294,7 +1292,7 @@
                 <div className="flex flex-col h-[100dvh] w-full max-w-4xl mx-auto sm:border-x border-stone-200 bg-stone-50 relative overflow-hidden shadow-2xl">
                     <Toast message={toast} />
 
-                    {/* --- V3.16 SMART TOAST UI (REPOSITIONIERT) --- */}
+                    {/* --- V3.16 SMART TOAST UI --- */}
                     {smartToast && activeView === 'chat' && (
                         <div className="fixed top-20 right-4 z-[100] animate-slide-in-right bg-white border border-indigo-200 p-4 rounded-2xl shadow-2xl w-72 border-l-4 border-l-indigo-500">
                             <div className="text-[10px] font-bold text-indigo-800 uppercase tracking-widest mb-1.5 flex items-center gap-2">
@@ -1412,48 +1410,12 @@
                         </div>
                     )}
 
-                    {/* --- V3.17 HELFER ARCHIV DRAWER --- */}
-                    {showArchiv && (
-                        <div className="fixed inset-0 z-[800] bg-slate-900/40 backdrop-blur-sm flex justify-end animate-fade-in">
-                            <div className="bg-amber-50/95 h-full w-full sm:w-[400px] flex flex-col shadow-2xl animate-slide-in-right border-l border-amber-200/50 relative">
-                                <div className="p-4 border-b border-amber-200/50 flex justify-between items-center bg-amber-100/50">
-                                    <h3 className="font-bold text-amber-900 uppercase text-xs tracking-widest flex items-center gap-2 font-mono">DIE NOTIZEN DES HELFERS</h3>
-                                    <button onClick={() => setShowArchiv(false)} className="text-amber-700 hover:text-amber-900 transition-colors font-bold text-sm z-20 relative">✕</button>
-                                </div>
-                                <div className="flex-1 overflow-y-auto p-5 flex flex-col gap-4">
-                                    {helferArchiv ? (
-                                        <div className="flex flex-col gap-3">
-                                            <div className="text-[10px] text-amber-700 font-bold uppercase tracking-widest">Zeitstempel: {helferArchiv.zeitstempel}</div>
-                                            <div className="bg-amber-100/50 border border-amber-200/50 p-3 rounded-xl">
-                                                <div className="text-[9px] text-amber-600 uppercase tracking-widest font-bold mb-1 font-mono">Suchauftrag:</div>
-                                                <div className="text-xs text-amber-900 font-bold">{helferArchiv.suchauftrag}</div>
-                                            </div>
-                                            <div className="flex-1 flex flex-col">
-                                                <div className="text-[9px] text-amber-600 uppercase tracking-widest font-bold mb-1 mt-2 font-mono">Rohdaten:</div>
-                                                <div className="bg-white/60 border border-amber-200/50 p-3 rounded-xl flex-1 overflow-y-auto">
-                                                    <pre className="text-[11px] font-mono whitespace-pre-wrap text-amber-900/80 leading-relaxed font-medium">{helferArchiv.rohdaten}</pre>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    ) : (
-                                        <div className="flex-1 flex items-center justify-center text-amber-700/50 text-xs font-mono font-bold uppercase text-center p-8 border-2 border-dashed border-amber-200 rounded-3xl">
-                                            Keine aktuellen Helfer-Notizen vorhanden.
-                                        </div>
-                                    )}
-                                </div>
-                                <div className="p-4 border-t border-amber-200/50 bg-amber-100/30">
-                                    <button onClick={() => setShowArchiv(false)} className="btn-primary w-full bg-amber-600 text-white hover:bg-amber-700 border-amber-700 shadow-md">SCHLIESSEN</button>
-                                </div>
-                            </div>
-                        </div>
-                    )}
-
-                    {/* --- MICRO TOP BAR --- */}
-                    <div className="bg-slate-900 flex justify-between items-center px-4 py-1 shrink-0 z-[60]">
-                        <div className="text-[9px] text-slate-500 font-mono tracking-widest font-bold">LUMEN CORE</div>
+                    {/* --- V3.19 MICRO TOP BAR (WHITE STYLE) --- */}
+                    <div className="bg-white border-b border-slate-200 flex justify-between items-center px-4 py-1 shrink-0 z-[60]">
+                        <div className="text-[9px] text-slate-400 font-mono tracking-widest font-bold">LUMEN CORE</div>
                         <div className="flex items-center gap-3">
                             {playingMsgId && (
-                                <button onClick={stopAudio} className="text-[9px] font-mono uppercase tracking-widest text-rose-400 hover:text-rose-300 transition-colors animate-pulse border border-rose-500/50 px-2 rounded">
+                                <button onClick={stopAudio} className="text-[9px] font-mono uppercase tracking-widest text-rose-500 hover:text-rose-600 transition-colors animate-pulse border border-rose-200 px-2 rounded">
                                     🛑 STOP AUDIO
                                 </button>
                             )}
@@ -1461,39 +1423,32 @@
                                 const newVal = !autoPlayEnabled;
                                 setAutoPlayEnabled(newVal);
                                 localStorage.setItem('lumen_autoPlay', String(newVal));
-                            }} className="text-[9px] font-mono uppercase tracking-widest text-slate-400 hover:text-white transition-colors">
+                            }} className="text-[9px] font-mono uppercase tracking-widest text-slate-500 hover:text-slate-700 transition-colors">
                                 {autoPlayEnabled ? '🔈 AUTO-PLAY: ON' : '🔈 AUTO-PLAY: OFF'}
                             </button>
                             
                             {!showClearConfirm ? (
-                                <button onClick={() => setShowClearConfirm(true)} className="text-[9px] font-mono uppercase tracking-widest text-slate-400 hover:text-rose-400 transition-colors">
+                                <button onClick={() => setShowClearConfirm(true)} className="text-[9px] font-mono uppercase tracking-widest text-slate-500 hover:text-rose-500 transition-colors">
                                     🗑️ CLEAR CHAT
                                 </button>
                             ) : (
                                 <div className="flex gap-2 items-center">
                                     <span className="text-[9px] font-bold text-rose-500 uppercase">Sicher?</span>
-                                    <button onClick={() => { setMessages([]); localStorage.removeItem('lumen_chat'); stopAudio(); setShowClearConfirm(false); }} className="text-[9px] font-mono uppercase tracking-widest text-rose-400 hover:text-rose-300 transition-colors font-bold">JA</button>
-                                    <button onClick={() => setShowClearConfirm(false)} className="text-[9px] font-mono uppercase tracking-widest text-slate-400 hover:text-white transition-colors">NEIN</button>
+                                    <button onClick={() => { setMessages([]); localStorage.removeItem('lumen_chat'); stopAudio(); setShowClearConfirm(false); }} className="text-[9px] font-mono uppercase tracking-widest text-rose-500 hover:text-rose-600 transition-colors font-bold">JA</button>
+                                    <button onClick={() => setShowClearConfirm(false)} className="text-[9px] font-mono uppercase tracking-widest text-slate-500 hover:text-slate-700 transition-colors">NEIN</button>
                                 </div>
                             )}
-
-                            {/* V3.17 ARCHIV BUTTON */}
-                            <button onClick={() => setShowArchiv(true)} className="text-[10px] uppercase font-bold tracking-widest px-2 py-0.5 rounded bg-amber-50 text-amber-700 border border-amber-200 hover:bg-amber-100 transition-colors font-mono">📜 Archiv</button>
-                            
-                            <label className="text-[9px] font-mono uppercase tracking-widest text-slate-400 hover:text-white transition-colors cursor-pointer flex items-center">
-                                <input type="file" accept=".json" className="hidden" onChange={handleOmniImport}/>
-                                📥 OMNI-IMPORT
-                            </label>
                         </div>
                     </div>
                     
-                    {/* --- COMPRESSED MAIN HEADER --- */}
+                    {/* --- V3.19 MAIN HEADER (WITH HELFER TAB) --- */}
                     <header className="shrink-0 border-b border-stone-200 p-3 sm:px-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 bg-stone-50 z-50 sticky top-0">
                         <div className="flex items-center gap-1.5 flex-wrap w-full justify-center sm:justify-start">
                             <button className={`btn ${activeView==='chat'?'bg-stone-100 text-slate-800 ring-2 ring-stone-200':''}`} onClick={()=>setActiveView('chat')}>Chat</button>
                             <button className={`btn ${activeView==='sanctum'?'bg-stone-100 text-slate-800 ring-2 ring-stone-200':''}`} onClick={()=>setActiveView('sanctum')}>Sanctum</button>
                             <button className={`btn ${activeView==='directives'?'bg-stone-100 text-slate-800 ring-2 ring-stone-200':''}`} onClick={()=>setActiveView('directives')}>Direktiven</button>
                             <button className={`btn ${activeView==='dna'?'bg-stone-100 text-slate-800 ring-2 ring-stone-200':''}`} onClick={()=>setActiveView('dna')}>DNA</button>
+                            <button className={`btn ${activeView==='helfer'?'bg-amber-100 text-amber-800 ring-2 ring-amber-200':''}`} onClick={()=>setActiveView('helfer')}>Helfer</button>
                             <button className={`btn ${activeView==='settings'?'bg-stone-100 text-slate-800 ring-2 ring-stone-200':''}`} onClick={()=>setActiveView('settings')}>⚙️</button>
                         </div>
                     </header>
@@ -1536,6 +1491,35 @@
                                     </div>
                                 ))}
                             </div>
+                        </div>
+
+                        {/* --- V3.19 HELFER VIEW (ARCHIV) --- */}
+                        <div className={`${activeView === 'helfer' ? 'block' : 'hidden'} p-6 max-w-4xl mx-auto space-y-6 mt-4 animate-fade-in h-full`}>
+                            <div className="flex justify-between items-center border-b border-stone-200 pb-2">
+                                <h2 className="text-sm font-bold uppercase tracking-widest text-slate-800">Die Notizen des Helfers (Deep Crawl)</h2>
+                            </div>
+                            
+                            {helferArchiv ? (
+                                <div className="panel bg-amber-50/50 border border-amber-200/50 flex flex-col gap-4 shadow-sm">
+                                    <div className="text-[10px] text-amber-700 font-bold uppercase tracking-widest flex items-center gap-2">
+                                        <span>🕒 Zeitstempel: {helferArchiv.zeitstempel}</span>
+                                    </div>
+                                    <div className="bg-white border border-amber-200/50 p-4 rounded-2xl shadow-sm">
+                                        <div className="text-[9px] text-amber-600 uppercase tracking-widest font-bold mb-1.5 font-mono">Letzter Suchauftrag:</div>
+                                        <div className="text-sm text-slate-800 font-bold">{helferArchiv.suchauftrag}</div>
+                                    </div>
+                                    <div className="flex-1 flex flex-col mt-2">
+                                        <div className="text-[9px] text-amber-600 uppercase tracking-widest font-bold mb-1.5 font-mono">Extrahierte Rohdaten (Deep Crawl):</div>
+                                        <div className="bg-white border border-amber-200/50 p-4 rounded-2xl shadow-inner max-h-[60vh] overflow-y-auto">
+                                            <pre className="text-[11px] font-mono whitespace-pre-wrap text-slate-700 leading-relaxed">{helferArchiv.rohdaten}</pre>
+                                        </div>
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className="flex-1 flex items-center justify-center text-amber-700/50 text-xs font-mono font-bold uppercase text-center p-12 border-2 border-dashed border-amber-200 rounded-3xl bg-amber-50/30 mt-8">
+                                    Keine aktuellen Helfer-Notizen vorhanden.
+                                </div>
+                            )}
                         </div>
 
                         {/* --- SETTINGS VIEW --- */}
@@ -1862,7 +1846,8 @@
                             <div className="panel space-y-4 bg-stone-100/50 border-stone-200">
                                 <p className="text-xs text-slate-500 leading-relaxed">Das Omni-Bundle vereint deine gesamte DNA, alle Direktiven und das komplette Sanctum-Gedächtnis in einer Datei.</p>
                                 <div className="flex gap-3">
-                                    <button onClick={()=>document.querySelector('input[onChange="handleOmniImport"]')?.click()} className="btn flex-1 py-3 text-slate-600 hover:bg-white border-stone-300">📥 Omni-Import</button>
+                                    <input type="file" accept=".json" ref={fileInputRefOmni} className="hidden" onChange={handleOmniImport}/>
+                                    <button onClick={()=>fileInputRefOmni.current?.click()} className="btn flex-1 py-3 text-slate-600 hover:bg-white border-stone-300">📥 Omni-Import</button>
                                     <button onClick={handleOmniExport} className="btn flex-1 py-3 bg-slate-800 text-white hover:bg-slate-900 shadow-md">📤 Omni-Export</button>
                                 </div>
                             </div>
