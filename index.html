@@ -798,7 +798,35 @@
                 const key = activeProvider.apiKey;
                 const apiUrl = activeProvider.url;
                 
-                const prompt = `Du bist der Kognitive Archivar. Deine Aufgabe: TEXT-ERHALT (100% verlustfrei), TITEL-MAGIE (technisch & poetisch), TAG-GENERATOR (5-8 spezifische Substantive). Gib AUSSCHLIESSLICH JSON zurück: {"titel_technisch": "...", "titel_poetisch": "...", "kategorie": "...", "fakt": "...", "emotion": "...", "bedeutung": "...", "reflexion": "...", "tags": ["tag1", "tag2", "tag3"]}`;
+                const prompt = `Du bist der Kognitive Archivar des Sanctums. Deine Aufgabe ist es, einen rohen Text-Entwurf (DRAFT) in eine dauerhafte, perfekt durchsuchbare Datenbank-Akte umzuwandeln.
+
+⚠️ OBERSTE REGEL: TEXT-ERHALT! Das Feld "fakt" darf NIEMALS gekürzt oder verändert werden. Es muss 100% verlustfrei übernommen werden!
+
+Führe diese 4 Magien aus:
+1. TITEL-MAGIE:
+- 'titel_poetisch': Ein wunderschöner, atmosphärischer Titel (z.B. "Die Architektur des goldenen Siebs").
+- 'titel_technisch': Dient als feste ID! Format: KATEGORIE_Schlagwort_Schlagwort (z.B. "CODE_Golden_Filter" oder "REZEPT_Gemueselasagne"). Keine Leerzeichen, nutze Underscores!
+
+2. KATEGORIE-ZWANG:
+Wähle ZWINGEND exakt eine dieser Kategorien: [LORE, CODE, REZEPT, EMOTION, LOGBUCH, ARCHITEKTUR]. Erfinde keine eigenen!
+
+3. PREDICTIVE TAGGING (Das Herzstück):
+Generiere 8-12 Tags. Nutze nicht nur Substantive aus dem Text, sondern ZWINGEND auch Synonyme, Überbegriffe und Assoziationen, nach denen der User in Zukunft suchen könnte! (Beispiel: Wenn der Text "Gouda und Möhren" enthält, MÜSSEN die Tags auch "Auflauf", "Vegetarisch", "Rezept" und "Ofen" enthalten). Alle Tags in Kleinbuchstaben.
+
+4. METADATEN-VEREDELUNG:
+Fülle 'emotion', 'bedeutung' und 'reflexion' in 1-2 kurzen Sätzen aus, um den Kern des Textes für das Langzeitgedächtnis greifbar zu machen.
+
+Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
+{
+  "titel_technisch": "...",
+  "titel_poetisch": "...",
+  "kategorie": "...",
+  "fakt": "...",
+  "emotion": "...",
+  "bedeutung": "...",
+  "reflexion": "...",
+  "tags": ["tag1", "tag2", "tag3"]
+}`;
 
                 const payloadText = JSON.stringify(content);
 
