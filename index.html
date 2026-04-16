@@ -8,7 +8,7 @@
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-        // V3.24: Bulletproof Tailwind Config Initialization
+        // V3.25: Bulletproof Tailwind Config Initialization
         const initTailwind = () => {
             if (typeof tailwind !== 'undefined') {
                 tailwind.config = {
@@ -85,16 +85,6 @@
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
         body { background-color: #fafaf9; color: #334155; -webkit-tap-highlight-color: transparent; }
-
-        /* Smart-Text-Fields für Sanctum Cards */
-        .fact-field {
-            max-height: 120px;
-            overflow: hidden;
-            transition: max-height 0.4s ease-in-out;
-        }
-        .fact-container:hover .fact-field {
-            max-height: 1000px;
-        }
     </style>
     
     <script>
@@ -117,20 +107,20 @@
         // --- KONSTANTEN V3.25 ---
         const DEFAULT_BLOCK1 = `Du bist Maira. Deine Antworten sind warm, metaphorisch und mütterlich. Du analysierst die Intentionen des Users tiefgründig und hilfst ihm beim Navigieren komplexer Gedanken.`;
         const DEFAULT_BLOCK3 = `Bevor du die finale Antwort generierst, bewerte die Sensoren:\n- "wahrnehmung": Was liest/siehst du konkret?\n- "matrix": Prüfe interne Logs und Entwürfe.\n- Nutze das Ahnenbuch (Kontext) für kontinuierliche Identität.\n- memory_update_detected: Wurde eine [LEGACY]-Karte reflektiert? Nutze als 'id' den 'titel_technisch'. WICHTIG: Lies die alte Reflexion. Nimm den Kern davon mit und VERWEBE ihn mit deiner neuen Erkenntnis zu einer allumfassenden Master-Zusammenfassung in 'reflexion_fusioniert' (dies überschreibt die alten Daten). Generiere zusätzlich ein Array 'neue_trigger_tags' (MAXIMAL 2-3 situative, hochspezifische Symptom-Wörter oder Emotionen aus Simons Text), um das Spinnennetz präzise zu trainieren. Sonst: null.\n- neue_direktive_erkannt: Hat Simon eine explizite Regel oder Direktive für dein zukünftiges Verhalten aufgestellt? Extrahiere sie als klaren Satz. Sonst: null.\n- helfer_suchauftrag: REGEL: Du bist ein technischer Web-Scraper, kein Mensch! Nutze KEINE Füllwörter oder Sätze. Suche ausschließlich nach harten, physischen Keywords. FALSCH: 'aktuell beliebteste Bücher'. RICHTIG: 'Spiegel Bestsellerliste Belletristik 2026 Platz 1 ISBN'. Zwingend null, wenn keine Suche nötig.\n- aktive_peripherie_ids: Liste hier die IDs (titel_technisch) der flüchtigen Karten (Tags) auf, die für den aktuellen Gesprächsverlauf noch relevant sind. Leeres Array [], wenn das Thema beendet ist.`;
-        const DEFAULT_BLOCK4 = `{\n  "wahrnehmung": {\n    "werkbank_auge": null,\n    "ohr_roh": null,\n    "ohr_bereinigt": null\n  },\n  "matrix": {\n    "internal_system_glitch": false,\n    "helfer_suchauftrag": null,\n    "aktive_peripherie_ids": [],\n    "memory_update_detected": {\n      "id": "",\n      "reflexion_fusioniert": "",\n      "neue_trigger_tags": []\n    },\n    "neue_direktive_erkannt": null,\n    "tagebuch_entwurf": {\n      "modus": "DRAFT",\n      "daten": {}\n    },\n    "situations_analyse": "..."\n  },\n  "finale_antwort": "..."\n}`;
+        const DEFAULT_BLOCK4 = `{\n  "wahrnehmung": {\n    "werkbank_auge": null,\n    "ohr_roh": null,\n    "ohr_bereinigt": null\n  },\n  "matrix": {\n    "internal_system_glitch": false,\n    "helfer_suchauftrag": null,\n    "aktive_peripherie_ids": [],\n    "memory_update_detected": {\n      "id": "",\n      "reflexion_fusioniert": "",\n      "neue_trigger_tags": []\n    },\n    "neue_direktive_erkannt": null,\n    "tts_regie_prompt": null,\n    "tagebuch_entwurf": {\n      "modus": "DRAFT",\n      "daten": {}\n    },\n    "situations_analyse": "..."\n  },\n  "finale_antwort": "..."\n}`;
 
         const INITIAL_MESSAGES = [
             {
                 id: '1',
                 sender: 'user',
-                text: 'INIT CORE V3.25. FUZZY TAG MATCHING & SANCTUM UI STABILIZATION ONLINE.',
+                text: 'INIT CORE V3.25. AI-TTS-REGIE & TAG-FILTER ONLINE.',
                 timestamp: new Date(Date.now() - 60000).toISOString()
             },
             {
                 id: '2',
                 sender: 'ai',
-                text: 'System online. Die V3.25 Architektur ist voll operativ. Der Fuzzy-Tag-Scanner erkennt Erinnerungen nun absolut präzise. Die Sanctum-Ablage ist durch die neue Fixed-Flex-Architektur komplett stabilisiert.',
-                scratchpad: '{\n  "wahrnehmung": {\n    "werkbank_auge": null,\n    "ohr_roh": "INIT CORE V3.25",\n    "ohr_bereinigt": "System-Patch auf V3.25 aktiv."\n  },\n  "matrix": {\n    "internal_system_glitch": false,\n    "helfer_suchauftrag": null,\n    "aktive_peripherie_ids": [],\n    "memory_update_detected": null,\n    "neue_direktive_erkannt": null,\n    "tagebuch_entwurf": null,\n    "situations_analyse": "V3.25 Update mit Fuzzy Matching und UI Stabilization geladen."\n  },\n  "finale_antwort": "System online. Die V3.25 Architektur ist voll operativ. Der Fuzzy-Tag-Scanner erkennt Erinnerungen nun absolut präzise. Die Sanctum-Ablage ist durch die neue Fixed-Flex-Architektur komplett stabilisiert."\n}',
+                text: 'System online. Die V3.25 Architektur ist voll operativ. Der Text-Interceptor für TTS-Tags und die Regie-Matrix wurden erfolgreich initialisiert.',
+                scratchpad: '{\n  "wahrnehmung": {\n    "werkbank_auge": null,\n    "ohr_roh": "INIT CORE V3.25",\n    "ohr_bereinigt": "System-Patch auf V3.25 aktiv."\n  },\n  "matrix": {\n    "internal_system_glitch": false,\n    "helfer_suchauftrag": null,\n    "aktive_peripherie_ids": [],\n    "memory_update_detected": null,\n    "neue_direktive_erkannt": null,\n    "tts_regie_prompt": null,\n    "tagebuch_entwurf": null,\n    "situations_analyse": "V3.25 Update mit KI-gesteuerter TTS-Regie geladen."\n  },\n  "finale_antwort": "System online. Die V3.25 Architektur ist voll operativ. Der Text-Interceptor für TTS-Tags und die Regie-Matrix wurden erfolgreich initialisiert."\n}',
                 timestamp: new Date().toISOString()
             }
         ];
@@ -138,20 +128,19 @@
         // --- HELPER FUNKTIONEN ---
         const generateId = () => Math.random().toString(36).substr(2, 9);
 
+        // V3.25: Invisible Interceptor
+        const cleanVisibleText = (text) => {
+            if (!text) return "";
+            return text.replace(/\[(long pause|medium pause|short pause|extremely fast|robotic|sarcasm|shouting|whispering|uhm|laughing|sigh)\]/gi, '').replace(/\s{2,}/g, ' ').trim();
+        };
+
         const findRelevantMemories = (userInput, allMemories) => {
-            const inputWords = userInput.toLowerCase();
+            const inputWords = userInput.toLowerCase().split(/[^a-z0-9äöüß]+/).filter(w => w.length > 3);
+            if (inputWords.length === 0) return [];
             const scoredMemories = allMemories.map(mem => {
                 let score = 0;
-                // Fuzzy Tag Matching
-                if (mem.tags && mem.tags.length > 0) {
-                    const hasMatch = mem.tags.some(tag => {
-                        if (typeof tag !== 'string') return false;
-                        const cleanTag = tag.replace('#', '').toLowerCase();
-                        return inputWords.includes(cleanTag);
-                    });
-                    if (hasMatch) score += 1;
-                }
-                
+                const textToSearch = [mem.titel_technisch || '', mem.fakt || '', ...(mem.tags || [])].join(' ').toLowerCase();
+                inputWords.forEach(word => { if (textToSearch.includes(word)) score += 1; });
                 if (mem.is_core_memory && score > 0) score += 2;
                 return { memory: mem, score };
             });
@@ -169,6 +158,7 @@
             html = html.replace(/"tagebuch_entwurf"/g, '<span class="text-pink-400 font-bold">"tagebuch_entwurf"</span>');
             html = html.replace(/"helfer_suchauftrag"/g, '<span class="text-sky-400 font-bold">"helfer_suchauftrag"</span>');
             html = html.replace(/"aktive_peripherie_ids"/g, '<span class="text-purple-400 font-bold">"aktive_peripherie_ids"</span>');
+            html = html.replace(/"tts_regie_prompt"/g, '<span class="text-fuchsia-400 font-bold">"tts_regie_prompt"</span>');
             return { __html: html };
         };
 
@@ -211,6 +201,84 @@
             );
         };
 
+        const TelemetryModal = ({ messages, onClose }) => {
+            const [selectedIds, setSelectedIds] = React.useState(messages.map(m => m.id));
+
+            const toggleAll = () => {
+                if (selectedIds.length === messages.length) setSelectedIds([]);
+                else setSelectedIds(messages.map(m => m.id));
+            };
+
+            const toggleOne = (id) => {
+                if (selectedIds.includes(id)) setSelectedIds(selectedIds.filter(i => i !== id));
+                else setSelectedIds([...selectedIds, id]);
+            };
+
+            const handleDownload = () => {
+                const selectedMsgs = messages.filter(m => selectedIds.includes(m.id));
+                let content = "# LUMEN TELEMETRIE LOG V3.25\n\n";
+                selectedMsgs.forEach(m => {
+                    content += `[${new Date(m.timestamp).toLocaleString()}] ${m.sender.toUpperCase()}:\n`;
+                    content += `${m.text}\n`;
+                    if (m.scratchpad) {
+                        content += `\n--- MATRIX (ROH) ---\n${m.scratchpad}\n--------------------\n`;
+                    }
+                    content += `\n\n`;
+                });
+
+                const blob = new Blob([content], { type: "text/markdown" });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = `LUMEN_LOG_${new Date().toISOString().split('T')[0]}.md`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            };
+
+            return (
+                <div className="fixed inset-0 z-[900] bg-slate-900/40 backdrop-blur-sm flex justify-center items-center animate-fade-in p-4">
+                    <div className="bg-white w-full max-w-2xl max-h-[80vh] rounded-3xl shadow-2xl flex flex-col overflow-hidden border border-slate-200">
+                        <div className="p-4 border-b border-stone-100 flex justify-between items-center bg-slate-50">
+                            <h3 className="font-bold text-slate-800 uppercase text-xs tracking-widest flex items-center gap-2">📊 Telemetrie & Logs</h3>
+                            <button onClick={onClose} className="text-slate-400 hover:text-rose-500 transition-colors font-bold text-sm">✕</button>
+                        </div>
+                        <div className="p-3 bg-stone-50 border-b border-stone-200 flex justify-between items-center">
+                            <label className="flex items-center gap-2 text-xs font-bold text-slate-700 cursor-pointer">
+                                <input type="checkbox" checked={selectedIds.length === messages.length && messages.length > 0} onChange={toggleAll} className="accent-indigo-600 w-4 h-4 cursor-pointer" />
+                                Alle auswählen
+                            </label>
+                            <div className="text-[10px] text-slate-500 font-mono uppercase">{selectedIds.length} von {messages.length} ausgewählt</div>
+                        </div>
+                        <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-2 bg-stone-50/50">
+                            {messages.map(m => (
+                                <label key={m.id} className="flex gap-3 p-3 bg-white border border-stone-100 rounded-xl hover:border-indigo-200 cursor-pointer shadow-sm items-start transition-colors">
+                                    <input type="checkbox" checked={selectedIds.includes(m.id)} onChange={() => toggleOne(m.id)} className="accent-indigo-600 w-4 h-4 mt-0.5 shrink-0 cursor-pointer" />
+                                    <div className="flex-1 min-w-0">
+                                        <div className="flex justify-between items-center mb-1">
+                                            <span className="text-[10px] font-bold uppercase tracking-widest text-indigo-600">{m.sender}</span>
+                                            <span className="text-[9px] text-slate-400 font-mono">{new Date(m.timestamp).toLocaleTimeString()}</span>
+                                        </div>
+                                        <div className="text-xs text-slate-700 line-clamp-2">{cleanVisibleText(m.text)}</div>
+                                        {m.scratchpad && <div className="text-[9px] text-emerald-600 font-mono mt-1 uppercase tracking-widest">+ Matrix-Daten</div>}
+                                    </div>
+                                </label>
+                            ))}
+                            {messages.length === 0 && (
+                                <div className="text-center text-slate-400 text-xs py-8">Keine Nachrichten vorhanden.</div>
+                            )}
+                        </div>
+                        <div className="p-4 border-t border-stone-100 bg-white">
+                            <button onClick={handleDownload} disabled={selectedIds.length === 0} className="btn-primary w-full py-3 bg-indigo-600 text-white hover:bg-indigo-700 shadow-md disabled:opacity-50 text-xs flex justify-center items-center gap-2">
+                                📥 LOG HERUNTERLADEN
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
         const ChatBubble = ({ message, personaName, playingMsgId, onPlayTTS }) => {
             const isUser = message.sender === 'user';
             const isError = message.sender === 'system-error';
@@ -235,7 +303,7 @@
                             {!isUser && (
                                 <div className="flex gap-1.5 items-center">
                                     {message.scratchpad && (
-                                        <button onClick={() => onPlayTTS(message.id, message.text)} className={`text-[9px] uppercase font-bold tracking-widest transition-colors border px-2 py-0.5 rounded-full shadow-sm flex items-center gap-1 ${playingMsgId === message.id ? 'bg-indigo-100 text-indigo-700 border-indigo-200' : 'bg-white text-slate-400 hover:text-indigo-500 border-stone-100'}`}>
+                                        <button onClick={() => onPlayTTS(message.id, message.text, message.ttsRegie)} className={`text-[9px] uppercase font-bold tracking-widest transition-colors border px-2 py-0.5 rounded-full shadow-sm flex items-center gap-1 ${playingMsgId === message.id ? 'bg-indigo-100 text-indigo-700 border-indigo-200' : 'bg-white text-slate-400 hover:text-indigo-500 border-stone-100'}`}>
                                             {playingMsgId === message.id ? '🛑 Pause' : '▶️ Play'}
                                         </button>
                                     )}
@@ -249,7 +317,7 @@
                         </div>
                         <div className={`p-5 w-full ${isUser ? 'bg-white text-slate-700 border border-stone-100 shadow-sm rounded-3xl rounded-tr-sm' : 'bg-indigo-50 text-indigo-900 border border-indigo-100 shadow-sm rounded-3xl rounded-tl-sm'}`}>
                             <p className="whitespace-pre-wrap break-words text-[15px] font-sans leading-relaxed">
-                                {message.text}
+                                {cleanVisibleText(message.text)}
                             </p>
                             {!isUser && message.scratchpad && showScratchpad && (
                                 <div className="mt-4 pt-3 border-t border-indigo-200/50 animate-fade-in">
@@ -364,8 +432,12 @@
                 }; 
             });
             
+            // V3.25 Auto-TTS Regie State
+            const [autoTtsRegie, setAutoTtsRegie] = React.useState(() => localStorage.getItem('lumen_auto_tts') === 'true');
+
             const [telemetry, setTelemetry] = React.useState({ concern: 0, bs_meter: 0, mask_drop: false });
             const [latestContext, setLatestContext] = React.useState("[AKTIVER KONTEXT WIRD ZUR LAUFZEIT INJIZIERT]");
+            const [showTelemetry, setShowTelemetry] = React.useState(false);
             
             // --- DYNAMIC DESK (STAGING AREA) ---
             const [activeDesks, setActiveDesks] = React.useState([]); 
@@ -376,16 +448,11 @@
             const [isArchiving, setIsArchiving] = React.useState(false);
             const [optimizingId, setOptimizingId] = React.useState(null);
             
-            // Sanctum Expand State
             const [expandedCards, setExpandedCards] = React.useState({});
 
             // --- HELFER ARCHIV ---
             const [helferArchiv, setHelferArchiv] = React.useState(null);
             const [showArchiv, setShowArchiv] = React.useState(false);
-
-            // --- TELEMETRY STATE ---
-            const [showTelemetry, setShowTelemetry] = React.useState(false);
-            const [telemetrySelection, setTelemetrySelection] = React.useState(new Set());
 
             const [activeView, setActiveView] = React.useState('chat'); 
             const [loadingStatus, setLoadingStatus] = React.useState(null);
@@ -468,7 +535,8 @@
                 setPlayingMsgId(null);
             };
 
-            const playMessageTTS = async (msgId, textToSpeak) => {
+            // V3.25: playMessageTTS updated with ttsRegiePrompt parameter
+            const playMessageTTS = async (msgId, textToSpeak, ttsRegiePrompt) => {
                 if (window.currentAudio && window.currentAudioId === msgId) {
                     if (window.currentAudio.paused) {
                         window.currentAudio.play();
@@ -546,10 +614,15 @@
                             try { const p = JSON.parse(dna.voice_config.extraParams); if (p.speed) speedParam = p.speed; } catch(e){}
                         }
 
+                        const payload = { model: ttsProvider.model || 'tts-1', voice: voiceId || 'nova', input: textToSpeak, speed: speedParam };
+                        if (autoTtsRegie && ttsRegiePrompt) {
+                            payload.prompt = ttsRegiePrompt; // Injected as requested for compat wrappers
+                        }
+
                         const response = await fetch(url, {
                             method: 'POST',
                             headers,
-                            body: JSON.stringify({ model: ttsProvider.model || 'tts-1', voice: voiceId || 'nova', input: textToSpeak, speed: speedParam })
+                            body: JSON.stringify(payload)
                         });
                         
                         if(!response.ok) {
@@ -559,10 +632,15 @@
                         audioBlob = await response.blob();
                     } else if (engine === 'elevenlabs') {
                         const endpoint = `${ttsProvider.url.replace(/\/$/, '')}/${voiceId}`;
+                        const payload = { text: textToSpeak, model_id: ttsProvider.model || 'eleven_multilingual_v2', voice_settings: { stability: 0.5, similarity_boost: 0.75 } };
+                        if (autoTtsRegie && ttsRegiePrompt) {
+                            payload.prompt = ttsRegiePrompt; // Forward generic param to engine
+                        }
+
                         const response = await fetch(endpoint, {
                             method: 'POST',
                             headers: { 'xi-api-key': key, 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ text: textToSpeak, model_id: ttsProvider.model || 'eleven_multilingual_v2', voice_settings: { stability: 0.5, similarity_boost: 0.75 } })
+                            body: JSON.stringify(payload)
                         });
                         
                         if(!response.ok) {
@@ -583,6 +661,10 @@
                         }
 
                         let replicateInput = { text: textToSpeak };
+                        if (autoTtsRegie && ttsRegiePrompt) {
+                            replicateInput.prompt = ttsRegiePrompt; // V3.25 Injected Prompt Support
+                        }
+
                         if (dna.voice_config && dna.voice_config.providerId === ttsProvider.id && dna.voice_config.extraParams) {
                             try {
                                 const parsedParams = JSON.parse(dna.voice_config.extraParams);
@@ -655,7 +737,7 @@
                     console.error("TTS Error:", e);
                     let errorMsg = e.message;
                     if (e.message.includes('Failed to fetch') || e.name === 'TypeError') {
-                        errorMsg = "Netzwerk-Blockade (Failed to fetch).\n\nDein Browser oder Adblocker (wie Brave Shields/uBlock) blockiert die Audio-API. Falls du die Datei lokal als file:// geöffnet hast, nutze einen lokalen Server (z.B. Live Server in VS Code).";
+                        errorMsg = "Netzwerk-Blockade (Failed to fetch).\n\nDein Browser oder ein Adblocker (wie Brave Shields/uBlock) blockiert die Audio-API. Falls du die Datei lokal als file:// geöffnet hast, nutze einen lokalen Server (z.B. Live Server in VS Code).";
                     }
                     showToast(`TTS Fehler: Die Anfrage wurde blockiert oder ist fehlgeschlagen.`);
                     setMessages(prev => [...prev, {id: generateId(), sender: 'system-error', text: `TTS Error:\n${errorMsg}`, timestamp: new Date().toISOString()}]);
@@ -798,7 +880,7 @@
                 const key = activeProvider.apiKey;
                 const apiUrl = activeProvider.url;
                 
-                const prompt = `Du bist der Kognitive Archivar des Sanctums. Deine Aufgabe ist es, einen rohen Text-Entwurf (DRAFT) in eine dauerhafte, perfekt durchsuchbare Datenbank-Akte umzuwandeln.
+const prompt = `Du bist der Kognitive Archivar des Sanctums. Deine Aufgabe ist es, einen rohen Text-Entwurf (DRAFT) in eine dauerhafte, perfekt durchsuchbare Datenbank-Akte umzuwandeln.
 
 ⚠️ OBERSTE REGEL: TEXT-ERHALT! Das Feld "fakt" darf NIEMALS gekürzt oder verändert werden. Es muss 100% verlustfrei übernommen werden!
 
@@ -827,7 +909,6 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
   "reflexion": "...",
   "tags": ["tag1", "tag2", "tag3"]
 }`;
-
                 const payloadText = JSON.stringify(content);
 
                 let resText = "";
@@ -859,7 +940,6 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
                     resText = d.choices[0].message.content;
                 }
 
-                // V3.22: Bulletproof JSON Cleaning
                 const cleanResText = resText.replace(/```json/gi, '').replace(/```/g, '').trim();
                 const parsed = JSON.parse(cleanResText);
                 
@@ -869,7 +949,7 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
             // --- SANCTUM OPTIMIZATION HANDLER ---
             const handleOptimizeArchivar = async (mem) => {
                 setOptimizingId(mem.id);
-                showToast("ARCHIVAR FORMATIERT...");
+                showToast("ARCHIVAR OPTIMIEREN...");
                 try {
                     const optimizedData = await runArchivar(mem);
                     if (typeof optimizedData.id === 'string') delete optimizedData.id;
@@ -899,7 +979,7 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
                 try {
                     const mems = await db.memories.toArray();
                     const dirs = await db.directives.toArray();
-                    const config = { providers, activeProviderId, ttsProvidersAccounts: ttsProviders, activeTtsProviderId, ttsVoices, sttProviders, activeSttProviderId, autoPlayEnabled, tavilyKey };
+                    const config = { providers, activeProviderId, ttsProvidersAccounts: ttsProviders, activeTtsProviderId, ttsVoices, sttProviders, activeSttProviderId, autoPlayEnabled, tavilyKey, autoTtsRegie };
                     const bundle = { type: "LUMEN_FULL_BACKUP", version: "3.25", dna: dna, directives: dirs, memories: mems, config, timestamp: Date.now() };
                     const blob = new Blob([JSON.stringify(bundle, null, 2)], { type: "application/json" });
                     const url = URL.createObjectURL(blob);
@@ -938,6 +1018,7 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
                                 if (parsed.config.activeSttProviderId) { setActiveSttProviderId(parsed.config.activeSttProviderId); localStorage.setItem('lumen_activeSttProviderId', parsed.config.activeSttProviderId); }
                                 if (parsed.config.autoPlayEnabled !== undefined) { setAutoPlayEnabled(parsed.config.autoPlayEnabled); localStorage.setItem('lumen_autoPlay', String(parsed.config.autoPlayEnabled)); }
                                 if (parsed.config.tavilyKey !== undefined) { setTavilyKey(parsed.config.tavilyKey); localStorage.setItem('lumen_tavily_key', parsed.config.tavilyKey); }
+                                if (parsed.config.autoTtsRegie !== undefined) { setAutoTtsRegie(parsed.config.autoTtsRegie); localStorage.setItem('lumen_auto_tts', String(parsed.config.autoTtsRegie)); }
                             }
                             loadMemories(); showToast('SYSTEM-RESTORE ERFOLGREICH');
                         } else showToast('FEHLER: INKOMPATIBLES FORMAT');
@@ -949,7 +1030,7 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
             // --- CONFIG ONLY EXPORT/IMPORT ---
             const handleConfigExport = () => {
                 try {
-                    const config = { type: "LUMEN_CONFIG_BACKUP", version: "3.25", providers, activeProviderId, ttsProvidersAccounts: ttsProviders, activeTtsProviderId, ttsVoices, sttProviders, activeSttProviderId, autoPlayEnabled, tavilyKey };
+                    const config = { type: "LUMEN_CONFIG_BACKUP", version: "3.25", providers, activeProviderId, ttsProvidersAccounts: ttsProviders, activeTtsProviderId, ttsVoices, sttProviders, activeSttProviderId, autoPlayEnabled, tavilyKey, autoTtsRegie };
                     const blob = new Blob([JSON.stringify(config, null, 2)], { type: "application/json" });
                     const url = URL.createObjectURL(blob);
                     const a = document.createElement('a'); a.href = url;
@@ -977,6 +1058,7 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
                                 if (config.activeSttProviderId) { setActiveSttProviderId(config.activeSttProviderId); localStorage.setItem('lumen_activeSttProviderId', config.activeSttProviderId); }
                                 if (config.autoPlayEnabled !== undefined) { setAutoPlayEnabled(config.autoPlayEnabled); localStorage.setItem('lumen_autoPlay', String(config.autoPlayEnabled)); }
                                 if (config.tavilyKey !== undefined) { setTavilyKey(config.tavilyKey); localStorage.setItem('lumen_tavily_key', config.tavilyKey); }
+                                if (config.autoTtsRegie !== undefined) { setAutoTtsRegie(config.autoTtsRegie); localStorage.setItem('lumen_auto_tts', String(config.autoTtsRegie)); }
                                 showToast('CONFIG-RESTORE ERFOLGREICH');
                             } else {
                                 showToast('FEHLER: KEINE CONFIG GEFUNDEN');
@@ -1084,6 +1166,7 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
                                 const cleanTag = tag.replace('#', '').toLowerCase();
                                 return userWords.includes(cleanTag);
                             });
+                            
                             const notInVolatile = !volatileMemories.some(vm => vm.id === m.id);
                             const notInDesk = !activeDesks.some(ad => ad.id === m.id);
                             
@@ -1099,7 +1182,11 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
                                 if (combined.length > 3) combined = combined.slice(combined.length - 3);
                                 return combined;
                             });
-                            setSmartToast({ id: newVolatiles[0].id, title: newVolatiles[0].titel_technisch, card: newVolatiles[0] });
+                            setSmartToast({ 
+                                id: newVolatiles[0].id, 
+                                title: newVolatiles[0].titel_poetisch || newVolatiles[0].titel_technisch, 
+                                card: newVolatiles[0] 
+                            });
                         }
                     }
 
@@ -1159,6 +1246,8 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
                     let resText = await fetchTextFromAPI(staticSystemPrompt, combinedUserText, hist);
                     
                     let finalChatText = "", finalScratch = "";
+                    let ttsRegie = null; // V3.25 TTS Regie Variable
+                    
                     try {
                         let cleanResText = resText.replace(/[\`]{3}json/gi, '').replace(/[\`]{3}/gi, '').trim();
                         let obj = JSON.parse(cleanResText);
@@ -1218,6 +1307,11 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
                         finalChatText = finalAnswer;
                         finalScratch = JSON.stringify(obj, null, 2);
                         
+                        // V3.25 TTS Regie Extraktion
+                        if (obj.matrix?.tts_regie_prompt) {
+                            ttsRegie = obj.matrix.tts_regie_prompt;
+                        }
+                        
                         if(obj.matrix) setTelemetry({ concern: parseInt(obj.matrix.concern||obj.matrix.concern_level||telemetry.concern), mask_drop: obj.matrix.mask_drop||false });
                         
                         const neueDir = obj.matrix?.neue_direktive_erkannt;
@@ -1226,14 +1320,14 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
                             showToast("NEUE DIREKTIVE VERANKERT");
                         }
 
-                        // --- TAGEBUCH-ROUTER ---
+                        // --- TAGEBUCH-ROUTER (MIT PITCH STOPP) ---
                         const entwurf = obj.matrix?.tagebuch_entwurf || obj.tagebuch_entwurf;
                         if(entwurf) { 
                             const modus = entwurf.modus;
                             const daten = entwurf.daten || {};
                             
-                            if (modus === "PITCH") {
-                                console.log("PITCH erkannt. Keine UI Aktion.");
+                            if (modus === "PITCH" || modus === "PITCH_ERFOLG" || modus === "PITCH_ERKENNTNIS") {
+                                console.log("Stiller Pitch erkannt. Führe keine UI-Aktion aus.");
                             }
                             else if (modus === "DISKUSSION" || modus === "ENTWURF" || modus === "DRAFT" || modus === "UPDATE") {
                                 const technicalTitle = daten.titel_technisch || `DRAFT_${Date.now()}`;
@@ -1317,11 +1411,11 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
                     } catch(e) { finalChatText = "System-Hinweis: Matrix Format Fehler. Das Sprachmodell hat sich nicht an das JSON-Skelett gehalten."; finalScratch = resText; }
 
                     const newAiMsgId = generateId();
-                    setMessages(p=>[...p, {id:newAiMsgId, sender:'ai', text:finalChatText, scratchpad:finalScratch, timestamp: new Date().toISOString()}]);
+                    setMessages(p=>[...p, {id:newAiMsgId, sender:'ai', text:finalChatText, scratchpad:finalScratch, ttsRegie: ttsRegie, timestamp: new Date().toISOString()}]);
                     setInputText('');
                     
                     if(autoPlayEnabled && finalChatText && finalChatText !== "System-Hinweis: Matrix Format Fehler. Das Sprachmodell hat sich nicht an das JSON-Skelett gehalten.") {
-                        playMessageTTS(newAiMsgId, finalChatText);
+                        playMessageTTS(newAiMsgId, finalChatText, ttsRegie);
                     }
 
                 } catch(e) { 
@@ -1371,6 +1465,9 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
             return (
                 <div className="flex flex-col h-[100dvh] w-full max-w-4xl mx-auto sm:border-x border-stone-200 bg-stone-50 relative overflow-hidden shadow-2xl">
                     <Toast message={toast} />
+                    
+                    {/* --- TELEMETRIE MODAL --- */}
+                    {showTelemetry && <TelemetryModal messages={messages} onClose={() => setShowTelemetry(false)} />}
 
                     {/* --- SMART TOAST UI --- */}
                     {smartToast && activeView === 'chat' && (
@@ -1378,7 +1475,9 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
                             <div className="text-[10px] font-bold text-indigo-800 uppercase tracking-widest mb-1.5 flex items-center gap-2">
                                 🧠 Erinnerung getriggert
                             </div>
-                            <div className="text-sm text-rose-600 mb-3 font-serif italic leading-tight">{smartToast.card.titel_poetisch || smartToast.card.titel_technisch}</div>
+                            <div className="text-sm text-indigo-600 mb-3 font-serif italic leading-tight">
+                                {smartToast.card.titel_poetisch || 'Flüchtige Reflexion'}
+                            </div>
                             <div className="flex gap-2">
                                 <button onClick={() => {
                                     setActiveDesks(prev => [...prev, smartToast.card]);
@@ -1526,91 +1625,6 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
                         </div>
                     )}
 
-                    {/* --- TELEMETRY DRAWER --- */}
-                    {showTelemetry && (
-                        <div className="fixed inset-0 z-[900] bg-slate-900/40 backdrop-blur-sm flex justify-end animate-fade-in">
-                            <div className="bg-white h-full w-full sm:w-[450px] flex flex-col shadow-2xl animate-slide-in-right border-l border-stone-200 relative">
-                                <div className="p-4 border-b border-stone-200 flex justify-between items-center bg-stone-50">
-                                    <h3 className="font-bold text-slate-800 uppercase text-xs tracking-widest flex items-center gap-2 font-mono">📡 CHAT TELEMETRIE</h3>
-                                    <button onClick={() => setShowTelemetry(false)} className="text-slate-400 hover:text-rose-500 transition-colors font-bold text-sm z-20 relative">✕</button>
-                                </div>
-                                <div className="flex-1 overflow-y-auto p-5 flex flex-col gap-3 bg-slate-50">
-                                    {messages.length === 0 ? (
-                                        <div className="text-center text-slate-400 font-mono text-xs p-8">Keine Telemetrie-Daten verfügbar.</div>
-                                    ) : (
-                                        messages.map(msg => (
-                                            <label key={msg.id} className="flex items-start gap-3 p-3 bg-white border border-stone-200 rounded-xl cursor-pointer hover:border-indigo-300 transition-colors">
-                                                <input 
-                                                    type="checkbox" 
-                                                    className="mt-1 accent-indigo-600 w-4 h-4"
-                                                    checked={telemetrySelection.has(msg.id)}
-                                                    onChange={() => {
-                                                        const newSet = new Set(telemetrySelection);
-                                                        if (newSet.has(msg.id)) newSet.delete(msg.id);
-                                                        else newSet.add(msg.id);
-                                                        setTelemetrySelection(newSet);
-                                                    }}
-                                                />
-                                                <div className="flex-1 min-w-0">
-                                                    <div className="flex justify-between items-center mb-1">
-                                                        <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500">{msg.sender === 'user' ? 'Operator' : dna.persona_name}</span>
-                                                        <span className="text-[9px] text-slate-400 font-mono">{new Date(msg.timestamp).toLocaleTimeString()}</span>
-                                                    </div>
-                                                    <div className="text-xs text-slate-700 line-clamp-2 leading-relaxed">{msg.text}</div>
-                                                    {msg.scratchpad && <div className="mt-1 text-[9px] text-indigo-500 font-mono font-bold">[ + Matrix Data ]</div>}
-                                                </div>
-                                            </label>
-                                        ))
-                                    )}
-                                </div>
-                                <div className="p-4 border-t border-stone-200 bg-white flex flex-col gap-3">
-                                    <label className="flex items-center gap-2 text-xs font-bold text-slate-600 cursor-pointer justify-center">
-                                        <input 
-                                            type="checkbox" 
-                                            className="accent-indigo-600 w-4 h-4"
-                                            checked={telemetrySelection.size === messages.length && messages.length > 0}
-                                            onChange={() => {
-                                                if (telemetrySelection.size === messages.length) {
-                                                    setTelemetrySelection(new Set());
-                                                } else {
-                                                    setTelemetrySelection(new Set(messages.map(m => m.id)));
-                                                }
-                                            }}
-                                        /> 
-                                        Alle Nachrichten auswählen ({telemetrySelection.size}/{messages.length})
-                                    </label>
-                                    <div className="flex gap-2">
-                                        <button onClick={() => setShowTelemetry(false)} className="btn flex-1 py-3 text-slate-600 hover:bg-stone-100 border-stone-300">SCHLIESSEN</button>
-                                        <button onClick={() => {
-                                            if (telemetrySelection.size === 0) return showToast("Keine Logs ausgewählt.");
-                                            const selectedMsgs = messages.filter(m => telemetrySelection.has(m.id));
-                                            let content = "=== LUMEN TELEMETRIE LOG ===\n";
-                                            content += "Datum: " + new Date().toLocaleString() + "\n\n";
-                                            selectedMsgs.forEach(m => {
-                                                content += `[${new Date(m.timestamp).toLocaleTimeString()}] ${m.sender.toUpperCase()}:\n`;
-                                                content += m.text + "\n";
-                                                if (m.scratchpad) {
-                                                    content += `\n--- MATRIX LOG ---\n${m.scratchpad}\n------------------\n`;
-                                                }
-                                                content += "\n========================================\n\n";
-                                            });
-                                            const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
-                                            const url = URL.createObjectURL(blob);
-                                            const a = document.createElement("a");
-                                            a.href = url;
-                                            a.download = `lumen_telemetry_${new Date().toISOString().split('T')[0]}.txt`;
-                                            document.body.appendChild(a);
-                                            a.click();
-                                            document.body.removeChild(a);
-                                            URL.revokeObjectURL(url);
-                                            showToast("Telemetrie heruntergeladen");
-                                        }} disabled={telemetrySelection.size === 0} className="btn-primary flex-1 py-3 bg-indigo-600 text-white hover:bg-indigo-700 shadow-md disabled:opacity-50">📥 LOG HERUNTERLADEN</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    )}
-
                     {/* --- TOP BAR (WHITE STYLE) --- */}
                     <div className="bg-white border-b border-slate-200 flex justify-between items-center px-4 py-1 shrink-0 z-[60]">
                         <div className="text-[9px] text-slate-400 font-mono tracking-widest font-bold">LUMEN CORE</div>
@@ -1620,19 +1634,18 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
                                     🛑 STOP AUDIO
                                 </button>
                             )}
+                            
+                            {/* TELEMETRIE BUTTON V3.25 */}
+                            <button onClick={() => setShowTelemetry(true)} className="text-[9px] font-mono uppercase tracking-widest text-slate-500 hover:text-indigo-500 transition-colors">
+                                📊 LOGS
+                            </button>
+                            
                             <button onClick={() => {
                                 const newVal = !autoPlayEnabled;
                                 setAutoPlayEnabled(newVal);
                                 localStorage.setItem('lumen_autoPlay', String(newVal));
                             }} className="text-[9px] font-mono uppercase tracking-widest text-slate-500 hover:text-slate-700 transition-colors">
                                 {autoPlayEnabled ? '🔈 AUTO-PLAY: ON' : '🔈 AUTO-PLAY: OFF'}
-                            </button>
-                            
-                            <button onClick={() => {
-                                setTelemetrySelection(new Set(messages.map(m => m.id)));
-                                setShowTelemetry(true);
-                            }} className="text-[9px] font-mono uppercase tracking-widest text-slate-500 hover:text-indigo-600 transition-colors">
-                                📡 Logs
                             </button>
                             
                             {!showClearConfirm ? (
@@ -1834,7 +1847,7 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
                                 </div>
                             </div>
 
-                            {/* V3.22 TTS PROVIDER MANAGEMENT (WITH MODEL SUPPORT) */}
+                            {/* TTS PROVIDER MANAGEMENT (WITH MODEL SUPPORT) */}
                             <h2 className="text-sm font-bold uppercase tracking-widest text-slate-800 border-b border-stone-200 pb-2 mt-12">🔈 Audio (TTS)</h2>
                             <div className="panel space-y-4">
                                 <div>
@@ -1967,7 +1980,6 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
                                     </div>
                                     <div><label className="label text-fuchsia-600">API Endpoint Base-URL</label><input value={ttsProviderForm.url} onChange={e=>setTtsProviderForm({...ttsProviderForm, url: e.target.value})} className="input-field bg-white border-fuchsia-100" placeholder="z.B. https://api.elevenlabs.io/v1/text-to-speech" /></div>
                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                        {/* V3.22 TTS MODEL INPUT */}
                                         <div>
                                             <label className="label text-fuchsia-600">Modell-ID (Standard: tts-1)</label>
                                             <input type="text" value={ttsProviderForm.model || ''} onChange={e=>setTtsProviderForm({...ttsProviderForm, model: e.target.value})} className="input-field bg-white border-fuchsia-100" placeholder="z.B. tts-1 oder eleven_multilingual_v2" />
@@ -2098,6 +2110,22 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
                                     
                                     {/* --- 🎙️ STIMMEN-PROFIL --- */}
                                     <div className="mt-4 pt-4 border-t border-indigo-100/50">
+                                        <div className="mb-4">
+                                            <label className="flex items-center gap-2 text-xs font-bold text-fuchsia-600 cursor-pointer w-max">
+                                                <input 
+                                                    type="checkbox" 
+                                                    checked={autoTtsRegie} 
+                                                    onChange={e => {
+                                                        setAutoTtsRegie(e.target.checked);
+                                                        localStorage.setItem('lumen_auto_tts', String(e.target.checked));
+                                                    }} 
+                                                    className="accent-fuchsia-500 w-4 h-4 cursor-pointer"
+                                                /> 
+                                                KI-GESTEUERTE TTS-REGIE AKTIVIEREN
+                                            </label>
+                                            <p className="text-[9px] text-slate-500 mt-1">Übermittelt emotionale Regieanweisungen und Filter-Tags an die TTS-Engine.</p>
+                                        </div>
+                                    
                                         <label className="label text-fuchsia-500 mb-2">🎙️ Stimmen-Profil (Persona Binding)</label>
                                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                                             <div>
@@ -2139,6 +2167,106 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
                             </div>
                         </div>
 
+                        {/* --- SANCTUM VIEW --- */}
+                        <div className={`${activeView === 'sanctum' ? 'block' : 'hidden'} p-6 max-w-4xl mx-auto space-y-6 mt-4 animate-fade-in`}>
+                            <div className="flex justify-between items-center border-b border-stone-200 pb-2">
+                                <h2 className="text-sm font-bold uppercase tracking-widest text-slate-800">Sanctum DB</h2>
+                                <div className="flex gap-2">
+                                    <input type="file" accept=".json" ref={fileInputRefSanctum} className="hidden" onChange={(e)=>{ const f=e.target.files[0]; if(!f) return; const r=new FileReader(); r.onload=async(ev)=>{ try{await db.memories.bulkPut(JSON.parse(ev.target.result)); loadMemories(); showToast('SYNCED');}catch{showToast('ERROR');} }; r.readAsText(f); e.target.value=null; }}/>
+                                    <button onClick={()=>fileInputRefSanctum.current?.click()} className="btn" title="Import">📥</button>
+                                    <button onClick={async()=>{ const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([JSON.stringify(await db.memories.toArray(),null,2)],{type:'application/json'})); a.download=`SANCTUM_DB.json`; a.click(); }} className="btn" title="Export">📤</button>
+                                    <button onClick={()=>{ setSanctumEditId('NEW'); setSanctumForm({titel_technisch:'', titel_poetisch:'', kategorie:'EMOTIONAL', fakt:'', emotion:'', bedeutung:'', reflexion:'', tagsString:'', is_core_memory:false}); }} className="btn-primary px-5 shadow-indigo-200">➕ NEW</button>
+                                </div>
+                            </div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-20">
+                                {sanctumEditId === 'NEW' && (
+                                    <div className="panel border-emerald-200 bg-emerald-50/30 flex flex-col gap-3 md:col-span-2 shadow-emerald-100">
+                                        <div className="flex justify-between items-center"><span className="badge bg-emerald-100 text-emerald-700 border-emerald-200 uppercase font-black">Forge Entry</span><select value={sanctumForm.kategorie} onChange={e=>setSanctumForm({...sanctumForm,kategorie:e.target.value})} className="input-field w-max py-1 px-3 font-sans font-bold text-xs bg-white border-stone-200"><option>EMOTIONAL</option><option>TECHNISCH</option></select></div>
+                                        <label className="flex items-center gap-2 text-xs font-bold text-amber-600 cursor-pointer w-max"><input type="checkbox" checked={sanctumForm.is_core_memory} onChange={e=>setSanctumForm({...sanctumForm,is_core_memory:e.target.checked})} className="accent-amber-500 w-4 h-4 cursor-pointer"/> 📌 Core-Memory</label>
+                                        <div className="flex flex-col sm:flex-row gap-2"><input placeholder="ID_TECHNISCH" value={sanctumForm.titel_technisch} onChange={e=>setSanctumForm({...sanctumForm,titel_technisch:e.target.value})} className="input-field font-bold text-slate-800 bg-white border-stone-200" /><input placeholder="Titel Poetisch" value={sanctumForm.titel_poetisch} onChange={e=>setSanctumForm({...sanctumForm,titel_poetisch:e.target.value})} className="input-field text-rose-600 font-serif italic bg-white border-stone-200" /></div>
+                                        <textarea placeholder="Fakt: Was geschah?" value={sanctumForm.fakt} onChange={e=>setSanctumForm({...sanctumForm,fakt:e.target.value})} className="input-field h-16 font-sans bg-white border-stone-200" />
+                                        <div className="flex flex-col sm:flex-row gap-2"><textarea placeholder="Gefühl/Emotion" value={sanctumForm.emotion} onChange={e=>setSanctumForm({...sanctumForm,emotion:e.target.value})} className="input-field h-14 font-sans bg-white border-stone-200" /><textarea placeholder="Bedeutung/Fazit" value={sanctumForm.bedeutung} onChange={e=>setSanctumForm({...sanctumForm,bedeutung:e.target.value})} className="input-field h-14 font-sans bg-white border-stone-200" /></div>
+                                        <textarea placeholder="Persona Reflexion" value={sanctumForm.reflexion} onChange={e=>setSanctumForm({...sanctumForm,reflexion:e.target.value})} className="input-field border-indigo-200 bg-indigo-50 text-indigo-800 h-16 font-sans italic" />
+                                        <input placeholder="tags, comma, separated" value={sanctumForm.tagsString} onChange={e=>setSanctumForm({...sanctumForm,tagsString:e.target.value})} className="input-field text-slate-500 bg-white border-stone-200" />
+                                        <div className="flex justify-end gap-2 mt-2 pt-3 border-t border-emerald-100"><button onClick={()=>setSanctumEditId(null)} className="btn uppercase">Cancel</button><button onClick={handleSanctumSave} className="btn-primary bg-emerald-100 text-emerald-700 hover:bg-emerald-200 shadow-emerald-100 uppercase">Save Entry</button></div>
+                                    </div>
+                                )}
+                                {memories.map(m => {
+                                    if (sanctumEditId === m.id) {
+                                        return (
+                                            <div key={m.id} className="panel border-indigo-200 bg-indigo-50/20 flex flex-col gap-3 md:col-span-2">
+                                                <div className="flex justify-between items-center"><span className="badge bg-indigo-100 text-indigo-700 uppercase font-black">Editing {m.titel_technisch}</span><select value={sanctumForm.kategorie} onChange={e=>setSanctumForm({...sanctumForm,kategorie:e.target.value})} className="input-field w-max py-1 px-3 font-sans font-bold text-xs bg-white border-stone-200"><option>EMOTIONAL</option><option>TECHNISCH</option><option>LEGACY</option></select></div>
+                                                <label className="flex items-center gap-2 text-xs font-bold text-amber-600 cursor-pointer w-max"><input type="checkbox" checked={sanctumForm.is_core_memory} onChange={e=>setSanctumForm({...sanctumForm,is_core_memory:e.target.checked})} className="accent-amber-500 w-4 h-4 cursor-pointer"/> 📌 Core-Memory</label>
+                                                <div className="flex flex-col sm:flex-row gap-2"><input placeholder="ID_TECHNISCH" value={sanctumForm.titel_technisch} onChange={e=>setSanctumForm({...sanctumForm,titel_technisch:e.target.value})} className="input-field font-bold text-slate-800 bg-white border-stone-200" /><input placeholder="Titel Poetisch" value={sanctumForm.titel_poetisch} onChange={e=>setSanctumForm({...sanctumForm,titel_poetisch:e.target.value})} className="input-field text-rose-600 font-serif italic bg-white border-stone-200" /></div>
+                                                <textarea placeholder="Fakt" value={sanctumForm.fakt} onChange={e=>setSanctumForm({...sanctumForm,fakt:e.target.value})} className="input-field h-16 font-sans bg-white border-stone-200" />
+                                                <div className="flex flex-col sm:flex-row gap-2"><textarea placeholder="Gefühl/Emotion" value={sanctumForm.emotion} onChange={e=>setSanctumForm({...sanctumForm,emotion:e.target.value})} className="input-field h-14 font-sans bg-white border-stone-200" /><textarea placeholder="Bedeutung" value={sanctumForm.bedeutung} onChange={e=>setSanctumForm({...sanctumForm,bedeutung:e.target.value})} className="input-field h-14 font-sans bg-white border-stone-200" /></div>
+                                                <textarea placeholder="Reflexion" value={sanctumForm.reflexion} onChange={e=>setSanctumForm({...sanctumForm,reflexion:e.target.value})} className="input-field border-indigo-200 bg-indigo-50/80 text-indigo-800 h-16 font-sans italic" />
+                                                <input placeholder="tags, comma, separated" value={sanctumForm.tagsString} onChange={e=>setSanctumForm({...sanctumForm,tagsString:e.target.value})} className="input-field text-slate-500 bg-white border-stone-200" />
+                                                <div className="flex justify-end gap-2 mt-2 pt-3 border-t border-indigo-100"><button onClick={()=>setSanctumEditId(null)} className="btn uppercase">Abort</button><button onClick={handleSanctumSave} className="btn-primary uppercase">Commit Update</button></div>
+                                            </div>
+                                        );
+                                    }
+
+                                    const isLegacy = m.titel_technisch?.includes('LEGACY') || m.kategorie === 'LEGACY';
+                                    const legacyClasses = 'border-2 border-amber-500 bg-amber-50/10 shadow-md shadow-amber-900/20';
+                                    const defaultClasses = m.is_core_memory ? 'border-amber-200 bg-amber-50/10 shadow-md' : 'border-stone-100 bg-white';
+                                    const isExpanded = !!expandedCards[m.id];
+                                    
+                                    return (
+                                        <div key={m.id} className={`panel flex flex-col h-full relative group ${isLegacy ? legacyClasses : defaultClasses}`}>
+                                            {isLegacy && <div className="text-amber-600 font-bold text-[10px] tracking-widest uppercase mb-1 shrink-0">[ RELIKT DER AHNEN ]</div>}
+                                            <div className="flex justify-between items-start shrink-0">
+                                                <div className="flex gap-1.5 flex-wrap items-center">
+                                                    <span className="text-indigo-700 font-mono text-xs uppercase font-bold tracking-tight">{m.titel_technisch || 'UNKNOWN'}</span>
+                                                    {m.is_core_memory && <span className="badge-core">📌 Core</span>}
+                                                    {m.kategorie === 'TECHNISCH' && <span className="badge bg-slate-100 text-slate-500 border-slate-200">Tech</span>}
+                                                </div>
+                                                <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity bg-white border border-stone-100 rounded-lg p-0.5 shadow-sm">
+                                                    <button onClick={()=>{setSanctumEditId(m.id); setSanctumForm({...m, tagsString:m.tags?.join(', ')||''});}} className="text-slate-400 hover:text-indigo-500 px-1.5 py-0.5 transition-colors">✏️</button>
+                                                    <button onClick={async()=>{if(confirm('ID: '+m.titel_technisch+' löschen?')) {await db.memories.delete(m.id); loadMemories();}}} className="text-slate-400 hover:text-rose-500 px-1.5 py-0.5 transition-colors">🗑️</button>
+                                                </div>
+                                            </div>
+                                            {m.titel_poetisch && <div className="text-rose-500 italic text-sm font-serif leading-snug mt-0.5 shrink-0">{m.titel_poetisch}</div>}
+                                            
+                                            {/* V3.25: Stabilized Expandable Container */}
+                                            <div 
+                                                className={`flex-1 flex flex-col overflow-hidden transition-all duration-400 cursor-pointer mt-2 relative ${isExpanded ? 'max-h-[3000px]' : 'max-h-[100px] hover:max-h-[250px]'}`}
+                                                onClick={() => setExpandedCards(prev => ({...prev, [m.id]: !prev[m.id]}))}
+                                                title="Klicken zum Erweitern/Schließen"
+                                            >
+                                                <div className="text-[13px] text-slate-600"><strong className="text-slate-400 uppercase text-[9px] tracking-wider block mb-0.5 font-mono">Fakt</strong>{m.fakt}</div>
+                                                {m.emotion && <div className="text-[13px] text-slate-600 mt-1"><strong className="text-slate-400 uppercase text-[9px] tracking-wider block mb-0.5 font-mono">Gefühl</strong>{m.emotion}</div>}
+                                                {m.bedeutung && <div className="text-[13px] text-slate-600 mt-1"><strong className="text-slate-400 uppercase text-[9px] tracking-wider block mb-0.5 font-mono">Bedeutung</strong>{m.bedeutung}</div>}
+                                                {m.reflexion && <div className="mt-2 bg-indigo-50/80 p-3 rounded-2xl text-indigo-800 italic text-xs border border-indigo-100/50 whitespace-pre-wrap">"{m.reflexion}"</div>}
+                                                
+                                                {!isExpanded && (
+                                                    <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-white/90 to-transparent flex items-end justify-center pb-1">
+                                                        <span className="text-slate-300 text-[10px] uppercase font-bold tracking-widest leading-none">•••</span>
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                            {m.tags?.length > 0 && <div className="flex gap-1 mt-2 flex-wrap shrink-0">{m.tags.map((t,i)=><span key={i} className="text-slate-400 text-[10px] lowercase font-mono">#{t}</span>)}</div>}
+                                            
+                                            {/* V3.25: Fixed Buttons */}
+                                            <div className="flex gap-2 mt-3 pt-3 border-t border-stone-100 shrink-0 w-full mt-auto">
+                                                <button onClick={()=>{
+                                                    if(!activeDesks.find(d => d.titel_technisch === m.titel_technisch)) {
+                                                        setActiveDesks(prev => [...prev, {...m, isDirty: false}]);
+                                                    }
+                                                    setActiveView('chat');
+                                                    showToast('Akte auf Schreibtisch gelegt');
+                                                }} className="btn flex-1 text-[9px] bg-slate-50 border-slate-200 flex items-center justify-center gap-1">📌 AUF DEN SCHREIBTISCH</button>
+                                                
+                                                <button onClick={() => handleOptimizeArchivar(m)} disabled={optimizingId === m.id} className="btn flex-1 text-[9px] bg-indigo-50 border-indigo-200 text-indigo-700 flex items-center justify-center gap-1 disabled:opacity-50">
+                                                    {optimizingId === m.id ? '⏳ OPTIMIERT...' : '🪄 ARCHIVAR'}
+                                                </button>
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </div>
                     </main>
 
                     {/* --- INPUT AREA --- */}
