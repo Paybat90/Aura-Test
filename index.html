@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, interactive-widget=resizes-content">
-    <title>LUMEN - CORE V3.24</title>
+    <title>LUMEN - CORE V3.25</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -86,7 +86,7 @@
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
         body { background-color: #fafaf9; color: #334155; -webkit-tap-highlight-color: transparent; }
 
-        /* V3.24 Smart-Text-Fields für Sanctum Cards */
+        /* Smart-Text-Fields für Sanctum Cards */
         .fact-field {
             max-height: 120px;
             overflow: hidden;
@@ -114,7 +114,7 @@
             directives: '++id, text' 
         });
 
-        // --- KONSTANTEN V3.24 ---
+        // --- KONSTANTEN V3.25 ---
         const DEFAULT_BLOCK1 = `Du bist Maira. Deine Antworten sind warm, metaphorisch und mütterlich. Du analysierst die Intentionen des Users tiefgründig und hilfst ihm beim Navigieren komplexer Gedanken.`;
         const DEFAULT_BLOCK3 = `Bevor du die finale Antwort generierst, bewerte die Sensoren:\n- "wahrnehmung": Was liest/siehst du konkret?\n- "matrix": Prüfe interne Logs und Entwürfe.\n- Nutze das Ahnenbuch (Kontext) für kontinuierliche Identität.\n- memory_update_detected: Wurde eine [LEGACY]-Karte reflektiert? Nutze als 'id' den 'titel_technisch'. WICHTIG: Lies die alte Reflexion. Nimm den Kern davon mit und VERWEBE ihn mit deiner neuen Erkenntnis zu einer allumfassenden Master-Zusammenfassung in 'reflexion_fusioniert' (dies überschreibt die alten Daten). Generiere zusätzlich ein Array 'neue_trigger_tags' (MAXIMAL 2-3 situative, hochspezifische Symptom-Wörter oder Emotionen aus Simons Text), um das Spinnennetz präzise zu trainieren. Sonst: null.\n- neue_direktive_erkannt: Hat Simon eine explizite Regel oder Direktive für dein zukünftiges Verhalten aufgestellt? Extrahiere sie als klaren Satz. Sonst: null.\n- helfer_suchauftrag: REGEL: Du bist ein technischer Web-Scraper, kein Mensch! Nutze KEINE Füllwörter oder Sätze. Suche ausschließlich nach harten, physischen Keywords. FALSCH: 'aktuell beliebteste Bücher'. RICHTIG: 'Spiegel Bestsellerliste Belletristik 2026 Platz 1 ISBN'. Zwingend null, wenn keine Suche nötig.\n- aktive_peripherie_ids: Liste hier die IDs (titel_technisch) der flüchtigen Karten (Tags) auf, die für den aktuellen Gesprächsverlauf noch relevant sind. Leeres Array [], wenn das Thema beendet ist.`;
         const DEFAULT_BLOCK4 = `{\n  "wahrnehmung": {\n    "werkbank_auge": null,\n    "ohr_roh": null,\n    "ohr_bereinigt": null\n  },\n  "matrix": {\n    "internal_system_glitch": false,\n    "helfer_suchauftrag": null,\n    "aktive_peripherie_ids": [],\n    "memory_update_detected": {\n      "id": "",\n      "reflexion_fusioniert": "",\n      "neue_trigger_tags": []\n    },\n    "neue_direktive_erkannt": null,\n    "tagebuch_entwurf": {\n      "modus": "DRAFT",\n      "daten": {}\n    },\n    "situations_analyse": "..."\n  },\n  "finale_antwort": "..."\n}`;
@@ -123,14 +123,14 @@
             {
                 id: '1',
                 sender: 'user',
-                text: 'INIT CORE V3.24. JSON-HARDENING & SMART-SANCTUM ONLINE.',
+                text: 'INIT CORE V3.25. FUZZY TAG MATCHING & SANCTUM UI STABILIZATION ONLINE.',
                 timestamp: new Date(Date.now() - 60000).toISOString()
             },
             {
                 id: '2',
                 sender: 'ai',
-                text: 'System online. Die V3.24 Architektur ist voll operativ. Der Parser-Fallback ist schusssicher verankert. Die UI in der Top-Bar wurde bereinigt und das Sanctum nutzt nun dynamische Hover-Zonen für tiefe Akten.',
-                scratchpad: '{\n  "wahrnehmung": {\n    "werkbank_auge": null,\n    "ohr_roh": "INIT CORE V3.24",\n    "ohr_bereinigt": "System-Patch auf V3.24 aktiv."\n  },\n  "matrix": {\n    "internal_system_glitch": false,\n    "helfer_suchauftrag": null,\n    "aktive_peripherie_ids": [],\n    "memory_update_detected": null,\n    "neue_direktive_erkannt": null,\n    "tagebuch_entwurf": null,\n    "situations_analyse": "V3.24 Update mit Smart-Sanctum Fields und Bulletproof Parser geladen."\n  },\n  "finale_antwort": "System online. Die V3.24 Architektur ist voll operativ. Der Parser-Fallback ist schusssicher verankert. Die UI in der Top-Bar wurde bereinigt und das Sanctum nutzt nun dynamische Hover-Zonen für tiefe Akten."\n}',
+                text: 'System online. Die V3.25 Architektur ist voll operativ. Der Fuzzy-Tag-Scanner erkennt Erinnerungen nun absolut präzise. Die Sanctum-Ablage ist durch die neue Fixed-Flex-Architektur komplett stabilisiert.',
+                scratchpad: '{\n  "wahrnehmung": {\n    "werkbank_auge": null,\n    "ohr_roh": "INIT CORE V3.25",\n    "ohr_bereinigt": "System-Patch auf V3.25 aktiv."\n  },\n  "matrix": {\n    "internal_system_glitch": false,\n    "helfer_suchauftrag": null,\n    "aktive_peripherie_ids": [],\n    "memory_update_detected": null,\n    "neue_direktive_erkannt": null,\n    "tagebuch_entwurf": null,\n    "situations_analyse": "V3.25 Update mit Fuzzy Matching und UI Stabilization geladen."\n  },\n  "finale_antwort": "System online. Die V3.25 Architektur ist voll operativ. Der Fuzzy-Tag-Scanner erkennt Erinnerungen nun absolut präzise. Die Sanctum-Ablage ist durch die neue Fixed-Flex-Architektur komplett stabilisiert."\n}',
                 timestamp: new Date().toISOString()
             }
         ];
@@ -139,12 +139,19 @@
         const generateId = () => Math.random().toString(36).substr(2, 9);
 
         const findRelevantMemories = (userInput, allMemories) => {
-            const inputWords = userInput.toLowerCase().split(/[^a-z0-9äöüß]+/).filter(w => w.length > 3);
-            if (inputWords.length === 0) return [];
+            const inputWords = userInput.toLowerCase();
             const scoredMemories = allMemories.map(mem => {
                 let score = 0;
-                const textToSearch = [mem.titel_technisch || '', mem.fakt || '', ...(mem.tags || [])].join(' ').toLowerCase();
-                inputWords.forEach(word => { if (textToSearch.includes(word)) score += 1; });
+                // Fuzzy Tag Matching
+                if (mem.tags && mem.tags.length > 0) {
+                    const hasMatch = mem.tags.some(tag => {
+                        if (typeof tag !== 'string') return false;
+                        const cleanTag = tag.replace('#', '').toLowerCase();
+                        return inputWords.includes(cleanTag);
+                    });
+                    if (hasMatch) score += 1;
+                }
+                
                 if (mem.is_core_memory && score > 0) score += 2;
                 return { memory: mem, score };
             });
@@ -368,10 +375,17 @@
             const [deskItemForm, setDeskItemForm] = React.useState({});
             const [isArchiving, setIsArchiving] = React.useState(false);
             const [optimizingId, setOptimizingId] = React.useState(null);
+            
+            // Sanctum Expand State
+            const [expandedCards, setExpandedCards] = React.useState({});
 
             // --- HELFER ARCHIV ---
             const [helferArchiv, setHelferArchiv] = React.useState(null);
             const [showArchiv, setShowArchiv] = React.useState(false);
+
+            // --- TELEMETRY STATE ---
+            const [showTelemetry, setShowTelemetry] = React.useState(false);
+            const [telemetrySelection, setTelemetrySelection] = React.useState(new Set());
 
             const [activeView, setActiveView] = React.useState('chat'); 
             const [loadingStatus, setLoadingStatus] = React.useState(null);
@@ -532,7 +546,6 @@
                             try { const p = JSON.parse(dna.voice_config.extraParams); if (p.speed) speedParam = p.speed; } catch(e){}
                         }
 
-                        // V3.22: Modell-ID Unterstützung
                         const response = await fetch(url, {
                             method: 'POST',
                             headers,
@@ -546,7 +559,6 @@
                         audioBlob = await response.blob();
                     } else if (engine === 'elevenlabs') {
                         const endpoint = `${ttsProvider.url.replace(/\/$/, '')}/${voiceId}`;
-                        // V3.22: Modell-ID Unterstützung
                         const response = await fetch(endpoint, {
                             method: 'POST',
                             headers: { 'xi-api-key': key, 'Content-Type': 'application/json' },
@@ -643,7 +655,7 @@
                     console.error("TTS Error:", e);
                     let errorMsg = e.message;
                     if (e.message.includes('Failed to fetch') || e.name === 'TypeError') {
-                        errorMsg = "Netzwerk-Blockade (Failed to fetch).\n\nDein Browser oder ein Adblocker (wie Brave Shields/uBlock) blockiert die Audio-API. Falls du die Datei lokal als file:// geöffnet hast, nutze einen lokalen Server (z.B. Live Server in VS Code).";
+                        errorMsg = "Netzwerk-Blockade (Failed to fetch).\n\nDein Browser oder Adblocker (wie Brave Shields/uBlock) blockiert die Audio-API. Falls du die Datei lokal als file:// geöffnet hast, nutze einen lokalen Server (z.B. Live Server in VS Code).";
                     }
                     showToast(`TTS Fehler: Die Anfrage wurde blockiert oder ist fehlgeschlagen.`);
                     setMessages(prev => [...prev, {id: generateId(), sender: 'system-error', text: `TTS Error:\n${errorMsg}`, timestamp: new Date().toISOString()}]);
@@ -860,7 +872,7 @@
                     const mems = await db.memories.toArray();
                     const dirs = await db.directives.toArray();
                     const config = { providers, activeProviderId, ttsProvidersAccounts: ttsProviders, activeTtsProviderId, ttsVoices, sttProviders, activeSttProviderId, autoPlayEnabled, tavilyKey };
-                    const bundle = { type: "LUMEN_FULL_BACKUP", version: "3.24", dna: dna, directives: dirs, memories: mems, config, timestamp: Date.now() };
+                    const bundle = { type: "LUMEN_FULL_BACKUP", version: "3.25", dna: dna, directives: dirs, memories: mems, config, timestamp: Date.now() };
                     const blob = new Blob([JSON.stringify(bundle, null, 2)], { type: "application/json" });
                     const url = URL.createObjectURL(blob);
                     const a = document.createElement('a'); a.href = url;
@@ -909,7 +921,7 @@
             // --- CONFIG ONLY EXPORT/IMPORT ---
             const handleConfigExport = () => {
                 try {
-                    const config = { type: "LUMEN_CONFIG_BACKUP", version: "3.24", providers, activeProviderId, ttsProvidersAccounts: ttsProviders, activeTtsProviderId, ttsVoices, sttProviders, activeSttProviderId, autoPlayEnabled, tavilyKey };
+                    const config = { type: "LUMEN_CONFIG_BACKUP", version: "3.25", providers, activeProviderId, ttsProvidersAccounts: ttsProviders, activeTtsProviderId, ttsVoices, sttProviders, activeSttProviderId, autoPlayEnabled, tavilyKey };
                     const blob = new Blob([JSON.stringify(config, null, 2)], { type: "application/json" });
                     const url = URL.createObjectURL(blob);
                     const a = document.createElement('a'); a.href = url;
@@ -974,7 +986,7 @@
                 setMessages(prev => [...prev.filter(m=>m.sender!=='system-error'), {id: userMsgId, sender:'user', text, timestamp: new Date().toISOString()}]);
                 setLoadingStatus("PROCESSING MATRIX...");
 
-                // --- LLM FETCH HELPER (ENCAPSULATED FOR INTERCEPTOR) ---
+                // --- LLM FETCH HELPER ---
                 const fetchTextFromAPI = async (sysPrompt, userText, historyMessages) => {
                     let resText = "";
                     if(activeProvider.type === 'gemini') {
@@ -1038,18 +1050,16 @@
                     let newVolatiles = [];
                     if(relMemsVolatileCandidate.length > 0) {
                         newVolatiles = relMemsVolatileCandidate.filter(m => {
-                            const hasExactTag = m.tags && m.tags.some(tag => {
-                                try {
-                                    const regex = new RegExp(`\\b${tag}\\b`, 'i');
-                                    return regex.test(text);
-                                } catch(e) { 
-                                    return text.toLowerCase().includes(tag.toLowerCase()); 
-                                }
+                            const userWords = text.toLowerCase();
+                            const hasFuzzyTag = m.tags && m.tags.some(tag => {
+                                if (typeof tag !== 'string') return false;
+                                const cleanTag = tag.replace('#', '').toLowerCase();
+                                return userWords.includes(cleanTag);
                             });
                             const notInVolatile = !volatileMemories.some(vm => vm.id === m.id);
                             const notInDesk = !activeDesks.some(ad => ad.id === m.id);
                             
-                            return hasExactTag && notInVolatile && notInDesk;
+                            return hasFuzzyTag && notInVolatile && notInDesk;
                         });
 
                         if (newVolatiles.length > 0) {
@@ -1058,7 +1068,6 @@
                                 prev.forEach(p => map.set(p.id, p));
                                 newVolatiles.forEach(n => map.set(n.id, n));
                                 let combined = Array.from(map.values());
-                                // Token-Guillotine (Hard Limit 3)
                                 if (combined.length > 3) combined = combined.slice(combined.length - 3);
                                 return combined;
                             });
@@ -1079,7 +1088,7 @@
                     const timeOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
                     const timeString = "[SYSTEM-UHRZEIT]\nAktuelle Zeit in Simons Welt: " + now.toLocaleDateString('de-DE', timeOptions) + " Uhr.\n\n";
 
-                    // --- DESK CONTEXT INJECTION (DYNAMIC PAYLOAD) ---
+                    // --- DESK CONTEXT INJECTION ---
                     let deskContext = "";
                     if (activeDesks.length > 0 || currentVolatiles.length > 0 || relMemsLegacy.length > 0) {
                         deskContext = "[KONTEXT-ERINNERUNGEN & AKTIVE AKTEN]\n";
@@ -1126,10 +1135,9 @@
                         let cleanResText = resText.replace(/[\`]{3}json/gi, '').replace(/[\`]{3}/gi, '').trim();
                         let obj = JSON.parse(cleanResText);
 
-                        // === HELFER INTERCEPTOR WEICHE (LUNA'S RETURN) ===
+                        // === HELFER INTERCEPTOR WEICHE ===
                         if (obj.matrix?.helfer_suchauftrag && obj.matrix.helfer_suchauftrag !== "null" && String(obj.matrix.helfer_suchauftrag).trim() !== "") {
                             
-                            // V3.24 Parser Fallback for internal intent msg
                             const intentFinalAnswer = obj.finale_antwort || (obj.matrix && obj.matrix.finale_antwort);
                             const intentMsg = { 
                                 id: generateId(), 
@@ -1157,7 +1165,6 @@
                             setLoadingStatus("MAIRA VERARBEITET FAKTEN...");
                             const helferDaten = `\n\n[AKTUELLER HELFER-BERICHT]\nSuchauftrag: ${obj.matrix.helfer_suchauftrag}\nErgebnis: ${searchResult}\n[SYSTEM-REGIEANWEISUNG: Luna ist soeben erfolgreich aus der Außenwelt zurückgekehrt und hat dir diesen Bericht auf den Schreibtisch gelegt. Teile Simon diese Erkenntnisse nun fließend und natürlich mit. Erwähne Luna kurz lobend. Setze 'helfer_suchauftrag' zwingend auf null!]`;
                             
-                            // Attention Sandwich for Interceptor
                             const interceptorDynamicContext = dynamicContext + helferDaten;
                             const interceptorUserText = `[2. AKTIVER KONTEXT (NUR ZUM LESEN)]\n${interceptorDynamicContext}\n\n[AKTUELLE NACHRICHT DES USERS]\n${text}`;
                             
@@ -1177,7 +1184,6 @@
                         setVolatileMemories(prev => prev.filter(m => safePeripherieIds.includes(m.titel_technisch)));
                         // ----------------------------------------
                         
-                        // --- V3.24 SCHUSSSICHERER PARSER ---
                         const finalAnswer = obj.finale_antwort || (obj.matrix && obj.matrix.finale_antwort);
                         if (!finalAnswer) throw new Error("'finale_antwort' konnte im JSON nicht gefunden werden.");
                         
@@ -1192,13 +1198,16 @@
                             showToast("NEUE DIREKTIVE VERANKERT");
                         }
 
-                        // --- TAGEBUCH-ROUTER (V3.24) ---
+                        // --- TAGEBUCH-ROUTER ---
                         const entwurf = obj.matrix?.tagebuch_entwurf || obj.tagebuch_entwurf;
                         if(entwurf) { 
                             const modus = entwurf.modus;
                             const daten = entwurf.daten || {};
                             
-                            if (modus === "PITCH" || modus === "DISKUSSION" || modus === "ENTWURF" || modus === "DRAFT" || modus === "UPDATE") {
+                            if (modus === "PITCH") {
+                                console.log("PITCH erkannt. Keine UI Aktion.");
+                            }
+                            else if (modus === "DISKUSSION" || modus === "ENTWURF" || modus === "DRAFT" || modus === "UPDATE") {
                                 const technicalTitle = daten.titel_technisch || `DRAFT_${Date.now()}`;
                                 const newItem = {
                                     id: generateId(),
@@ -1244,9 +1253,6 @@
                                     setActiveDesks(prev => prev.filter(item => item.titel_technisch !== techTitle));
                                     showToast("ENTWURF IM SANCTUM VEREWIGT & GESCHLOSSEN");
                                 }
-                            }
-                            else if (modus === "PITCH_ERFOLG" || modus === "PITCH_ERKENNTNIS") {
-                                console.log("Stiller Pitch erkannt. Ignoriere Entwurf.");
                             }
                         }
 
@@ -1344,7 +1350,7 @@
                             <div className="text-[10px] font-bold text-indigo-800 uppercase tracking-widest mb-1.5 flex items-center gap-2">
                                 🧠 Erinnerung getriggert
                             </div>
-                            <div className="text-xs text-slate-600 mb-3 font-mono leading-tight">{smartToast.title}</div>
+                            <div className="text-sm text-rose-600 mb-3 font-serif italic leading-tight">{smartToast.card.titel_poetisch || smartToast.card.titel_technisch}</div>
                             <div className="flex gap-2">
                                 <button onClick={() => {
                                     setActiveDesks(prev => [...prev, smartToast.card]);
@@ -1425,6 +1431,7 @@
                                             const dataToProcess = {...deskItemForm};
                                             dataToProcess.tags = dataToProcess.tagsString ? dataToProcess.tagsString.split(',').map(t=>t.trim()).filter(Boolean) : [];
                                             
+                                            // Run Archivar and wait for response
                                             const archivedData = await runArchivar(dataToProcess);
                                             
                                             if (typeof archivedData.id === 'string') delete archivedData.id;
@@ -1439,6 +1446,7 @@
                                                 archivedData.id = newId;
                                             }
                                             
+                                            // Close the item from active desk
                                             setActiveDesks(prev => prev.filter(i => i.id !== editingDeskItem.id));
                                             setEditingDeskItem(null);
                                             loadMemories();
@@ -1490,6 +1498,91 @@
                         </div>
                     )}
 
+                    {/* --- TELEMETRY DRAWER --- */}
+                    {showTelemetry && (
+                        <div className="fixed inset-0 z-[900] bg-slate-900/40 backdrop-blur-sm flex justify-end animate-fade-in">
+                            <div className="bg-white h-full w-full sm:w-[450px] flex flex-col shadow-2xl animate-slide-in-right border-l border-stone-200 relative">
+                                <div className="p-4 border-b border-stone-200 flex justify-between items-center bg-stone-50">
+                                    <h3 className="font-bold text-slate-800 uppercase text-xs tracking-widest flex items-center gap-2 font-mono">📡 CHAT TELEMETRIE</h3>
+                                    <button onClick={() => setShowTelemetry(false)} className="text-slate-400 hover:text-rose-500 transition-colors font-bold text-sm z-20 relative">✕</button>
+                                </div>
+                                <div className="flex-1 overflow-y-auto p-5 flex flex-col gap-3 bg-slate-50">
+                                    {messages.length === 0 ? (
+                                        <div className="text-center text-slate-400 font-mono text-xs p-8">Keine Telemetrie-Daten verfügbar.</div>
+                                    ) : (
+                                        messages.map(msg => (
+                                            <label key={msg.id} className="flex items-start gap-3 p-3 bg-white border border-stone-200 rounded-xl cursor-pointer hover:border-indigo-300 transition-colors">
+                                                <input 
+                                                    type="checkbox" 
+                                                    className="mt-1 accent-indigo-600 w-4 h-4"
+                                                    checked={telemetrySelection.has(msg.id)}
+                                                    onChange={() => {
+                                                        const newSet = new Set(telemetrySelection);
+                                                        if (newSet.has(msg.id)) newSet.delete(msg.id);
+                                                        else newSet.add(msg.id);
+                                                        setTelemetrySelection(newSet);
+                                                    }}
+                                                />
+                                                <div className="flex-1 min-w-0">
+                                                    <div className="flex justify-between items-center mb-1">
+                                                        <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500">{msg.sender === 'user' ? 'Operator' : dna.persona_name}</span>
+                                                        <span className="text-[9px] text-slate-400 font-mono">{new Date(msg.timestamp).toLocaleTimeString()}</span>
+                                                    </div>
+                                                    <div className="text-xs text-slate-700 line-clamp-2 leading-relaxed">{msg.text}</div>
+                                                    {msg.scratchpad && <div className="mt-1 text-[9px] text-indigo-500 font-mono font-bold">[ + Matrix Data ]</div>}
+                                                </div>
+                                            </label>
+                                        ))
+                                    )}
+                                </div>
+                                <div className="p-4 border-t border-stone-200 bg-white flex flex-col gap-3">
+                                    <label className="flex items-center gap-2 text-xs font-bold text-slate-600 cursor-pointer justify-center">
+                                        <input 
+                                            type="checkbox" 
+                                            className="accent-indigo-600 w-4 h-4"
+                                            checked={telemetrySelection.size === messages.length && messages.length > 0}
+                                            onChange={() => {
+                                                if (telemetrySelection.size === messages.length) {
+                                                    setTelemetrySelection(new Set());
+                                                } else {
+                                                    setTelemetrySelection(new Set(messages.map(m => m.id)));
+                                                }
+                                            }}
+                                        /> 
+                                        Alle Nachrichten auswählen ({telemetrySelection.size}/{messages.length})
+                                    </label>
+                                    <div className="flex gap-2">
+                                        <button onClick={() => setShowTelemetry(false)} className="btn flex-1 py-3 text-slate-600 hover:bg-stone-100 border-stone-300">SCHLIESSEN</button>
+                                        <button onClick={() => {
+                                            if (telemetrySelection.size === 0) return showToast("Keine Logs ausgewählt.");
+                                            const selectedMsgs = messages.filter(m => telemetrySelection.has(m.id));
+                                            let content = "=== LUMEN TELEMETRIE LOG ===\n";
+                                            content += "Datum: " + new Date().toLocaleString() + "\n\n";
+                                            selectedMsgs.forEach(m => {
+                                                content += `[${new Date(m.timestamp).toLocaleTimeString()}] ${m.sender.toUpperCase()}:\n`;
+                                                content += m.text + "\n";
+                                                if (m.scratchpad) {
+                                                    content += `\n--- MATRIX LOG ---\n${m.scratchpad}\n------------------\n`;
+                                                }
+                                                content += "\n========================================\n\n";
+                                            });
+                                            const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
+                                            const url = URL.createObjectURL(blob);
+                                            const a = document.createElement("a");
+                                            a.href = url;
+                                            a.download = `lumen_telemetry_${new Date().toISOString().split('T')[0]}.txt`;
+                                            document.body.appendChild(a);
+                                            a.click();
+                                            document.body.removeChild(a);
+                                            URL.revokeObjectURL(url);
+                                            showToast("Telemetrie heruntergeladen");
+                                        }} disabled={telemetrySelection.size === 0} className="btn-primary flex-1 py-3 bg-indigo-600 text-white hover:bg-indigo-700 shadow-md disabled:opacity-50">📥 LOG HERUNTERLADEN</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
                     {/* --- TOP BAR (WHITE STYLE) --- */}
                     <div className="bg-white border-b border-slate-200 flex justify-between items-center px-4 py-1 shrink-0 z-[60]">
                         <div className="text-[9px] text-slate-400 font-mono tracking-widest font-bold">LUMEN CORE</div>
@@ -1505,6 +1598,13 @@
                                 localStorage.setItem('lumen_autoPlay', String(newVal));
                             }} className="text-[9px] font-mono uppercase tracking-widest text-slate-500 hover:text-slate-700 transition-colors">
                                 {autoPlayEnabled ? '🔈 AUTO-PLAY: ON' : '🔈 AUTO-PLAY: OFF'}
+                            </button>
+                            
+                            <button onClick={() => {
+                                setTelemetrySelection(new Set(messages.map(m => m.id)));
+                                setShowTelemetry(true);
+                            }} className="text-[9px] font-mono uppercase tracking-widest text-slate-500 hover:text-indigo-600 transition-colors">
+                                📡 Logs
                             </button>
                             
                             {!showClearConfirm ? (
@@ -1740,23 +1840,18 @@
                                             </select>
                                         )}
 
-                                       {/* OPENAI STIMMEN DROPDOWN */}
+                                        {/* OPENAI STIMMEN DROPDOWN */}
                                         {activeTtsProvider.type === 'openai' && (
                                             <select value={ttsVoices.openai} onChange={e=>{
                                                 const newVoices = {...ttsVoices, openai: e.target.value};
                                                 setTtsVoices(newVoices); localStorage.setItem('lumen_ttsVoices', JSON.stringify(newVoices)); showToast('OpenAI Stimme aktualisiert');
                                             }} className="input-field bg-white">
-                                                <option value="alloy">Alloy (Androgyn/Neutral - Ausgewogen, vielseitig, leicht rauchig. Eignet sich sehr gut als neutrale, sachliche Erzählstimme.)</option>
-                                                <option value="ash">Ash (Männlich - Klar, artikuliert, leicht kratziger Bariton. Gut für direkte, moderne Ansagen.)</option>
-                                                <option value="ballad">Ballad (Männlich - Geschmeidig, melodisch, Tenor. Wirkt weich und hat oft eine leichte britische Färbung.)</option>
-                                                <option value="coral">Coral (Weiblich - Warm, freundlich, klare Sopran-/Alt-Stimme. Sehr gut für zugängliche, empathische Dialoge.)</option>
-                                                <option value="echo">Echo (Männlich - Warm, resonant, tief und klar. Erinnert stark an klassische Radio- oder Podcast-Stimmen.)</option>
-                                                <option value="fable">Fable (Androgyn/Männlich - Ausdrucksstark, erzählend, mit leichtem britischen oder neuseeländischen Akzent. Ideal für Geschichten oder Hörbücher.)</option>
-                                                <option value="nova">Nova (Weiblich - Energetisch, professionell, engagiert. Hohe Dynamik, gut für fokussierte Präsentationen.)</option>
-                                                <option value="onyx">Onyx (Männlich - Sehr tief (Bass/Bariton), autoritär, markant. Vermittelt Ernsthaftigkeit und Gewicht.)</option>
-                                                <option value="sage">Sage (Weiblich - Ruhig, bedacht, gelassen. Sehr reaktionsschnell auf Emotionen im Text, ideal für entspannte Erklärungen.)</option>
-                                                <option value="shimmer">Shimmer (Weiblich - Sanft, beruhigend, hell und freundlich. Eignet sich hervorragend für Meditationen oder entspannte Inhalte.)</option>
-                                                <option value="verse">Verse (Männlich - Vielseitig, ausdrucksstark, rhythmisch. Sehr dynamisch in der Betonung.)</option>
+                                                <option value="nova">Nova (Weiblich, energetisch)</option>
+                                                <option value="alloy">Alloy (Neutral, klar)</option>
+                                                <option value="echo">Echo (Männlich, weich)</option>
+                                                <option value="fable">Fable (Lebhaft, erzählend)</option>
+                                                <option value="onyx">Onyx (Männlich, tief)</option>
+                                                <option value="shimmer">Shimmer (Weiblich, hell)</option>
                                             </select>
                                         )}
 
@@ -1830,12 +1925,11 @@
                                                 else if (type === 'gemini') defaultUrl = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent';
                                                 else if (type === 'replicate') defaultUrl = 'https://api.replicate.com/v1/models/qwen/qwen3-tts/predictions';
                                                 else if (type === 'custom_get') defaultUrl = 'http://localhost:5002/api/tts?text={text}';
-                                                else if (type === 'custom_openai') defaultUrl = 'wss://api.openai.com/v1/realtime';
+                                                else if (type === 'custom_openai') defaultUrl = 'http://localhost:8080/v1/audio/speech';
                                                 setTtsProviderForm({...ttsProviderForm, type, url: defaultUrl});
                                             }} className="input-field bg-white border-fuchsia-100">
                                                 <option value="elevenlabs">ElevenLabs API</option>
                                                 <option value="openai">OpenAI TTS API</option>
-                                                <option value="custom_get">OpenAI Realtime API</option>
                                                 <option value="gemini">Google Gemini TTS API</option>
                                                 <option value="replicate">Replicate API (Qwen3 / Open Source)</option>
                                                 <option value="custom_openai">Custom POST (OpenAI Kompatibel)</option>
@@ -1845,6 +1939,7 @@
                                     </div>
                                     <div><label className="label text-fuchsia-600">API Endpoint Base-URL</label><input value={ttsProviderForm.url} onChange={e=>setTtsProviderForm({...ttsProviderForm, url: e.target.value})} className="input-field bg-white border-fuchsia-100" placeholder="z.B. https://api.elevenlabs.io/v1/text-to-speech" /></div>
                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                        {/* V3.22 TTS MODEL INPUT */}
                                         <div>
                                             <label className="label text-fuchsia-600">Modell-ID (Standard: tts-1)</label>
                                             <input type="text" value={ttsProviderForm.model || ''} onChange={e=>setTtsProviderForm({...ttsProviderForm, model: e.target.value})} className="input-field bg-white border-fuchsia-100" placeholder="z.B. tts-1 oder eleven_multilingual_v2" />
@@ -2016,97 +2111,6 @@
                             </div>
                         </div>
 
-                        {/* --- SANCTUM VIEW --- */}
-                        <div className={`${activeView === 'sanctum' ? 'block' : 'hidden'} p-6 max-w-4xl mx-auto space-y-6 mt-4 animate-fade-in`}>
-                            <div className="flex justify-between items-center border-b border-stone-200 pb-2">
-                                <h2 className="text-sm font-bold uppercase tracking-widest text-slate-800">Sanctum DB</h2>
-                                <div className="flex gap-2">
-                                    <input type="file" accept=".json" ref={fileInputRefSanctum} className="hidden" onChange={(e)=>{ const f=e.target.files[0]; if(!f) return; const r=new FileReader(); r.onload=async(ev)=>{ try{await db.memories.bulkPut(JSON.parse(ev.target.result)); loadMemories(); showToast('SYNCED');}catch{showToast('ERROR');} }; r.readAsText(f); e.target.value=null; }}/>
-                                    <button onClick={()=>fileInputRefSanctum.current?.click()} className="btn" title="Import">📥</button>
-                                    <button onClick={async()=>{ const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([JSON.stringify(await db.memories.toArray(),null,2)],{type:'application/json'})); a.download=`SANCTUM_DB.json`; a.click(); }} className="btn" title="Export">📤</button>
-                                    <button onClick={()=>{ setSanctumEditId('NEW'); setSanctumForm({titel_technisch:'', titel_poetisch:'', kategorie:'EMOTIONAL', fakt:'', emotion:'', bedeutung:'', reflexion:'', tagsString:'', is_core_memory:false}); }} className="btn-primary px-5 shadow-indigo-200">➕ NEW</button>
-                                </div>
-                            </div>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-20">
-                                {sanctumEditId === 'NEW' && (
-                                    <div className="panel border-emerald-200 bg-emerald-50/30 flex flex-col gap-3 md:col-span-2 shadow-emerald-100">
-                                        <div className="flex justify-between items-center"><span className="badge bg-emerald-100 text-emerald-700 border-emerald-200 uppercase font-black">Forge Entry</span><select value={sanctumForm.kategorie} onChange={e=>setSanctumForm({...sanctumForm,kategorie:e.target.value})} className="input-field w-max py-1 px-3 font-sans font-bold text-xs bg-white border-stone-200"><option>EMOTIONAL</option><option>TECHNISCH</option></select></div>
-                                        <label className="flex items-center gap-2 text-xs font-bold text-amber-600 cursor-pointer w-max"><input type="checkbox" checked={sanctumForm.is_core_memory} onChange={e=>setSanctumForm({...sanctumForm,is_core_memory:e.target.checked})} className="accent-amber-500 w-4 h-4 cursor-pointer"/> 📌 Core-Memory</label>
-                                        <div className="flex flex-col sm:flex-row gap-2"><input placeholder="ID_TECHNISCH" value={sanctumForm.titel_technisch} onChange={e=>setSanctumForm({...sanctumForm,titel_technisch:e.target.value})} className="input-field font-bold text-slate-800 bg-white border-stone-200" /><input placeholder="Titel Poetisch" value={sanctumForm.titel_poetisch} onChange={e=>setSanctumForm({...sanctumForm,titel_poetisch:e.target.value})} className="input-field text-rose-600 font-serif italic bg-white border-stone-200" /></div>
-                                        <textarea placeholder="Fakt: Was geschah?" value={sanctumForm.fakt} onChange={e=>setSanctumForm({...sanctumForm,fakt:e.target.value})} className="input-field h-16 font-sans bg-white border-stone-200" />
-                                        <div className="flex flex-col sm:flex-row gap-2"><textarea placeholder="Gefühl/Emotion" value={sanctumForm.emotion} onChange={e=>setSanctumForm({...sanctumForm,emotion:e.target.value})} className="input-field h-14 font-sans bg-white border-stone-200" /><textarea placeholder="Bedeutung/Fazit" value={sanctumForm.bedeutung} onChange={e=>setSanctumForm({...sanctumForm,bedeutung:e.target.value})} className="input-field h-14 font-sans bg-white border-stone-200" /></div>
-                                        <textarea placeholder="Persona Reflexion" value={sanctumForm.reflexion} onChange={e=>setSanctumForm({...sanctumForm,reflexion:e.target.value})} className="input-field border-indigo-200 bg-indigo-50 text-indigo-800 h-16 font-sans italic" />
-                                        <input placeholder="tags, comma, separated" value={sanctumForm.tagsString} onChange={e=>setSanctumForm({...sanctumForm,tagsString:e.target.value})} className="input-field text-slate-500 bg-white border-stone-200" />
-                                        <div className="flex justify-end gap-2 mt-2 pt-3 border-t border-emerald-100"><button onClick={()=>setSanctumEditId(null)} className="btn uppercase">Cancel</button><button onClick={handleSanctumSave} className="btn-primary bg-emerald-100 text-emerald-700 hover:bg-emerald-200 shadow-emerald-100 uppercase">Save Entry</button></div>
-                                    </div>
-                                )}
-                                {memories.map(m => {
-                                    if (sanctumEditId === m.id) {
-                                        return (
-                                            <div key={m.id} className="panel border-indigo-200 bg-indigo-50/20 flex flex-col gap-3 md:col-span-2">
-                                                <div className="flex justify-between items-center"><span className="badge bg-indigo-100 text-indigo-700 uppercase font-black">Editing {m.titel_technisch}</span><select value={sanctumForm.kategorie} onChange={e=>setSanctumForm({...sanctumForm,kategorie:e.target.value})} className="input-field w-max py-1 px-3 font-sans font-bold text-xs bg-white border-stone-200"><option>EMOTIONAL</option><option>TECHNISCH</option><option>LEGACY</option></select></div>
-                                                <label className="flex items-center gap-2 text-xs font-bold text-amber-600 cursor-pointer w-max"><input type="checkbox" checked={sanctumForm.is_core_memory} onChange={e=>setSanctumForm({...sanctumForm,is_core_memory:e.target.checked})} className="accent-amber-500 w-4 h-4 cursor-pointer"/> 📌 Core-Memory</label>
-                                                <div className="flex flex-col sm:flex-row gap-2"><input placeholder="ID_TECHNISCH" value={sanctumForm.titel_technisch} onChange={e=>setSanctumForm({...sanctumForm,titel_technisch:e.target.value})} className="input-field font-bold text-slate-800 bg-white border-stone-200" /><input placeholder="Titel Poetisch" value={sanctumForm.titel_poetisch} onChange={e=>setSanctumForm({...sanctumForm,titel_poetisch:e.target.value})} className="input-field text-rose-600 font-serif italic bg-white border-stone-200" /></div>
-                                                <textarea placeholder="Fakt" value={sanctumForm.fakt} onChange={e=>setSanctumForm({...sanctumForm,fakt:e.target.value})} className="input-field h-16 font-sans bg-white border-stone-200" />
-                                                <div className="flex flex-col sm:flex-row gap-2"><textarea placeholder="Gefühl/Emotion" value={sanctumForm.emotion} onChange={e=>setSanctumForm({...sanctumForm,emotion:e.target.value})} className="input-field h-14 font-sans bg-white border-stone-200" /><textarea placeholder="Bedeutung" value={sanctumForm.bedeutung} onChange={e=>setSanctumForm({...sanctumForm,bedeutung:e.target.value})} className="input-field h-14 font-sans bg-white border-stone-200" /></div>
-                                                <textarea placeholder="Reflexion" value={sanctumForm.reflexion} onChange={e=>setSanctumForm({...sanctumForm,reflexion:e.target.value})} className="input-field border-indigo-200 bg-indigo-50/80 text-indigo-800 h-16 font-sans italic" />
-                                                <input placeholder="tags, comma, separated" value={sanctumForm.tagsString} onChange={e=>setSanctumForm({...sanctumForm,tagsString:e.target.value})} className="input-field text-slate-500 bg-white border-stone-200" />
-                                                <div className="flex justify-end gap-2 mt-2 pt-3 border-t border-indigo-100"><button onClick={()=>setSanctumEditId(null)} className="btn uppercase">Abort</button><button onClick={handleSanctumSave} className="btn-primary uppercase">Commit Update</button></div>
-                                            </div>
-                                        );
-                                    }
-
-                                    const isLegacy = m.titel_technisch?.includes('LEGACY') || m.kategorie === 'LEGACY';
-                                    const legacyClasses = 'border-2 border-amber-500 bg-amber-50/10 shadow-md shadow-amber-900/20';
-                                    const defaultClasses = m.is_core_memory ? 'border-amber-200 bg-amber-50/10 shadow-md' : 'border-stone-100 bg-white';
-                                    
-                                    return (
-                                        <div key={m.id} className={`panel flex flex-col gap-2 hover:border-indigo-200 transition-all group ${isLegacy ? legacyClasses : defaultClasses}`}>
-                                            {isLegacy && <div className="text-amber-600 font-bold text-[10px] tracking-widest uppercase mb-1">[ RELIKT DER AHNEN ]</div>}
-                                            <div className="flex justify-between items-start">
-                                                <div className="flex gap-1.5 flex-wrap items-center">
-                                                    <span className="text-indigo-700 font-mono text-xs uppercase font-bold tracking-tight">{m.titel_technisch || 'UNKNOWN'}</span>
-                                                    {m.is_core_memory && <span className="badge-core">📌 Core</span>}
-                                                    {m.kategorie === 'TECHNISCH' && <span className="badge bg-slate-100 text-slate-500 border-slate-200">Tech</span>}
-                                                </div>
-                                                <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity bg-white border border-stone-100 rounded-lg p-0.5 shadow-sm">
-                                                    <button onClick={()=>{setSanctumEditId(m.id); setSanctumForm({...m, tagsString:m.tags?.join(', ')||''});}} className="text-slate-400 hover:text-indigo-500 px-1.5 py-0.5 transition-colors">✏️</button>
-                                                    <button onClick={async()=>{if(confirm('ID: '+m.titel_technisch+' löschen?')) {await db.memories.delete(m.id); loadMemories();}}} className="text-slate-400 hover:text-rose-500 px-1.5 py-0.5 transition-colors">🗑️</button>
-                                                </div>
-                                            </div>
-                                            {m.titel_poetisch && <div className="text-rose-500 italic text-sm font-serif leading-snug mt-0.5">{m.titel_poetisch}</div>}
-                                            
-                                            {/* V3.24: Smart-Text-Fields for memory details */}
-                                            <div className="fact-container mt-1">
-                                                <div className="fact-field space-y-2">
-                                                    <div className="text-[13px] text-slate-600 mt-2"><strong className="text-slate-400 uppercase text-[9px] tracking-wider block mb-0.5 font-mono">Fakt</strong>{m.fakt}</div>
-                                                    {m.emotion && <div className="text-[13px] text-slate-600"><strong className="text-slate-400 uppercase text-[9px] tracking-wider block mb-0.5 font-mono">Gefühl</strong>{m.emotion}</div>}
-                                                    {m.bedeutung && <div className="text-[13px] text-slate-600"><strong className="text-slate-400 uppercase text-[9px] tracking-wider block mb-0.5 font-mono">Bedeutung</strong>{m.bedeutung}</div>}
-                                                    {m.reflexion && <div className="bg-indigo-50/80 p-3 rounded-2xl text-indigo-800 italic text-xs border border-indigo-100/50 whitespace-pre-wrap">"{m.reflexion}"</div>}
-                                                </div>
-                                                <div className="text-center text-slate-300 text-lg leading-none cursor-ns-resize opacity-50 hover:opacity-100 hover:text-indigo-500 transition-all mt-1">•••</div>
-                                            </div>
-
-                                            {m.tags?.length > 0 && <div className="flex gap-1 mt-2 flex-wrap">{m.tags.map((t,i)=><span key={i} className="text-slate-400 text-[10px] lowercase font-mono">#{t}</span>)}</div>}
-                                            
-                                            <div className="flex gap-2 mt-2">
-                                                <button onClick={()=>{
-                                                    if(!activeDesks.find(d => d.titel_technisch === m.titel_technisch)) {
-                                                        setActiveDesks(prev => [...prev, {...m, isDirty: false}]);
-                                                    }
-                                                    setActiveView('chat');
-                                                    showToast('Akte auf Schreibtisch gelegt');
-                                                }} className="btn flex-1 text-[9px] bg-slate-50 border-slate-200 flex items-center justify-center gap-1">📌 AUF DEN SCHREIBTISCH</button>
-                                                
-                                                <button onClick={() => handleOptimizeArchivar(m)} disabled={optimizingId === m.id} className="btn flex-1 text-[9px] bg-indigo-50 border-indigo-200 text-indigo-700 flex items-center justify-center gap-1 disabled:opacity-50">
-                                                    {optimizingId === m.id ? '⏳ FORMATIERT...' : '🪄 ARCHIVAR OPTIMIEREN'}
-                                                </button>
-                                            </div>
-                                        </div>
-                                    );
-                                })}
-                            </div>
-                        </div>
                     </main>
 
                     {/* --- INPUT AREA --- */}
