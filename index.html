@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, interactive-widget=resizes-content">
-    <title>LUMEN - CORE V3.25</title>
+    <title>LUMEN - CORE V3.26</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-        // V3.25: Bulletproof Tailwind Config Initialization
+        // V3.26: Bulletproof Tailwind Config Initialization
         const initTailwind = () => {
             if (typeof tailwind !== 'undefined') {
                 tailwind.config = {
@@ -104,7 +104,7 @@
             directives: '++id, text' 
         });
 
-        // --- KONSTANTEN V3.25 ---
+        // --- KONSTANTEN V3.26 ---
         const DEFAULT_BLOCK1 = `Du bist Maira. Deine Antworten sind warm, metaphorisch und mütterlich. Du analysierst die Intentionen des Users tiefgründig und hilfst ihm beim Navigieren komplexer Gedanken.`;
         const DEFAULT_BLOCK3 = `Bevor du die finale Antwort generierst, bewerte die Sensoren:\n- "wahrnehmung": Was liest/siehst du konkret?\n- "matrix": Prüfe interne Logs und Entwürfe.\n- Nutze das Ahnenbuch (Kontext) für kontinuierliche Identität.\n- memory_update_detected: Wurde eine [LEGACY]-Karte reflektiert? Nutze als 'id' den 'titel_technisch'. WICHTIG: Lies die alte Reflexion. Nimm den Kern davon mit und VERWEBE ihn mit deiner neuen Erkenntnis zu einer allumfassenden Master-Zusammenfassung in 'reflexion_fusioniert' (dies überschreibt die alten Daten). Generiere zusätzlich ein Array 'neue_trigger_tags' (MAXIMAL 2-3 situative, hochspezifische Symptom-Wörter oder Emotionen aus Simons Text), um das Spinnennetz präzise zu trainieren. Sonst: null.\n- neue_direktive_erkannt: Hat Simon eine explizite Regel oder Direktive für dein zukünftiges Verhalten aufgestellt? Extrahiere sie als klaren Satz. Sonst: null.\n- helfer_suchauftrag: REGEL: Du bist ein technischer Web-Scraper, kein Mensch! Nutze KEINE Füllwörter oder Sätze. Suche ausschließlich nach harten, physischen Keywords. FALSCH: 'aktuell beliebteste Bücher'. RICHTIG: 'Spiegel Bestsellerliste Belletristik 2026 Platz 1 ISBN'. Zwingend null, wenn keine Suche nötig.\n- aktive_peripherie_ids: Liste hier die IDs (titel_technisch) der flüchtigen Karten (Tags) auf, die für den aktuellen Gesprächsverlauf noch relevant sind. Leeres Array [], wenn das Thema beendet ist.`;
         const DEFAULT_BLOCK4 = `{\n  "wahrnehmung": {\n    "werkbank_auge": null,\n    "ohr_roh": null,\n    "ohr_bereinigt": null\n  },\n  "matrix": {\n    "internal_system_glitch": false,\n    "helfer_suchauftrag": null,\n    "aktive_peripherie_ids": [],\n    "memory_update_detected": {\n      "id": "",\n      "reflexion_fusioniert": "",\n      "neue_trigger_tags": []\n    },\n    "neue_direktive_erkannt": null,\n    "tts_regie_prompt": null,\n    "tagebuch_entwurf": {\n      "modus": "DRAFT",\n      "daten": {}\n    },\n    "situations_analyse": "..."\n  },\n  "finale_antwort": "..."\n}`;
@@ -113,14 +113,14 @@
             {
                 id: '1',
                 sender: 'user',
-                text: 'INIT CORE V3.25. AI-TTS-REGIE & TAG-FILTER ONLINE.',
+                text: 'INIT CORE V3.26. UNIVERSAL-FILTER & POLLING BYPASS ONLINE.',
                 timestamp: new Date(Date.now() - 60000).toISOString()
             },
             {
                 id: '2',
                 sender: 'ai',
-                text: 'System online. Die V3.25 Architektur ist voll operativ. Der Text-Interceptor für TTS-Tags und die Regie-Matrix wurden erfolgreich initialisiert.',
-                scratchpad: '{\n  "wahrnehmung": {\n    "werkbank_auge": null,\n    "ohr_roh": "INIT CORE V3.25",\n    "ohr_bereinigt": "System-Patch auf V3.25 aktiv."\n  },\n  "matrix": {\n    "internal_system_glitch": false,\n    "helfer_suchauftrag": null,\n    "aktive_peripherie_ids": [],\n    "memory_update_detected": null,\n    "neue_direktive_erkannt": null,\n    "tts_regie_prompt": null,\n    "tagebuch_entwurf": null,\n    "situations_analyse": "V3.25 Update mit KI-gesteuerter TTS-Regie geladen."\n  },\n  "finale_antwort": "System online. Die V3.25 Architektur ist voll operativ. Der Text-Interceptor für TTS-Tags und die Regie-Matrix wurden erfolgreich initialisiert."\n}',
+                text: 'System online. Die V3.26 Architektur ist voll operativ. Der Universal-Textfilter und der asynchrone Audio-Sync wurden erfolgreich initialisiert.',
+                scratchpad: '{\n  "wahrnehmung": {\n    "werkbank_auge": null,\n    "ohr_roh": "INIT CORE V3.26",\n    "ohr_bereinigt": "System-Patch auf V3.26 aktiv."\n  },\n  "matrix": {\n    "internal_system_glitch": false,\n    "helfer_suchauftrag": null,\n    "aktive_peripherie_ids": [],\n    "memory_update_detected": null,\n    "neue_direktive_erkannt": null,\n    "tts_regie_prompt": null,\n    "tagebuch_entwurf": null,\n    "situations_analyse": "V3.26 Update mit KI-gesteuerter TTS-Regie geladen."\n  },\n  "finale_antwort": "System online. Die V3.26 Architektur ist voll operativ. Der Universal-Textfilter und der asynchrone Audio-Sync wurden erfolgreich initialisiert."\n}',
                 timestamp: new Date().toISOString()
             }
         ];
@@ -128,10 +128,10 @@
         // --- HELPER FUNKTIONEN ---
         const generateId = () => Math.random().toString(36).substr(2, 9);
 
-        // V3.25: Invisible Interceptor
+        // V3.26: Universal Invisible Interceptor
         const cleanVisibleText = (text) => {
             if (!text) return "";
-            return text.replace(/\[(long pause|medium pause|short pause|extremely fast|robotic|sarcasm|shouting|whispering|uhm|laughing|sigh)\]/gi, '').replace(/\s{2,}/g, ' ').trim();
+            return text.replace(/\[.*?\]/g, '').replace(/\s{2,}/g, ' ').trim();
         };
 
         const findRelevantMemories = (userInput, allMemories) => {
@@ -216,7 +216,7 @@
 
             const handleDownload = () => {
                 const selectedMsgs = messages.filter(m => selectedIds.includes(m.id));
-                let content = "# LUMEN TELEMETRIE LOG V3.25\n\n";
+                let content = "# LUMEN TELEMETRIE LOG V3.26\n\n";
                 selectedMsgs.forEach(m => {
                     content += `[${new Date(m.timestamp).toLocaleString()}] ${m.sender.toUpperCase()}:\n`;
                     content += `${m.text}\n`;
@@ -432,7 +432,7 @@
                 }; 
             });
             
-            // V3.25 Auto-TTS Regie State
+            // V3.26 Auto-TTS Regie State
             const [autoTtsRegie, setAutoTtsRegie] = React.useState(() => localStorage.getItem('lumen_auto_tts') === 'true');
 
             const [telemetry, setTelemetry] = React.useState({ concern: 0, bs_meter: 0, mask_drop: false });
@@ -535,7 +535,7 @@
                 setPlayingMsgId(null);
             };
 
-            // V3.25: playMessageTTS updated with ttsRegiePrompt parameter
+            // V3.26: playMessageTTS updated with ttsRegiePrompt parameter and Polling Bypass
             const playMessageTTS = async (msgId, textToSpeak, ttsRegiePrompt) => {
                 if (window.currentAudio && window.currentAudioId === msgId) {
                     if (window.currentAudio.paused) {
@@ -662,7 +662,7 @@
 
                         let replicateInput = { text: textToSpeak };
                         if (autoTtsRegie && ttsRegiePrompt) {
-                            replicateInput.prompt = ttsRegiePrompt; // V3.25 Injected Prompt Support
+                            replicateInput.prompt = ttsRegiePrompt;
                         }
 
                         if (dna.voice_config && dna.voice_config.providerId === ttsProvider.id && dna.voice_config.extraParams) {
@@ -683,21 +683,27 @@
                             body: JSON.stringify({ input: replicateInput })
                         });
                         
-                        if (!response.ok) {
-                            const errText = await response.text();
-                            throw new Error(`Proxy/API Fehler (${response.status}): ${errText.substring(0, 150)}`);
+                        // V3.26: CLOUDFLARE TIMEOUT-BYPASS (REPLICATE POLLING)
+                        let data = await response.json();
+                        if (!response.ok && response.status !== 202) throw new Error(data.detail || data.error || 'Replicate API Fehler');
+
+                        // Der Radar-Trick: Wenn das Modell noch lädt, fragen wir alle 2 Sekunden nach.
+                        while (data.status === "starting" || data.status === "processing") {
+                            await new Promise(r => setTimeout(r, 2000)); // 2 Sekunden warten
+                            const statusUrl = `${WORKER_URL}/?target=${encodeURIComponent(data.urls.get)}`;
+                            const statusResponse = await fetch(statusUrl, {
+                                headers: { 'Authorization': `Bearer ${key}` }
+                            });
+                            data = await statusResponse.json();
                         }
-                        
-                        const data = await response.json();
+
+                        if (data.status === "failed" || data.status === "canceled") {
+                            throw new Error('Replicate Timeout oder Abbruch: ' + (data.error || 'Unbekannt'));
+                        }
+
                         let audioUrl = data.output;
                         if (Array.isArray(audioUrl)) audioUrl = audioUrl[0];
-                        
-                        if (!audioUrl) {
-                            if (data.status === 'starting' || data.status === 'processing') {
-                                throw new Error('Replicate Timeout: Cloudflare hat die Verbindung gekappt, bevor das Audio fertig war (Prefer: wait Limit).');
-                            }
-                            throw new Error('Kein Audio Output erhalten. Replicate sagt: ' + JSON.stringify(data));
-                        }
+                        if (!audioUrl) throw new Error('Kein Audio Output erhalten.');
                         
                         const audioProxyUrl = `${WORKER_URL}/?target=${encodeURIComponent(audioUrl)}`;
                         const audioResponse = await fetch(audioProxyUrl);
@@ -783,7 +789,7 @@
                 try {
                     const base64Audio = await new Promise((resolve) => {
                         const reader = new FileReader();
-                        reader.onloadend = () => resolve(reader.result);
+                        reader.onloadend = () => resolve(eader.result);
                         reader.readAsDataURL(blob);
                     });
 
@@ -871,7 +877,7 @@
                 }
             };
 
-            // --- ARCHIVAR GATEKEEPER (HILFSFUNKTION) ---
+            // --- V3.26 ARCHIVAR GATEKEEPER ---
             const runArchivar = async (content) => {
                 const activeProvider = providers.find(p => p.id === activeProviderId) || providers[0];
                 if (!activeProvider) throw new Error('Kein Chat-Provider konfiguriert');
@@ -880,35 +886,33 @@
                 const key = activeProvider.apiKey;
                 const apiUrl = activeProvider.url;
                 
-const prompt = `Du bist der Kognitive Archivar des Sanctums. Deine Aufgabe ist es, einen rohen Text-Entwurf (DRAFT) in eine dauerhafte, perfekt durchsuchbare Datenbank-Akte umzuwandeln.
-
-⚠️ OBERSTE REGEL: TEXT-ERHALT! Das Feld "fakt" darf NIEMALS gekürzt oder verändert werden. Es muss 100% verlustfrei übernommen werden!
-
+                const prompt = `Du bist der Kognitive Archivar des Sanctums. Deine Aufgabe ist es, einen rohen Text-Entwurf in eine dauerhafte, perfekt durchsuchbare Datenbank-Akte umzuwandeln.
+⚠️ OBERSTE REGEL: INHALTS-ERHALT vs. STRUKTUR-MAGIE!
+Der inhaltliche Text im Feld "fakt" darf NIEMALS gekürzt oder sinngemäß verändert werden. ABER: Du MUSST ihn optisch strukturieren! Nutze Markdown (Absätze, Spiegelstriche, fette Hervorhebungen), um aus unstrukturierten Textwänden ein perfekt und schnell lesbares, klares Dokument zu machen.
 Führe diese 4 Magien aus:
-1. TITEL-MAGIE:
-- 'titel_poetisch': Ein wunderschöner, atmosphärischer Titel (z.B. "Die Architektur des goldenen Siebs").
-- 'titel_technisch': Dient als feste ID! Format: KATEGORIE_Schlagwort_Schlagwort (z.B. "CODE_Golden_Filter" oder "REZEPT_Gemueselasagne"). Keine Leerzeichen, nutze Underscores!
 
-2. KATEGORIE-ZWANG:
-Wähle ZWINGEND exakt eine dieser Kategorien: [LORE, CODE, REZEPT, EMOTION, LOGBUCH, ARCHITEKTUR]. Erfinde keine eigenen!
-
-3. PREDICTIVE TAGGING (Das Herzstück):
-Generiere 8-12 Tags. Nutze nicht nur Substantive aus dem Text, sondern ZWINGEND auch Synonyme, Überbegriffe und Assoziationen, nach denen der User in Zukunft suchen könnte! (Beispiel: Wenn der Text "Gouda und Möhren" enthält, MÜSSEN die Tags auch "Auflauf", "Vegetarisch", "Rezept" und "Ofen" enthalten). Alle Tags in Kleinbuchstaben.
-
-4. METADATEN-VEREDELUNG:
-Fülle 'emotion', 'bedeutung' und 'reflexion' in 1-2 kurzen Sätzen aus, um den Kern des Textes für das Langzeitgedächtnis greifbar zu machen.
-
+TITEL-MAGIE:
+'titel_poetisch': Ein atmosphärischer Titel (z.B. "Die Architektur des goldenen Siebs").
+'titel_technisch': Dient als feste ID! Format: KATEGORIE_Schlagwort_Schlagwort (z.B. "CODE_Golden_Filter"). Nutze Underscores!
+KATEGORIE-ZWANG:
+Wähle ZWINGEND exakt eine dieser Kategorien: [LORE, CODE, REZEPT, EMOTION, LOGBUCH, ARCHITEKTUR, REGELWERK].
+PREDICTIVE TAGGING & AUDIO-STEMPEL:
+Generiere 8-12 Such-Tags (inkl. Synonyme & Überbegriffe in Kleinbuchstaben).
+Erstelle eine 'audio_signatur': Wähle 1-2 emotionale TTS-Tags, die explizit für "Gemini 3.1 Flash TTS" optimiert sind (z.B. [amusement], [seriousness], [positive], [quiet]). Dies dient Maira später als Regieanweisung, in welcher Stimmung sie diese Erinnerung vorlesen soll.
+METADATEN-VEREDELUNG:
+Fülle 'emotion' und 'bedeutung' in 1-2 kurzen Sätzen aus, um den Kern des Textes greifbar zu machen. (Hinweis: Das Feld 'reflexion' bleibt leer/null, das ist ausschließlich Mairas Aufgabe bei alten Karten!).
 Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
 {
-  "titel_technisch": "...",
-  "titel_poetisch": "...",
-  "kategorie": "...",
-  "fakt": "...",
-  "emotion": "...",
-  "bedeutung": "...",
-  "reflexion": "...",
-  "tags": ["tag1", "tag2", "tag3"]
+"titel_technisch": "...",
+"titel_poetisch": "...",
+"kategorie": "...",
+"fakt": "...",
+"emotion": "...",
+"bedeutung": "...",
+"audio_signatur": "...",
+"tags": ["tag1", "tag2", "tag3"]
 }`;
+
                 const payloadText = JSON.stringify(content);
 
                 let resText = "";
@@ -929,7 +933,7 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
                     const headers = { 'Content-Type': 'application/json' };
                     if (key) headers['Authorization'] = `Bearer ${key}`;
                     const bodyPayload = { 
-                        model: activeProvider.model || 'gpt-4o', 
+                        model: activeProvider.model || 'gpt-5.4-nano', 
                         messages: [{role:'system',content:prompt}, {role:'user',content:payloadText}] 
                     };
                     if (useJsonMode) bodyPayload.response_format = { type: "json_object" };
@@ -962,6 +966,7 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
                         emotion: optimizedData.emotion || mem.emotion,
                         bedeutung: optimizedData.bedeutung || mem.bedeutung,
                         reflexion: optimizedData.reflexion || mem.reflexion,
+                        audio_signatur: optimizedData.audio_signatur || mem.audio_signatur,
                         tags: optimizedData.tags || mem.tags
                     });
                     
@@ -980,7 +985,7 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
                     const mems = await db.memories.toArray();
                     const dirs = await db.directives.toArray();
                     const config = { providers, activeProviderId, ttsProvidersAccounts: ttsProviders, activeTtsProviderId, ttsVoices, sttProviders, activeSttProviderId, autoPlayEnabled, tavilyKey, autoTtsRegie };
-                    const bundle = { type: "LUMEN_FULL_BACKUP", version: "3.25", dna: dna, directives: dirs, memories: mems, config, timestamp: Date.now() };
+                    const bundle = { type: "LUMEN_FULL_BACKUP", version: "3.26", dna: dna, directives: dirs, memories: mems, config, timestamp: Date.now() };
                     const blob = new Blob([JSON.stringify(bundle, null, 2)], { type: "application/json" });
                     const url = URL.createObjectURL(blob);
                     const a = document.createElement('a'); a.href = url;
@@ -1030,7 +1035,7 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
             // --- CONFIG ONLY EXPORT/IMPORT ---
             const handleConfigExport = () => {
                 try {
-                    const config = { type: "LUMEN_CONFIG_BACKUP", version: "3.25", providers, activeProviderId, ttsProvidersAccounts: ttsProviders, activeTtsProviderId, ttsVoices, sttProviders, activeSttProviderId, autoPlayEnabled, tavilyKey, autoTtsRegie };
+                    const config = { type: "LUMEN_CONFIG_BACKUP", version: "3.26", providers, activeProviderId, ttsProvidersAccounts: ttsProviders, activeTtsProviderId, ttsVoices, sttProviders, activeSttProviderId, autoPlayEnabled, tavilyKey, autoTtsRegie };
                     const blob = new Blob([JSON.stringify(config, null, 2)], { type: "application/json" });
                     const url = URL.createObjectURL(blob);
                     const a = document.createElement('a'); a.href = url;
@@ -1163,7 +1168,7 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
                             const userWords = text.toLowerCase();
                             const hasFuzzyTag = m.tags && m.tags.some(tag => {
                                 if (typeof tag !== 'string') return false;
-                                const cleanTag = tag.replace('#', '').toLowerCase();
+                                const cleanTag = tag.replace('#', '').trim().toLowerCase();
                                 return userWords.includes(cleanTag);
                             });
                             
@@ -1246,7 +1251,7 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
                     let resText = await fetchTextFromAPI(staticSystemPrompt, combinedUserText, hist);
                     
                     let finalChatText = "", finalScratch = "";
-                    let ttsRegie = null; // V3.25 TTS Regie Variable
+                    let ttsRegie = null; // V3.26 TTS Regie Variable
                     
                     try {
                         let cleanResText = resText.replace(/[\`]{3}json/gi, '').replace(/[\`]{3}/gi, '').trim();
@@ -1263,6 +1268,9 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
                                 timestamp: new Date().toISOString() 
                             };
                             setMessages(prev => [...prev, intentMsg]);
+                            
+                            // V3.26 AUDIO SYNC FÜR LUNA
+                            if (autoPlayEnabled) playMessageTTS(intentMsg.id, intentMsg.text, obj.matrix.tts_regie_prompt);
                             
                             setLoadingStatus("LUNA RECHERCHIERT: " + obj.matrix.helfer_suchauftrag.toUpperCase());
                             
@@ -1307,7 +1315,7 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
                         finalChatText = finalAnswer;
                         finalScratch = JSON.stringify(obj, null, 2);
                         
-                        // V3.25 TTS Regie Extraktion
+                        // V3.26 TTS Regie Extraktion
                         if (obj.matrix?.tts_regie_prompt) {
                             ttsRegie = obj.matrix.tts_regie_prompt;
                         }
@@ -1635,7 +1643,7 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
                                 </button>
                             )}
                             
-                            {/* TELEMETRIE BUTTON V3.25 */}
+                            {/* TELEMETRIE BUTTON V3.26 */}
                             <button onClick={() => setShowTelemetry(true)} className="text-[9px] font-mono uppercase tracking-widest text-slate-500 hover:text-indigo-500 transition-colors">
                                 📊 LOGS
                             </button>
@@ -2228,7 +2236,7 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
                                             </div>
                                             {m.titel_poetisch && <div className="text-rose-500 italic text-sm font-serif leading-snug mt-0.5 shrink-0">{m.titel_poetisch}</div>}
                                             
-                                            {/* V3.25: Stabilized Expandable Container */}
+                                            {/* V3.26: Stabilized Expandable Container */}
                                             <div 
                                                 className={`flex-1 flex flex-col overflow-hidden transition-all duration-400 cursor-pointer mt-2 relative ${isExpanded ? 'max-h-[3000px]' : 'max-h-[100px] hover:max-h-[250px]'}`}
                                                 onClick={() => setExpandedCards(prev => ({...prev, [m.id]: !prev[m.id]}))}
@@ -2248,7 +2256,7 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
 
                                             {m.tags?.length > 0 && <div className="flex gap-1 mt-2 flex-wrap shrink-0">{m.tags.map((t,i)=><span key={i} className="text-slate-400 text-[10px] lowercase font-mono">#{t}</span>)}</div>}
                                             
-                                            {/* V3.25: Fixed Buttons */}
+                                            {/* V3.26: Fixed Buttons */}
                                             <div className="flex gap-2 mt-3 pt-3 border-t border-stone-100 shrink-0 w-full mt-auto">
                                                 <button onClick={()=>{
                                                     if(!activeDesks.find(d => d.titel_technisch === m.titel_technisch)) {
