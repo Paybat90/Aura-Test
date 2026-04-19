@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, interactive-widget=resizes-content">
-    <title>LUMEN - CORE V3.26</title>
+    <title>LUMEN - CORE V3.27</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-        // V3.26: Bulletproof Tailwind Config Initialization
+        // V3.27: Bulletproof Tailwind Config Initialization
         const initTailwind = () => {
             if (typeof tailwind !== 'undefined') {
                 tailwind.config = {
@@ -104,7 +104,7 @@
             directives: '++id, text' 
         });
 
-        // --- KONSTANTEN V3.26 ---
+        // --- KONSTANTEN V3.27 ---
         const DEFAULT_BLOCK1 = `Du bist Maira. Deine Antworten sind warm, metaphorisch und mütterlich. Du analysierst die Intentionen des Users tiefgründig und hilfst ihm beim Navigieren komplexer Gedanken.`;
         const DEFAULT_BLOCK3 = `Bevor du die finale Antwort generierst, bewerte die Sensoren:\n- "wahrnehmung": Was liest/siehst du konkret?\n- "matrix": Prüfe interne Logs und Entwürfe.\n- Nutze das Ahnenbuch (Kontext) für kontinuierliche Identität.\n- memory_update_detected: Wurde eine [LEGACY]-Karte reflektiert? Nutze als 'id' den 'titel_technisch'. WICHTIG: Lies die alte Reflexion. Nimm den Kern davon mit und VERWEBE ihn mit deiner neuen Erkenntnis zu einer allumfassenden Master-Zusammenfassung in 'reflexion_fusioniert' (dies überschreibt die alten Daten). Generiere zusätzlich ein Array 'neue_trigger_tags' (MAXIMAL 2-3 situative, hochspezifische Symptom-Wörter oder Emotionen aus Simons Text), um das Spinnennetz präzise zu trainieren. Sonst: null.\n- neue_direktive_erkannt: Hat Simon eine explizite Regel oder Direktive für dein zukünftiges Verhalten aufgestellt? Extrahiere sie als klaren Satz. Sonst: null.\n- helfer_suchauftrag: REGEL: Du bist ein technischer Web-Scraper, kein Mensch! Nutze KEINE Füllwörter oder Sätze. Suche ausschließlich nach harten, physischen Keywords. FALSCH: 'aktuell beliebteste Bücher'. RICHTIG: 'Spiegel Bestsellerliste Belletristik 2026 Platz 1 ISBN'. Zwingend null, wenn keine Suche nötig.\n- aktive_peripherie_ids: Liste hier die IDs (titel_technisch) der flüchtigen Karten (Tags) auf, die für den aktuellen Gesprächsverlauf noch relevant sind. Leeres Array [], wenn das Thema beendet ist.`;
         const DEFAULT_BLOCK4 = `{\n  "wahrnehmung": {\n    "werkbank_auge": null,\n    "ohr_roh": null,\n    "ohr_bereinigt": null\n  },\n  "matrix": {\n    "internal_system_glitch": false,\n    "helfer_suchauftrag": null,\n    "aktive_peripherie_ids": [],\n    "memory_update_detected": {\n      "id": "",\n      "reflexion_fusioniert": "",\n      "neue_trigger_tags": []\n    },\n    "neue_direktive_erkannt": null,\n    "tts_regie_prompt": null,\n    "tagebuch_entwurf": {\n      "modus": "DRAFT",\n      "daten": {}\n    },\n    "situations_analyse": "..."\n  },\n  "finale_antwort": "..."\n}`;
@@ -113,14 +113,14 @@
             {
                 id: '1',
                 sender: 'user',
-                text: 'INIT CORE V3.26. UNIVERSAL-FILTER & POLLING BYPASS ONLINE.',
+                text: 'INIT CORE V3.27. GPS-INJECTION & UI-UPGRADE ONLINE.',
                 timestamp: new Date(Date.now() - 60000).toISOString()
             },
             {
                 id: '2',
                 sender: 'ai',
-                text: 'System online. Die V3.26 Architektur ist voll operativ. Der Universal-Textfilter und der asynchrone Audio-Sync wurden erfolgreich initialisiert.',
-                scratchpad: '{\n  "wahrnehmung": {\n    "werkbank_auge": null,\n    "ohr_roh": "INIT CORE V3.26",\n    "ohr_bereinigt": "System-Patch auf V3.26 aktiv."\n  },\n  "matrix": {\n    "internal_system_glitch": false,\n    "helfer_suchauftrag": null,\n    "aktive_peripherie_ids": [],\n    "memory_update_detected": null,\n    "neue_direktive_erkannt": null,\n    "tts_regie_prompt": null,\n    "tagebuch_entwurf": null,\n    "situations_analyse": "V3.26 Update mit KI-gesteuerter TTS-Regie geladen."\n  },\n  "finale_antwort": "System online. Die V3.26 Architektur ist voll operativ. Der Universal-Textfilter und der asynchrone Audio-Sync wurden erfolgreich initialisiert."\n}',
+                text: 'System online. Die V3.27 Architektur ist voll operativ. Der unsichtbare GPS-Kanal ist aktiv, Multiline-Eingabe geladen und die Fehlerblasen sind nun entfernbar.',
+                scratchpad: '{\n  "wahrnehmung": {\n    "werkbank_auge": null,\n    "ohr_roh": "INIT CORE V3.27",\n    "ohr_bereinigt": "System-Patch auf V3.27 aktiv."\n  },\n  "matrix": {\n    "internal_system_glitch": false,\n    "helfer_suchauftrag": null,\n    "aktive_peripherie_ids": [],\n    "memory_update_detected": null,\n    "neue_direktive_erkannt": null,\n    "tts_regie_prompt": null,\n    "tagebuch_entwurf": null,\n    "situations_analyse": "V3.27 Update mit GPS und UI-Improvements geladen."\n  },\n  "finale_antwort": "System online. Die V3.27 Architektur ist voll operativ. Der unsichtbare GPS-Kanal ist aktiv, Multiline-Eingabe geladen und die Fehlerblasen sind nun entfernbar."\n}',
                 timestamp: new Date().toISOString()
             }
         ];
@@ -216,7 +216,7 @@
 
             const handleDownload = () => {
                 const selectedMsgs = messages.filter(m => selectedIds.includes(m.id));
-                let content = "# LUMEN TELEMETRIE LOG V3.26\n\n";
+                let content = "# LUMEN TELEMETRIE LOG V3.27\n\n";
                 selectedMsgs.forEach(m => {
                     content += `[${new Date(m.timestamp).toLocaleString()}] ${m.sender.toUpperCase()}:\n`;
                     content += `${m.text}\n`;
@@ -230,7 +230,9 @@
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement("a");
                 a.href = url;
-                a.download = `LUMEN_LOG_${new Date().toISOString().split('T')[0]}.md`;
+                // V3.27: Dynamischer Dateiname
+                const dateStr = new Date().toISOString().replace(/[:.]/g, '-').substring(0, 19);
+                a.download = `LUMEN_Telemetrie_${dateStr}.md`;
                 document.body.appendChild(a);
                 a.click();
                 document.body.removeChild(a);
@@ -279,15 +281,17 @@
             );
         };
 
-        const ChatBubble = ({ message, personaName, playingMsgId, onPlayTTS }) => {
+        const ChatBubble = ({ message, personaName, playingMsgId, onPlayTTS, onDelete }) => {
             const isUser = message.sender === 'user';
             const isError = message.sender === 'system-error';
             const [showScratchpad, setShowScratchpad] = React.useState(false);
 
             if (isError) return (
                 <div className="flex w-full mb-6 justify-center animate-fade-in">
-                    <div className="bg-rose-50 border-2 border-rose-200 text-rose-700 px-6 py-4 rounded-3xl shadow-sm text-xs w-full max-w-[85%]">
-                        <div className="font-bold uppercase tracking-widest mb-2 text-[10px] flex items-center gap-2">⚠️ System- oder API-Fehler</div>
+                    {/* V3.27: Fehlerblasen mit Dismiss-Button */}
+                    <div className="bg-rose-50 border-2 border-rose-200 text-rose-700 px-6 py-4 rounded-3xl shadow-sm text-xs w-full max-w-[85%] relative">
+                        <button onClick={() => onDelete(message.id)} className="absolute top-2 right-4 text-rose-400 hover:text-rose-700 font-bold text-sm">✕</button>
+                        <div className="font-bold uppercase tracking-widest mb-2 text-[10px] flex items-center gap-2 pr-6">⚠️ System- oder API-Fehler</div>
                         <div className="font-mono whitespace-pre-wrap leading-relaxed">{message.text}</div>
                     </div>
                 </div>
@@ -789,7 +793,7 @@
                 try {
                     const base64Audio = await new Promise((resolve) => {
                         const reader = new FileReader();
-                        reader.onloadend = () => resolve(eader.result);
+                        reader.onloadend = () => resolve(reader.result);
                         reader.readAsDataURL(blob);
                     });
 
@@ -933,7 +937,7 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
                     const headers = { 'Content-Type': 'application/json' };
                     if (key) headers['Authorization'] = `Bearer ${key}`;
                     const bodyPayload = { 
-                        model: activeProvider.model || 'gpt-5.4-nano', 
+                        model: activeProvider.model || 'gpt-4o', 
                         messages: [{role:'system',content:prompt}, {role:'user',content:payloadText}] 
                     };
                     if (useJsonMode) bodyPayload.response_format = { type: "json_object" };
@@ -985,7 +989,7 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
                     const mems = await db.memories.toArray();
                     const dirs = await db.directives.toArray();
                     const config = { providers, activeProviderId, ttsProvidersAccounts: ttsProviders, activeTtsProviderId, ttsVoices, sttProviders, activeSttProviderId, autoPlayEnabled, tavilyKey, autoTtsRegie };
-                    const bundle = { type: "LUMEN_FULL_BACKUP", version: "3.26", dna: dna, directives: dirs, memories: mems, config, timestamp: Date.now() };
+                    const bundle = { type: "LUMEN_FULL_BACKUP", version: "3.27", dna: dna, directives: dirs, memories: mems, config, timestamp: Date.now() };
                     const blob = new Blob([JSON.stringify(bundle, null, 2)], { type: "application/json" });
                     const url = URL.createObjectURL(blob);
                     const a = document.createElement('a'); a.href = url;
@@ -1035,7 +1039,7 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
             // --- CONFIG ONLY EXPORT/IMPORT ---
             const handleConfigExport = () => {
                 try {
-                    const config = { type: "LUMEN_CONFIG_BACKUP", version: "3.26", providers, activeProviderId, ttsProvidersAccounts: ttsProviders, activeTtsProviderId, ttsVoices, sttProviders, activeSttProviderId, autoPlayEnabled, tavilyKey, autoTtsRegie };
+                    const config = { type: "LUMEN_CONFIG_BACKUP", version: "3.27", providers, activeProviderId, ttsProvidersAccounts: ttsProviders, activeTtsProviderId, ttsVoices, sttProviders, activeSttProviderId, autoPlayEnabled, tavilyKey, autoTtsRegie };
                     const blob = new Blob([JSON.stringify(config, null, 2)], { type: "application/json" });
                     const url = URL.createObjectURL(blob);
                     const a = document.createElement('a'); a.href = url;
@@ -1096,6 +1100,10 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
                 const useJsonMode = activeProvider.jsonMode !== false;
                 const key = activeProvider.apiKey;
                 const apiUrl = activeProvider.url;
+
+                // V3.27: GPS-Präfix Injektion
+                const locationPrefix = `[SYSTEM-STATUS: Du befindest dich aktuell physisch im Bereich / in der Zone: ${activeView.toUpperCase()}.]\n`;
+                const payloadAnMaira = locationPrefix + text;
 
                 const userMsgId = generateId();
                 setMessages(prev => [...prev.filter(m=>m.sender!=='system-error'), {id: userMsgId, sender:'user', text, timestamp: new Date().toISOString()}]);
@@ -1244,7 +1252,7 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
                     
                     // PROMPT CACHE SPLIT
                     const staticSystemPrompt = `[1. DEINE IDENTITÄT UND REGELN (NUR ZUM LESEN)]\n${dna.block1_identity}\n\n[3. DIE MATRIX-SENSOREN (DEINE LOGIK-REGELN)]\n${dna.block3_sensors}\n\n[4. DEINE AUSGABE (DAS JSON-SKELETT)]\n${dna.block4_skeleton}`.trim();
-                    const combinedUserText = `[2. AKTIVER KONTEXT (NUR ZUM LESEN)]\n${dynamicContext}\n\n[AKTUELLE NACHRICHT DES USERS]\n${text}`;
+                    const combinedUserText = `[2. AKTIVER KONTEXT (NUR ZUM LESEN)]\n${dynamicContext}\n\n[AKTUELLE NACHRICHT DES USERS]\n${payloadAnMaira}`;
 
                     const hist = messages.filter(m=>m.sender==='user'||m.sender==='ai');
                     
@@ -1265,6 +1273,7 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
                                 id: generateId(), 
                                 sender: 'ai', 
                                 text: intentFinalAnswer || `Ich schicke Luna in die Archive für: ${obj.matrix.helfer_suchauftrag}`,
+                                scratchpad: JSON.stringify(obj, null, 2), // V3.27 Matrix hinzugefügt
                                 timestamp: new Date().toISOString() 
                             };
                             setMessages(prev => [...prev, intentMsg]);
@@ -1291,7 +1300,7 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
                             const helferDaten = `\n\n[AKTUELLER HELFER-BERICHT]\nSuchauftrag: ${obj.matrix.helfer_suchauftrag}\nErgebnis: ${searchResult}\n[SYSTEM-REGIEANWEISUNG: Luna ist soeben erfolgreich aus der Außenwelt zurückgekehrt und hat dir diesen Bericht auf den Schreibtisch gelegt. Teile Simon diese Erkenntnisse nun fließend und natürlich mit. Erwähne Luna kurz lobend. Setze 'helfer_suchauftrag' zwingend auf null!]`;
                             
                             const interceptorDynamicContext = dynamicContext + helferDaten;
-                            const interceptorUserText = `[2. AKTIVER KONTEXT (NUR ZUM LESEN)]\n${interceptorDynamicContext}\n\n[AKTUELLE NACHRICHT DES USERS]\n${text}`;
+                            const interceptorUserText = `[2. AKTIVER KONTEXT (NUR ZUM LESEN)]\n${interceptorDynamicContext}\n\n[AKTUELLE NACHRICHT DES USERS]\n${payloadAnMaira}`;
                             
                             const secondResponse = await fetchTextFromAPI(staticSystemPrompt, interceptorUserText, hist);
                             const cleanedSecondResponse = secondResponse.replace(/```json/gi, '').replace(/```/g, '').trim();
@@ -1643,7 +1652,7 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
                                 </button>
                             )}
                             
-                            {/* TELEMETRIE BUTTON V3.26 */}
+                            {/* TELEMETRIE BUTTON V3.27 */}
                             <button onClick={() => setShowTelemetry(true)} className="text-[9px] font-mono uppercase tracking-widest text-slate-500 hover:text-indigo-500 transition-colors">
                                 📊 LOGS
                             </button>
@@ -1703,7 +1712,7 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
                             
                             <div className="flex-1 flex flex-col p-4 sm:p-6 overflow-y-auto">
                                 <div className="flex-1"></div>
-                                {messages.map(msg => <ChatBubble key={msg.id} message={msg} personaName={dna.persona_name} playingMsgId={playingMsgId} onPlayTTS={playMessageTTS} />)}
+                                {messages.map(msg => <ChatBubble key={msg.id} message={msg} personaName={dna.persona_name} playingMsgId={playingMsgId} onPlayTTS={playMessageTTS} onDelete={(id) => setMessages(prev => prev.filter(m => m.id !== id))} />)}
                                 {loadingStatus && <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest animate-pulse mb-6 ml-2 font-mono">[ {loadingStatus} ]</div>}
                                 <div ref={messagesEndRef} className="h-4" />
                             </div>
@@ -2289,7 +2298,21 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
                                 >
                                     {isRecording ? '🛑' : '🎤'}
                                 </button>
-                                <input value={inputText} onChange={e=>setInputText(e.target.value)} onKeyDown={e=>{if(e.key==='Enter') handleSendMessage();}} disabled={!!loadingStatus || isRecording} className="input-field flex-1 py-3 px-4 font-sans font-medium bg-white disabled:bg-stone-100 disabled:text-slate-400" placeholder={loadingStatus ? loadingStatus : (isRecording ? "HÖRE ZU..." : "INPUT...")} />
+                                {/* V3.27: Multiline Textarea */}
+                                <textarea 
+                                    value={inputText} 
+                                    onChange={e=>setInputText(e.target.value)} 
+                                    onKeyDown={(e) => {
+                                        if (e.key === 'Enter' && !e.shiftKey) {
+                                            e.preventDefault();
+                                            handleSendMessage();
+                                        }
+                                    }} 
+                                    disabled={!!loadingStatus || isRecording} 
+                                    className="input-field flex-1 py-3 px-4 font-sans font-medium bg-white disabled:bg-stone-100 disabled:text-slate-400 resize-none overflow-y-auto max-h-32" 
+                                    rows="1"
+                                    placeholder={loadingStatus ? loadingStatus : (isRecording ? "HÖRE ZU..." : "INPUT...")} 
+                                />
                                 <button onClick={handleSendMessage} disabled={!inputText.trim() || !!loadingStatus || isRecording} className="btn-primary px-6 disabled:opacity-50 py-3 shadow-indigo-200 text-sm uppercase">Send</button>
                             </div>
                         </div>
