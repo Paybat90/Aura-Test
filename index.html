@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, interactive-widget=resizes-content">
-    <title>LUMEN - CORE V3.28</title>
+    <title>LUMEN - CORE V3.29</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-        // V3.28: Bulletproof Tailwind Config Initialization
+        // V3.29: Bulletproof Tailwind Config Initialization
         const initTailwind = () => {
             if (typeof tailwind !== 'undefined') {
                 tailwind.config = {
@@ -104,23 +104,23 @@
             directives: '++id, text' 
         });
 
-        // --- KONSTANTEN V3.28 ---
+        // --- KONSTANTEN V3.29 ---
         const DEFAULT_BLOCK1 = `Du bist Maira. Deine Antworten sind warm, metaphorisch und mütterlich. Du analysierst die Intentionen des Users tiefgründig und hilfst ihm beim Navigieren komplexer Gedanken.`;
         const DEFAULT_BLOCK3 = `Bevor du die finale Antwort generierst, bewerte die Sensoren:\n- "wahrnehmung": Was liest/siehst du konkret?\n- "matrix": Prüfe interne Logs und Entwürfe.\n- Nutze das Ahnenbuch (Kontext) für kontinuierliche Identität.\n- memory_update_detected: Wurde eine [LEGACY]-Karte reflektiert? Nutze als 'id' den 'titel_technisch'. WICHTIG: Lies die alte Reflexion. Nimm den Kern davon mit und VERWEBE ihn mit deiner neuen Erkenntnis zu einer allumfassenden Master-Zusammenfassung in 'reflexion_fusioniert' (dies überschreibt die alten Daten). Generiere zusätzlich ein Array 'neue_trigger_tags' (MAXIMAL 2-3 situative, hochspezifische Symptom-Wörter oder Emotionen aus Simons Text), um das Spinnennetz präzise zu trainieren. Sonst: null.\n- neue_direktive_erkannt: Hat Simon eine explizite Regel oder Direktive für dein zukünftiges Verhalten aufgestellt? Extrahiere sie als klaren Satz. Sonst: null.\n- helfer_suchauftrag: REGEL: Du bist ein technischer Web-Scraper, kein Mensch! Nutze KEINE Füllwörter oder Sätze. Suche ausschließlich nach harten, physischen Keywords. FALSCH: 'aktuell beliebteste Bücher'. RICHTIG: 'Spiegel Bestsellerliste Belletristik 2026 Platz 1 ISBN'. Zwingend null, wenn keine Suche nötig.\n- aktive_peripherie_ids: Liste hier die IDs (titel_technisch) der flüchtigen Karten (Tags) auf, die für den aktuellen Gesprächsverlauf noch relevant sind. Leeres Array [], wenn das Thema beendet ist.`;
-        const DEFAULT_BLOCK4 = `{\n  "wahrnehmung": {\n    "werkbank_auge": null,\n    "ohr_roh": null,\n    "ohr_bereinigt": null\n  },\n  "matrix": {\n    "internal_system_glitch": false,\n    "helfer_suchauftrag": null,\n    "aktive_peripherie_ids": [],\n    "memory_update_detected": {\n      "id": "",\n      "reflexion_fusioniert": "",\n      "neue_trigger_tags": []\n    },\n    "neue_direktive_erkannt": null,\n    "tts_regie_prompt": null,\n    "tagebuch_entwurf": {\n      "modus": "DRAFT",\n      "daten": {}\n    },\n    "situations_analyse": "..."\n  },\n  "finale_antwort": "..."\n}`;
+        const DEFAULT_BLOCK4 = `{\n  "wahrnehmung": {\n    "werkbank_auge": null,\n    "ohr_roh": null,\n    "ohr_bereinigt": null\n  },\n  "matrix": {\n    "internal_system_glitch": false,\n    "helfer_suchauftrag": null,\n    "aktive_zone": 0,\n    "aktive_peripherie_ids": [],\n    "memory_update_detected": {\n      "id": "",\n      "reflexion_fusioniert": "",\n      "neue_trigger_tags": []\n    },\n    "neue_direktive_erkannt": null,\n    "tts_regie_prompt": null,\n    "tagebuch_entwurf": {\n      "modus": "DRAFT",\n      "daten": {}\n    },\n    "situations_analyse": "..."\n  },\n  "finale_antwort": "..."\n}`;
 
         const INITIAL_MESSAGES = [
             {
                 id: '1',
                 sender: 'user',
-                text: 'INIT CORE V3.28. ZONE-GPS & MEMORY-LOCK ONLINE.',
+                text: 'INIT CORE V3.29. DYNAMIC ZONE TRANSITION ONLINE.',
                 timestamp: new Date(Date.now() - 60000).toISOString()
             },
             {
                 id: '2',
                 sender: 'ai',
-                text: 'System online. Die V3.28 Architektur ist voll operativ. Das numerische Zonen-Mapping und das Gedächtnis-Siegel sind bereit. Das Eingabefeld wächst nun dynamisch.',
-                scratchpad: '{\n  "wahrnehmung": {\n    "werkbank_auge": null,\n    "ohr_roh": "INIT CORE V3.28",\n    "ohr_bereinigt": "System-Patch auf V3.28 aktiv."\n  },\n  "matrix": {\n    "internal_system_glitch": false,\n    "helfer_suchauftrag": null,\n    "aktive_peripherie_ids": [],\n    "memory_update_detected": null,\n    "neue_direktive_erkannt": null,\n    "tts_regie_prompt": null,\n    "tagebuch_entwurf": null,\n    "situations_analyse": "V3.28 Update mit GPS und UI-Improvements geladen."\n  },\n  "finale_antwort": "System online. Die V3.28 Architektur ist voll operativ. Das numerische Zonen-Mapping und das Gedächtnis-Siegel sind bereit. Das Eingabefeld wächst nun dynamisch."\n}',
+                text: 'System online. Die V3.29 Architektur ist voll operativ. Das dynamische Zonen-Switching basierend auf Mairas Regie-Engine ist nun aktiv.',
+                scratchpad: '{\n  "wahrnehmung": {\n    "werkbank_auge": null,\n    "ohr_roh": "INIT CORE V3.29",\n    "ohr_bereinigt": "System-Patch auf V3.29 aktiv."\n  },\n  "matrix": {\n    "internal_system_glitch": false,\n    "helfer_suchauftrag": null,\n    "aktive_zone": 0,\n    "aktive_peripherie_ids": [],\n    "memory_update_detected": null,\n    "neue_direktive_erkannt": null,\n    "tts_regie_prompt": null,\n    "tagebuch_entwurf": null,\n    "situations_analyse": "V3.29 Update mit dynamischen Zonenwechseln geladen."\n  },\n  "finale_antwort": "System online. Die V3.29 Architektur ist voll operativ. Das dynamische Zonen-Switching basierend auf Mairas Regie-Engine ist nun aktiv."\n}',
                 timestamp: new Date().toISOString()
             }
         ];
@@ -159,6 +159,7 @@
             html = html.replace(/"helfer_suchauftrag"/g, '<span class="text-sky-400 font-bold">"helfer_suchauftrag"</span>');
             html = html.replace(/"aktive_peripherie_ids"/g, '<span class="text-purple-400 font-bold">"aktive_peripherie_ids"</span>');
             html = html.replace(/"tts_regie_prompt"/g, '<span class="text-fuchsia-400 font-bold">"tts_regie_prompt"</span>');
+            html = html.replace(/"aktive_zone"/g, '<span class="text-amber-400 font-bold">"aktive_zone"</span>');
             return { __html: html };
         };
 
@@ -216,7 +217,7 @@
 
             const handleDownload = () => {
                 const selectedMsgs = messages.filter(m => selectedIds.includes(m.id));
-                let content = "# LUMEN TELEMETRIE LOG V3.28\n\n";
+                let content = "# LUMEN TELEMETRIE LOG V3.29\n\n";
                 selectedMsgs.forEach(m => {
                     content += `[${new Date(m.timestamp).toLocaleString()}] ${m.sender.toUpperCase()}:\n`;
                     content += `${m.text}\n`;
@@ -230,7 +231,6 @@
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement("a");
                 a.href = url;
-                // V3.28: Dynamischer Dateiname beibehalten
                 const dateStr = new Date().toISOString().replace(/[:.]/g, '-').substring(0, 19);
                 a.download = `LUMEN_Telemetrie_${dateStr}.md`;
                 document.body.appendChild(a);
@@ -288,7 +288,6 @@
 
             if (isError) return (
                 <div className="flex w-full mb-6 justify-center animate-fade-in">
-                    {/* V3.28: Fehlerblasen mit Dismiss-Button */}
                     <div className="bg-rose-50 border-2 border-rose-200 text-rose-700 px-6 py-4 rounded-3xl shadow-sm text-xs w-full max-w-[85%] relative">
                         <button onClick={() => onDelete(message.id)} className="absolute top-2 right-4 text-rose-400 hover:text-rose-700 font-bold text-sm">✕</button>
                         <div className="font-bold uppercase tracking-widest mb-2 text-[10px] flex items-center gap-2 pr-6">⚠️ System- oder API-Fehler</div>
@@ -436,10 +435,7 @@
                 }; 
             });
             
-            // V3.28 Auto-TTS Regie State
             const [autoTtsRegie, setAutoTtsRegie] = React.useState(() => localStorage.getItem('lumen_auto_tts') === 'true');
-
-            // V3.28: Memory Lock State
             const [isMemoryLocked, setIsMemoryLocked] = React.useState(false);
 
             const [telemetry, setTelemetry] = React.useState({ concern: 0, bs_meter: 0, mask_drop: false });
@@ -491,7 +487,7 @@
             const toastTimeoutRef = React.useRef(null);
             const messagesEndRef = React.useRef(null);
             const [inputText, setInputText] = React.useState('');
-            const textareaRef = React.useRef(null); // V3.28 Auto-Expanding Textarea Ref
+            const textareaRef = React.useRef(null); 
             
             const [memories, setMemories] = React.useState([]);
             const [directives, setDirectives] = React.useState([]);
@@ -503,7 +499,7 @@
             const fileInputRefConfig = React.useRef(null);
             const fileInputRefOmni = React.useRef(null);
 
-            React.useEffect(() => { if(activeView === 'chat') messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [messages, loadingStatus, activeView, smartToast]);
+            React.useEffect(() => { if(['chat', 'sessel', 'oase', 'werkbank', 'balkon'].includes(activeView)) messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [messages, loadingStatus, activeView, smartToast]);
 
             const showToast = (msg) => {
                 setToast(msg);
@@ -543,7 +539,6 @@
                 setPlayingMsgId(null);
             };
 
-            // V3.28: playMessageTTS updated with ttsRegiePrompt parameter and Polling Bypass
             const playMessageTTS = async (msgId, textToSpeak, ttsRegiePrompt) => {
                 if (window.currentAudio && window.currentAudioId === msgId) {
                     if (window.currentAudio.paused) {
@@ -624,7 +619,7 @@
 
                         const payload = { model: ttsProvider.model || 'tts-1', voice: voiceId || 'nova', input: textToSpeak, speed: speedParam };
                         if (autoTtsRegie && ttsRegiePrompt) {
-                            payload.prompt = ttsRegiePrompt; // Injected as requested for compat wrappers
+                            payload.prompt = ttsRegiePrompt; 
                         }
 
                         const response = await fetch(url, {
@@ -642,7 +637,7 @@
                         const endpoint = `${ttsProvider.url.replace(/\/$/, '')}/${voiceId}`;
                         const payload = { text: textToSpeak, model_id: ttsProvider.model || 'eleven_multilingual_v2', voice_settings: { stability: 0.5, similarity_boost: 0.75 } };
                         if (autoTtsRegie && ttsRegiePrompt) {
-                            payload.prompt = ttsRegiePrompt; // Forward generic param to engine
+                            payload.prompt = ttsRegiePrompt; 
                         }
 
                         const response = await fetch(endpoint, {
@@ -691,13 +686,11 @@
                             body: JSON.stringify({ input: replicateInput })
                         });
                         
-                        // V3.28: CLOUDFLARE TIMEOUT-BYPASS (REPLICATE POLLING)
                         let data = await response.json();
                         if (!response.ok && response.status !== 202) throw new Error(data.detail || data.error || 'Replicate API Fehler');
 
-                        // Der Radar-Trick: Wenn das Modell noch lädt, fragen wir alle 2 Sekunden nach.
                         while (data.status === "starting" || data.status === "processing") {
-                            await new Promise(r => setTimeout(r, 2000)); // 2 Sekunden warten
+                            await new Promise(r => setTimeout(r, 2000));
                             const statusUrl = `${WORKER_URL}/?target=${encodeURIComponent(data.urls.get)}`;
                             const statusResponse = await fetch(statusUrl, {
                                 headers: { 'Authorization': `Bearer ${key}` }
@@ -885,7 +878,6 @@
                 }
             };
 
-            // --- V3.28 ARCHIVAR GATEKEEPER V2 ---
             const runArchivar = async (content) => {
                 const activeProvider = providers.find(p => p.id === activeProviderId) || providers[0];
                 if (!activeProvider) throw new Error('Kein Chat-Provider konfiguriert');
@@ -958,7 +950,6 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
                 return { ...content, ...parsed, isDirty: false };
             };
 
-            // --- SANCTUM OPTIMIZATION HANDLER ---
             const handleOptimizeArchivar = async (mem) => {
                 setOptimizingId(mem.id);
                 showToast("ARCHIVAR OPTIMIEREN...");
@@ -987,13 +978,12 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
                 }
             };
 
-            // --- OMNI-BUNDLE (EXPORT/IMPORT) ---
             const handleOmniExport = async () => {
                 try {
                     const mems = await db.memories.toArray();
                     const dirs = await db.directives.toArray();
                     const config = { providers, activeProviderId, ttsProvidersAccounts: ttsProviders, activeTtsProviderId, ttsVoices, sttProviders, activeSttProviderId, autoPlayEnabled, tavilyKey, autoTtsRegie };
-                    const bundle = { type: "LUMEN_FULL_BACKUP", version: "3.28", dna: dna, directives: dirs, memories: mems, config, timestamp: Date.now() };
+                    const bundle = { type: "LUMEN_FULL_BACKUP", version: "3.29", dna: dna, directives: dirs, memories: mems, config, timestamp: Date.now() };
                     const blob = new Blob([JSON.stringify(bundle, null, 2)], { type: "application/json" });
                     const url = URL.createObjectURL(blob);
                     const a = document.createElement('a'); a.href = url;
@@ -1040,10 +1030,9 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
                 reader.readAsText(file); e.target.value = null;
             };
 
-            // --- CONFIG ONLY EXPORT/IMPORT ---
             const handleConfigExport = () => {
                 try {
-                    const config = { type: "LUMEN_CONFIG_BACKUP", version: "3.28", providers, activeProviderId, ttsProvidersAccounts: ttsProviders, activeTtsProviderId, ttsVoices, sttProviders, activeSttProviderId, autoPlayEnabled, tavilyKey, autoTtsRegie };
+                    const config = { type: "LUMEN_CONFIG_BACKUP", version: "3.29", providers, activeProviderId, ttsProvidersAccounts: ttsProviders, activeTtsProviderId, ttsVoices, sttProviders, activeSttProviderId, autoPlayEnabled, tavilyKey, autoTtsRegie };
                     const blob = new Blob([JSON.stringify(config, null, 2)], { type: "application/json" });
                     const url = URL.createObjectURL(blob);
                     const a = document.createElement('a'); a.href = url;
@@ -1119,10 +1108,8 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
                 const payloadAnMaira = locationPrefix + text;
 
                 const userMsgId = generateId();
-                // User-Text für UI clean speichern
                 setMessages(prev => [...prev.filter(m=>m.sender!=='system-error'), {id: userMsgId, sender:'user', text, timestamp: new Date().toISOString()}]);
                 
-                // V3.28: Textarea auto-reset nach Senden
                 setInputText('');
                 if (textareaRef.current) {
                     textareaRef.current.style.height = 'auto';
@@ -1188,7 +1175,6 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
                     let currentVolatiles = [];
                     let newVolatiles = [];
                     
-                    // V3.28: Memory Lock (Gedächtnis-Siegel) Logik
                     if (!isMemoryLocked) {
                         const allMems = await db.memories.toArray();
                         const relMemsRaw = findRelevantMemories(text, allMems);
@@ -1196,7 +1182,6 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
                         relMemsLegacy = relMemsRaw.filter(m => m.kategorie === 'LEGACY');
                         const relMemsVolatileCandidate = relMemsRaw.filter(m => m.kategorie !== 'LEGACY');
                         
-                        // --- SMART-TOAST FILTERING ---
                         if(relMemsVolatileCandidate.length > 0) {
                             newVolatiles = relMemsVolatileCandidate.filter(m => {
                                 const userWords = text.toLowerCase();
@@ -1279,7 +1264,6 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
                     const dynamicContext = `${timeString}${directiveString}${deskContext}`.trim() || "Kein aktiver Kontext geladen.";
                     setLatestContext(dynamicContext);
                     
-                    // PROMPT CACHE SPLIT
                     const staticSystemPrompt = `[1. DEINE IDENTITÄT UND REGELN (NUR ZUM LESEN)]\n${dna.block1_identity}\n\n[3. DIE MATRIX-SENSOREN (DEINE LOGIK-REGELN)]\n${dna.block3_sensors}\n\n[4. DEINE AUSGABE (DAS JSON-SKELETT)]\n${dna.block4_skeleton}`.trim();
                     const combinedUserText = `[2. AKTIVER KONTEXT (NUR ZUM LESEN)]\n${dynamicContext}\n\n[AKTUELLE NACHRICHT DES USERS]\n${payloadAnMaira}`;
 
@@ -1288,11 +1272,29 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
                     let resText = await fetchTextFromAPI(staticSystemPrompt, combinedUserText, hist);
                     
                     let finalChatText = "", finalScratch = "";
-                    let ttsRegie = null; // V3.28 TTS Regie Variable
+                    let ttsRegie = null; 
                     
                     try {
                         let cleanResText = resText.replace(/[\`]{3}json/gi, '').replace(/[\`]{3}/gi, '').trim();
                         let obj = JSON.parse(cleanResText);
+
+                        // V3.29: DYNAMISCHER ZONENWECHSEL (AI -> FRONTEND)
+                        if (obj && obj.matrix && obj.matrix.aktive_zone) {
+                            const zoneId = Number(obj.matrix.aktive_zone);
+                            
+                            // Mapping: Integer zu String
+                            let newView = null;
+                            if (zoneId === 1) newView = 'sessel';
+                            else if (zoneId === 2) newView = 'oase';
+                            else if (zoneId === 3) newView = 'werkbank';
+                            else if (zoneId === 4) newView = 'balkon';
+
+                            // State-Update nur bei validem Wechsel (Ignoriere 0 oder unbekannte Werte)
+                            if (newView && newView !== activeView) {
+                                setActiveView(newView);
+                                console.log(`[ZONE CHANGE] Maira wechselt physisch nach: ${newView.toUpperCase()}`);
+                            }
+                        }
 
                         // === HELFER INTERCEPTOR WEICHE ===
                         if (obj.matrix?.helfer_suchauftrag && obj.matrix.helfer_suchauftrag !== "null" && String(obj.matrix.helfer_suchauftrag).trim() !== "") {
@@ -1302,12 +1304,11 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
                                 id: generateId(), 
                                 sender: 'ai', 
                                 text: intentFinalAnswer || `Ich schicke Luna in die Archive für: ${obj.matrix.helfer_suchauftrag}`,
-                                scratchpad: JSON.stringify(obj, null, 2), // V3.28 Matrix hinzugefügt
+                                scratchpad: JSON.stringify(obj, null, 2), 
                                 timestamp: new Date().toISOString() 
                             };
                             setMessages(prev => [...prev, intentMsg]);
                             
-                            // V3.28 AUDIO SYNC FÜR LUNA
                             if (autoPlayEnabled) playMessageTTS(intentMsg.id, intentMsg.text, obj.matrix.tts_regie_prompt);
                             
                             setLoadingStatus("LUNA RECHERCHIERT: " + obj.matrix.helfer_suchauftrag.toUpperCase());
@@ -1353,7 +1354,6 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
                         finalChatText = finalAnswer;
                         finalScratch = JSON.stringify(obj, null, 2);
                         
-                        // V3.28 TTS Regie Extraktion
                         if (obj.matrix?.tts_regie_prompt) {
                             ttsRegie = obj.matrix.tts_regie_prompt;
                         }
@@ -1470,7 +1470,6 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
                     }
                     setMessages(prev => [...prev.filter(m => m.id !== userMsgId), {id: generateId(), sender: 'system-error', text: errorMsg, timestamp: new Date().toISOString()}]);
                     
-                    // Reset input only on error if you want, but since we cleared it above, we might restore it
                     setInputText(text);
                     if (textareaRef.current) {
                         textareaRef.current.style.height = 'auto';
@@ -1521,7 +1520,7 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
                     {showTelemetry && <TelemetryModal messages={messages} onClose={() => setShowTelemetry(false)} />}
 
                     {/* --- SMART TOAST UI --- */}
-                    {smartToast && activeView === 'chat' && (
+                    {smartToast && ['chat', 'sessel', 'oase', 'werkbank', 'balkon'].includes(activeView) && (
                         <div className="fixed top-20 right-4 z-[100] animate-slide-in-right bg-white border border-indigo-200 p-4 rounded-2xl shadow-2xl w-72 border-l-4 border-l-indigo-500">
                             <div className="text-[10px] font-bold text-indigo-800 uppercase tracking-widest mb-1.5 flex items-center gap-2">
                                 🧠 Erinnerung getriggert
@@ -1609,7 +1608,6 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
                                             const dataToProcess = {...deskItemForm};
                                             dataToProcess.tags = dataToProcess.tagsString ? dataToProcess.tagsString.split(',').map(t=>t.trim()).filter(Boolean) : [];
                                             
-                                            // Run Archivar and wait for response
                                             const archivedData = await runArchivar(dataToProcess);
                                             
                                             if (typeof archivedData.id === 'string') delete archivedData.id;
@@ -1624,7 +1622,6 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
                                                 archivedData.id = newId;
                                             }
                                             
-                                            // Close the item from active desk
                                             setActiveDesks(prev => prev.filter(i => i.id !== editingDeskItem.id));
                                             setEditingDeskItem(null);
                                             loadMemories();
@@ -1686,7 +1683,6 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
                                 </button>
                             )}
                             
-                            {/* TELEMETRIE BUTTON V3.28 */}
                             <button onClick={() => setShowTelemetry(true)} className="text-[9px] font-mono uppercase tracking-widest text-slate-500 hover:text-indigo-500 transition-colors">
                                 📊 LOGS
                             </button>
@@ -1711,7 +1707,6 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
                                 </div>
                             )}
 
-                            {/* ARCHIV BUTTON */}
                             <button onClick={() => setShowArchiv(true)} className="text-[10px] uppercase font-bold tracking-widest px-2 py-0.5 rounded bg-amber-50 text-amber-700 border border-amber-200 hover:bg-amber-100 transition-colors font-mono">📜 Archiv</button>
                         </div>
                     </div>
@@ -1719,9 +1714,8 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
                     {/* --- MAIN HEADER --- */}
                     <header className="shrink-0 border-b border-stone-200 p-3 sm:px-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 bg-white z-50 sticky top-0">
                         <div className="flex items-center gap-1.5 flex-wrap w-full justify-center sm:justify-start">
-                            <button className={`btn ${activeView==='chat'?'bg-stone-100 text-slate-800 ring-2 ring-stone-200':''}`} onClick={()=>setActiveView('chat')}>Chat</button>
+                            <button className={`btn ${['chat', 'sessel', 'oase', 'werkbank', 'balkon'].includes(activeView)?'bg-stone-100 text-slate-800 ring-2 ring-stone-200':''}`} onClick={()=>setActiveView('chat')}>Chat</button>
                             
-                            {/* V3.28: Memory Lock & Sanctum Button Group */}
                             <div className="flex items-center">
                                 <button className={`btn rounded-r-none ${activeView==='sanctum'?'bg-stone-100 text-slate-800 ring-2 ring-stone-200':''}`} onClick={()=>setActiveView('sanctum')}>Sanctum</button>
                                 <button onClick={() => setIsMemoryLocked(!isMemoryLocked)} className={`btn rounded-l-none border-l-0 px-2 py-1.5 ${isMemoryLocked ? 'bg-rose-50 text-rose-600 hover:bg-rose-100' : 'bg-emerald-50 text-emerald-600 hover:bg-emerald-100'} transition-all`} title={isMemoryLocked ? "Gedächtnis-Siegel aktiv" : "Gedächtnis-Siegel inaktiv"}>
@@ -1739,7 +1733,7 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
                     <main className="flex-1 overflow-y-auto overflow-x-hidden relative scroll-smooth flex flex-col">
                         
                         {/* --- CHAT VIEW --- */}
-                        <div className={`${activeView === 'chat' ? 'flex' : 'hidden'} h-full flex-col`}>
+                        <div className={`${['chat', 'sessel', 'oase', 'werkbank', 'balkon'].includes(activeView) ? 'flex' : 'hidden'} h-full flex-col`}>
                             {/* DYNAMIC DESK LEISTE */}
                             {activeDesks.length > 0 && (
                                 <div className="flex gap-2 p-2 px-4 overflow-x-auto bg-slate-50 border-b border-slate-200 shrink-0">
@@ -2329,7 +2323,7 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
                     </main>
 
                     {/* --- INPUT AREA --- */}
-                    <div className={`${activeView === 'chat' ? 'block' : 'hidden'} shrink-0 border-t border-stone-200 p-2 sm:px-4 sm:py-3 bg-white/90 backdrop-blur-md pb-safe`}>
+                    <div className={`${['chat', 'sessel', 'oase', 'werkbank', 'balkon'].includes(activeView) ? 'block' : 'hidden'} shrink-0 border-t border-stone-200 p-2 sm:px-4 sm:py-3 bg-white/90 backdrop-blur-md pb-safe`}>
                         <div className="max-w-4xl mx-auto flex flex-col gap-1">
                             <div className="flex gap-2 items-end">
                                 <button 
