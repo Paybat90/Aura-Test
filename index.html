@@ -657,7 +657,7 @@
                         }
                         audioBlob = await response.blob();
                     } else if (engine === 'replicate') {
-                        const WORKER_URL = "https://lumen-replicate-proxy2.sloosmail.workers.dev";
+                        const WORKER_URL = "HIER_DEINE_CLOUDFLARE_URL";
 
                         if (WORKER_URL.includes("HIER_DEINE")) {
                             throw new Error("PROXY FEHLT: Bitte trage deine Cloudflare-Worker-URL im Code ein!");
@@ -808,7 +808,7 @@
                         return;
                     }
 
-                    const WORKER_URL = "https://lumen-replicate-proxy2.sloosmail.workers.dev";
+                    const WORKER_URL = "HIER_DEINE_CLOUDFLARE_URL";
                     if (WORKER_URL.includes("HIER_DEINE")) {
                         showToast("FEHLER: Cloudflare Worker URL nicht konfiguriert.");
                         setLoadingStatus(null);
@@ -1105,12 +1105,15 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
                 const key = activeProvider.apiKey;
                 const apiUrl = activeProvider.url;
 
-                // V3.28: Zonen-GPS Mapping
+                // V3.29: Bulletproof Zonen-GPS Mapping
                 let mairaZone = "0"; // Puffer/Default
-                if (activeView === 'sessel') mairaZone = "1";
-                if (activeView === 'oase') mairaZone = "2";
-                if (activeView === 'werkbank') mairaZone = "3";
-                if (activeView === 'balkon') mairaZone = "4";
+                // Sicherheitsschicht: Mache den Wert zu einem sauberen, kleingeschriebenen String
+                let safeView = String(activeView).toLowerCase().trim();
+                
+                if (safeView.includes('sessel') || safeView === '1') mairaZone = "1";
+                else if (safeView.includes('oase') || safeView === '2') mairaZone = "2";
+                else if (safeView.includes('werkbank') || safeView === '3') mairaZone = "3";
+                else if (safeView.includes('balkon') || safeView === '4') mairaZone = "4";
 
                 const locationPrefix = `[SYSTEM-STATUS: Standort Zone ${mairaZone}]\n`;
                 const payloadAnMaira = locationPrefix + text;
