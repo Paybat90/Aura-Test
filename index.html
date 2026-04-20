@@ -657,7 +657,7 @@
                         }
                         audioBlob = await response.blob();
                     } else if (engine === 'replicate') {
-                        const WORKER_URL = "HIER_DEINE_CLOUDFLARE_URL";
+                        const WORKER_URL = "https://lumen-replicate-proxy2.sloosmail.workers.dev";
 
                         if (WORKER_URL.includes("HIER_DEINE")) {
                             throw new Error("PROXY FEHLT: Bitte trage deine Cloudflare-Worker-URL im Code ein!");
@@ -808,7 +808,7 @@
                         return;
                     }
 
-                    const WORKER_URL = "HIER_DEINE_CLOUDFLARE_URL";
+                    const WORKER_URL = "https://lumen-replicate-proxy2.sloosmail.workers.dev";
                     if (WORKER_URL.includes("HIER_DEINE")) {
                         showToast("FEHLER: Cloudflare Worker URL nicht konfiguriert.");
                         setLoadingStatus(null);
