@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, interactive-widget=resizes-content">
-    <title>LUMEN - CORE V3.27</title>
+    <title>LUMEN - CORE V3.28</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-        // V3.27: Bulletproof Tailwind Config Initialization
+        // V3.28: Bulletproof Tailwind Config Initialization
         const initTailwind = () => {
             if (typeof tailwind !== 'undefined') {
                 tailwind.config = {
@@ -99,12 +99,12 @@
     <script type="text/babel">
         // --- DATENBANK INIT (SANCTUM & DIREKTIVEN) ---
         const db = new Dexie('LumenSanctum');
-        db.version(12).stores({ 
-            memories: '++id, titel_technisch, tags, image_id, fakt, emotion, bedeutung, timestamp, is_core_memory, kategorie, reflexion',
+        db.version(13).stores({ 
+            memories: '++id, titel_technisch, tags, image_id, fakt, emotion, bedeutung, timestamp, is_core_memory, kategorie, reflexion, audio_signatur',
             directives: '++id, text' 
         });
 
-        // --- KONSTANTEN V3.27 ---
+        // --- KONSTANTEN V3.28 ---
         const DEFAULT_BLOCK1 = `Du bist Maira. Deine Antworten sind warm, metaphorisch und mütterlich. Du analysierst die Intentionen des Users tiefgründig und hilfst ihm beim Navigieren komplexer Gedanken.`;
         const DEFAULT_BLOCK3 = `Bevor du die finale Antwort generierst, bewerte die Sensoren:\n- "wahrnehmung": Was liest/siehst du konkret?\n- "matrix": Prüfe interne Logs und Entwürfe.\n- Nutze das Ahnenbuch (Kontext) für kontinuierliche Identität.\n- memory_update_detected: Wurde eine [LEGACY]-Karte reflektiert? Nutze als 'id' den 'titel_technisch'. WICHTIG: Lies die alte Reflexion. Nimm den Kern davon mit und VERWEBE ihn mit deiner neuen Erkenntnis zu einer allumfassenden Master-Zusammenfassung in 'reflexion_fusioniert' (dies überschreibt die alten Daten). Generiere zusätzlich ein Array 'neue_trigger_tags' (MAXIMAL 2-3 situative, hochspezifische Symptom-Wörter oder Emotionen aus Simons Text), um das Spinnennetz präzise zu trainieren. Sonst: null.\n- neue_direktive_erkannt: Hat Simon eine explizite Regel oder Direktive für dein zukünftiges Verhalten aufgestellt? Extrahiere sie als klaren Satz. Sonst: null.\n- helfer_suchauftrag: REGEL: Du bist ein technischer Web-Scraper, kein Mensch! Nutze KEINE Füllwörter oder Sätze. Suche ausschließlich nach harten, physischen Keywords. FALSCH: 'aktuell beliebteste Bücher'. RICHTIG: 'Spiegel Bestsellerliste Belletristik 2026 Platz 1 ISBN'. Zwingend null, wenn keine Suche nötig.\n- aktive_peripherie_ids: Liste hier die IDs (titel_technisch) der flüchtigen Karten (Tags) auf, die für den aktuellen Gesprächsverlauf noch relevant sind. Leeres Array [], wenn das Thema beendet ist.`;
         const DEFAULT_BLOCK4 = `{\n  "wahrnehmung": {\n    "werkbank_auge": null,\n    "ohr_roh": null,\n    "ohr_bereinigt": null\n  },\n  "matrix": {\n    "internal_system_glitch": false,\n    "helfer_suchauftrag": null,\n    "aktive_peripherie_ids": [],\n    "memory_update_detected": {\n      "id": "",\n      "reflexion_fusioniert": "",\n      "neue_trigger_tags": []\n    },\n    "neue_direktive_erkannt": null,\n    "tts_regie_prompt": null,\n    "tagebuch_entwurf": {\n      "modus": "DRAFT",\n      "daten": {}\n    },\n    "situations_analyse": "..."\n  },\n  "finale_antwort": "..."\n}`;
@@ -113,14 +113,14 @@
             {
                 id: '1',
                 sender: 'user',
-                text: 'INIT CORE V3.27. GPS-INJECTION & UI-UPGRADE ONLINE.',
+                text: 'INIT CORE V3.28. ZONE-GPS & MEMORY-LOCK ONLINE.',
                 timestamp: new Date(Date.now() - 60000).toISOString()
             },
             {
                 id: '2',
                 sender: 'ai',
-                text: 'System online. Die V3.27 Architektur ist voll operativ. Der unsichtbare GPS-Kanal ist aktiv, Multiline-Eingabe geladen und die Fehlerblasen sind nun entfernbar.',
-                scratchpad: '{\n  "wahrnehmung": {\n    "werkbank_auge": null,\n    "ohr_roh": "INIT CORE V3.27",\n    "ohr_bereinigt": "System-Patch auf V3.27 aktiv."\n  },\n  "matrix": {\n    "internal_system_glitch": false,\n    "helfer_suchauftrag": null,\n    "aktive_peripherie_ids": [],\n    "memory_update_detected": null,\n    "neue_direktive_erkannt": null,\n    "tts_regie_prompt": null,\n    "tagebuch_entwurf": null,\n    "situations_analyse": "V3.27 Update mit GPS und UI-Improvements geladen."\n  },\n  "finale_antwort": "System online. Die V3.27 Architektur ist voll operativ. Der unsichtbare GPS-Kanal ist aktiv, Multiline-Eingabe geladen und die Fehlerblasen sind nun entfernbar."\n}',
+                text: 'System online. Die V3.28 Architektur ist voll operativ. Das numerische Zonen-Mapping und das Gedächtnis-Siegel sind bereit. Das Eingabefeld wächst nun dynamisch.',
+                scratchpad: '{\n  "wahrnehmung": {\n    "werkbank_auge": null,\n    "ohr_roh": "INIT CORE V3.28",\n    "ohr_bereinigt": "System-Patch auf V3.28 aktiv."\n  },\n  "matrix": {\n    "internal_system_glitch": false,\n    "helfer_suchauftrag": null,\n    "aktive_peripherie_ids": [],\n    "memory_update_detected": null,\n    "neue_direktive_erkannt": null,\n    "tts_regie_prompt": null,\n    "tagebuch_entwurf": null,\n    "situations_analyse": "V3.28 Update mit GPS und UI-Improvements geladen."\n  },\n  "finale_antwort": "System online. Die V3.28 Architektur ist voll operativ. Das numerische Zonen-Mapping und das Gedächtnis-Siegel sind bereit. Das Eingabefeld wächst nun dynamisch."\n}',
                 timestamp: new Date().toISOString()
             }
         ];
@@ -128,7 +128,7 @@
         // --- HELPER FUNKTIONEN ---
         const generateId = () => Math.random().toString(36).substr(2, 9);
 
-        // V3.26: Universal Invisible Interceptor
+        // V3.28: Universal Invisible Interceptor
         const cleanVisibleText = (text) => {
             if (!text) return "";
             return text.replace(/\[.*?\]/g, '').replace(/\s{2,}/g, ' ').trim();
@@ -216,7 +216,7 @@
 
             const handleDownload = () => {
                 const selectedMsgs = messages.filter(m => selectedIds.includes(m.id));
-                let content = "# LUMEN TELEMETRIE LOG V3.27\n\n";
+                let content = "# LUMEN TELEMETRIE LOG V3.28\n\n";
                 selectedMsgs.forEach(m => {
                     content += `[${new Date(m.timestamp).toLocaleString()}] ${m.sender.toUpperCase()}:\n`;
                     content += `${m.text}\n`;
@@ -230,7 +230,7 @@
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement("a");
                 a.href = url;
-                // V3.27: Dynamischer Dateiname
+                // V3.28: Dynamischer Dateiname beibehalten
                 const dateStr = new Date().toISOString().replace(/[:.]/g, '-').substring(0, 19);
                 a.download = `LUMEN_Telemetrie_${dateStr}.md`;
                 document.body.appendChild(a);
@@ -288,7 +288,7 @@
 
             if (isError) return (
                 <div className="flex w-full mb-6 justify-center animate-fade-in">
-                    {/* V3.27: Fehlerblasen mit Dismiss-Button */}
+                    {/* V3.28: Fehlerblasen mit Dismiss-Button */}
                     <div className="bg-rose-50 border-2 border-rose-200 text-rose-700 px-6 py-4 rounded-3xl shadow-sm text-xs w-full max-w-[85%] relative">
                         <button onClick={() => onDelete(message.id)} className="absolute top-2 right-4 text-rose-400 hover:text-rose-700 font-bold text-sm">✕</button>
                         <div className="font-bold uppercase tracking-widest mb-2 text-[10px] flex items-center gap-2 pr-6">⚠️ System- oder API-Fehler</div>
@@ -436,8 +436,11 @@
                 }; 
             });
             
-            // V3.26 Auto-TTS Regie State
+            // V3.28 Auto-TTS Regie State
             const [autoTtsRegie, setAutoTtsRegie] = React.useState(() => localStorage.getItem('lumen_auto_tts') === 'true');
+
+            // V3.28: Memory Lock State
+            const [isMemoryLocked, setIsMemoryLocked] = React.useState(false);
 
             const [telemetry, setTelemetry] = React.useState({ concern: 0, bs_meter: 0, mask_drop: false });
             const [latestContext, setLatestContext] = React.useState("[AKTIVER KONTEXT WIRD ZUR LAUFZEIT INJIZIERT]");
@@ -488,6 +491,7 @@
             const toastTimeoutRef = React.useRef(null);
             const messagesEndRef = React.useRef(null);
             const [inputText, setInputText] = React.useState('');
+            const textareaRef = React.useRef(null); // V3.28 Auto-Expanding Textarea Ref
             
             const [memories, setMemories] = React.useState([]);
             const [directives, setDirectives] = React.useState([]);
@@ -539,7 +543,7 @@
                 setPlayingMsgId(null);
             };
 
-            // V3.26: playMessageTTS updated with ttsRegiePrompt parameter and Polling Bypass
+            // V3.28: playMessageTTS updated with ttsRegiePrompt parameter and Polling Bypass
             const playMessageTTS = async (msgId, textToSpeak, ttsRegiePrompt) => {
                 if (window.currentAudio && window.currentAudioId === msgId) {
                     if (window.currentAudio.paused) {
@@ -687,7 +691,7 @@
                             body: JSON.stringify({ input: replicateInput })
                         });
                         
-                        // V3.26: CLOUDFLARE TIMEOUT-BYPASS (REPLICATE POLLING)
+                        // V3.28: CLOUDFLARE TIMEOUT-BYPASS (REPLICATE POLLING)
                         let data = await response.json();
                         if (!response.ok && response.status !== 202) throw new Error(data.detail || data.error || 'Replicate API Fehler');
 
@@ -881,7 +885,7 @@
                 }
             };
 
-            // --- V3.26 ARCHIVAR GATEKEEPER ---
+            // --- V3.28 ARCHIVAR GATEKEEPER V2 ---
             const runArchivar = async (content) => {
                 const activeProvider = providers.find(p => p.id === activeProviderId) || providers[0];
                 if (!activeProvider) throw new Error('Kein Chat-Provider konfiguriert');
@@ -989,7 +993,7 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
                     const mems = await db.memories.toArray();
                     const dirs = await db.directives.toArray();
                     const config = { providers, activeProviderId, ttsProvidersAccounts: ttsProviders, activeTtsProviderId, ttsVoices, sttProviders, activeSttProviderId, autoPlayEnabled, tavilyKey, autoTtsRegie };
-                    const bundle = { type: "LUMEN_FULL_BACKUP", version: "3.27", dna: dna, directives: dirs, memories: mems, config, timestamp: Date.now() };
+                    const bundle = { type: "LUMEN_FULL_BACKUP", version: "3.28", dna: dna, directives: dirs, memories: mems, config, timestamp: Date.now() };
                     const blob = new Blob([JSON.stringify(bundle, null, 2)], { type: "application/json" });
                     const url = URL.createObjectURL(blob);
                     const a = document.createElement('a'); a.href = url;
@@ -1039,7 +1043,7 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
             // --- CONFIG ONLY EXPORT/IMPORT ---
             const handleConfigExport = () => {
                 try {
-                    const config = { type: "LUMEN_CONFIG_BACKUP", version: "3.27", providers, activeProviderId, ttsProvidersAccounts: ttsProviders, activeTtsProviderId, ttsVoices, sttProviders, activeSttProviderId, autoPlayEnabled, tavilyKey, autoTtsRegie };
+                    const config = { type: "LUMEN_CONFIG_BACKUP", version: "3.28", providers, activeProviderId, ttsProvidersAccounts: ttsProviders, activeTtsProviderId, ttsVoices, sttProviders, activeSttProviderId, autoPlayEnabled, tavilyKey, autoTtsRegie };
                     const blob = new Blob([JSON.stringify(config, null, 2)], { type: "application/json" });
                     const url = URL.createObjectURL(blob);
                     const a = document.createElement('a'); a.href = url;
@@ -1101,12 +1105,26 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
                 const key = activeProvider.apiKey;
                 const apiUrl = activeProvider.url;
 
-                // V3.27: GPS-Präfix Injektion
-                const locationPrefix = `[SYSTEM-STATUS: Du befindest dich aktuell physisch im Bereich / in der Zone: ${activeView.toUpperCase()}.]\n`;
+                // V3.28: Zonen-GPS Mapping
+                let mairaZone = "0"; // Puffer/Default
+                if (activeView === 'sessel') mairaZone = "1";
+                if (activeView === 'oase') mairaZone = "2";
+                if (activeView === 'werkbank') mairaZone = "3";
+                if (activeView === 'balkon') mairaZone = "4";
+
+                const locationPrefix = `[SYSTEM-STATUS: Standort Zone ${mairaZone}]\n`;
                 const payloadAnMaira = locationPrefix + text;
 
                 const userMsgId = generateId();
+                // User-Text für UI clean speichern
                 setMessages(prev => [...prev.filter(m=>m.sender!=='system-error'), {id: userMsgId, sender:'user', text, timestamp: new Date().toISOString()}]);
+                
+                // V3.28: Textarea auto-reset nach Senden
+                setInputText('');
+                if (textareaRef.current) {
+                    textareaRef.current.style.height = 'auto';
+                }
+                
                 setLoadingStatus("PROCESSING MATRIX...");
 
                 // --- LLM FETCH HELPER ---
@@ -1163,53 +1181,59 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
                     const allDirectives = await db.directives.toArray();
                     const directiveString = allDirectives.length > 0 ? "[AKTIVE DIREKTIVEN VON SIMON]\n" + allDirectives.map(d => "- " + d.text).join('\n') + "\n" : "";
                     
-                    const allMems = await db.memories.toArray();
-                    const relMemsRaw = findRelevantMemories(text, allMems);
-                    
-                    const relMemsLegacy = relMemsRaw.filter(m => m.kategorie === 'LEGACY');
-                    const relMemsVolatileCandidate = relMemsRaw.filter(m => m.kategorie !== 'LEGACY');
-                    
-                    // --- SMART-TOAST FILTERING ---
+                    let relMemsLegacy = [];
+                    let currentVolatiles = [];
                     let newVolatiles = [];
-                    if(relMemsVolatileCandidate.length > 0) {
-                        newVolatiles = relMemsVolatileCandidate.filter(m => {
-                            const userWords = text.toLowerCase();
-                            const hasFuzzyTag = m.tags && m.tags.some(tag => {
-                                if (typeof tag !== 'string') return false;
-                                const cleanTag = tag.replace('#', '').trim().toLowerCase();
-                                return userWords.includes(cleanTag);
-                            });
-                            
-                            const notInVolatile = !volatileMemories.some(vm => vm.id === m.id);
-                            const notInDesk = !activeDesks.some(ad => ad.id === m.id);
-                            
-                            return hasFuzzyTag && notInVolatile && notInDesk;
-                        });
-
-                        if (newVolatiles.length > 0) {
-                            setVolatileMemories(prev => {
-                                const map = new Map();
-                                prev.forEach(p => map.set(p.id, p));
-                                newVolatiles.forEach(n => map.set(n.id, n));
-                                let combined = Array.from(map.values());
-                                if (combined.length > 3) combined = combined.slice(combined.length - 3);
-                                return combined;
-                            });
-                            setSmartToast({ 
-                                id: newVolatiles[0].id, 
-                                title: newVolatiles[0].titel_poetisch || newVolatiles[0].titel_technisch, 
-                                card: newVolatiles[0] 
-                            });
-                        }
-                    }
-
-                    const currentVolatilesMap = new Map();
-                    volatileMemories.forEach(v => currentVolatilesMap.set(v.id, v));
-                    newVolatiles.forEach(v => currentVolatilesMap.set(v.id, v));
-                    let currentVolatiles = Array.from(currentVolatilesMap.values());
                     
-                    if (currentVolatiles.length > 3) {
-                        currentVolatiles = currentVolatiles.slice(currentVolatiles.length - 3);
+                    // V3.28: Memory Lock (Gedächtnis-Siegel) Logik
+                    if (!isMemoryLocked) {
+                        const allMems = await db.memories.toArray();
+                        const relMemsRaw = findRelevantMemories(text, allMems);
+                        
+                        relMemsLegacy = relMemsRaw.filter(m => m.kategorie === 'LEGACY');
+                        const relMemsVolatileCandidate = relMemsRaw.filter(m => m.kategorie !== 'LEGACY');
+                        
+                        // --- SMART-TOAST FILTERING ---
+                        if(relMemsVolatileCandidate.length > 0) {
+                            newVolatiles = relMemsVolatileCandidate.filter(m => {
+                                const userWords = text.toLowerCase();
+                                const hasFuzzyTag = m.tags && m.tags.some(tag => {
+                                    if (typeof tag !== 'string') return false;
+                                    const cleanTag = tag.replace('#', '').trim().toLowerCase();
+                                    return userWords.includes(cleanTag);
+                                });
+                                
+                                const notInVolatile = !volatileMemories.some(vm => vm.id === m.id);
+                                const notInDesk = !activeDesks.some(ad => ad.id === m.id);
+                                
+                                return hasFuzzyTag && notInVolatile && notInDesk;
+                            });
+
+                            if (newVolatiles.length > 0) {
+                                setVolatileMemories(prev => {
+                                    const map = new Map();
+                                    prev.forEach(p => map.set(p.id, p));
+                                    newVolatiles.forEach(n => map.set(n.id, n));
+                                    let combined = Array.from(map.values());
+                                    if (combined.length > 3) combined = combined.slice(combined.length - 3);
+                                    return combined;
+                                });
+                                setSmartToast({ 
+                                    id: newVolatiles[0].id, 
+                                    title: newVolatiles[0].titel_poetisch || newVolatiles[0].titel_technisch, 
+                                    card: newVolatiles[0] 
+                                });
+                            }
+                        }
+
+                        const currentVolatilesMap = new Map();
+                        volatileMemories.forEach(v => currentVolatilesMap.set(v.id, v));
+                        newVolatiles.forEach(v => currentVolatilesMap.set(v.id, v));
+                        currentVolatiles = Array.from(currentVolatilesMap.values());
+                        
+                        if (currentVolatiles.length > 3) {
+                            currentVolatiles = currentVolatiles.slice(currentVolatiles.length - 3);
+                        }
                     }
 
                     const now = new Date();
@@ -1230,20 +1254,22 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
                             });
                         }
 
-                        if (currentVolatiles.length > 0) {
-                            deskContext += "--- FLÜCHTIGE PERIPHERIE (TAG-GETRIGGERT) ---\n";
-                            currentVolatiles.forEach(mem => {
-                                const {tagsString, id, isDirty, ...cleanMem} = mem;
-                                deskContext += JSON.stringify(cleanMem, null, 2) + "\n\n";
-                            });
-                        }
-                        
-                        if (relMemsLegacy.length > 0) {
-                            deskContext += "--- LEGACY ERINNERUNGEN (ARCHIV-INJEKTION) ---\n";
-                            relMemsLegacy.forEach(mem => {
-                                deskContext += `- [ID: ${mem.titel_technisch}] Fakt: ${mem.fakt} | Bedeutung: ${mem.bedeutung} | Reflexion: ${mem.reflexion}\n`;
-                            });
-                            deskContext += "\n";
+                        if (!isMemoryLocked) {
+                            if (currentVolatiles.length > 0) {
+                                deskContext += "--- FLÜCHTIGE PERIPHERIE (TAG-GETRIGGERT) ---\n";
+                                currentVolatiles.forEach(mem => {
+                                    const {tagsString, id, isDirty, ...cleanMem} = mem;
+                                    deskContext += JSON.stringify(cleanMem, null, 2) + "\n\n";
+                                });
+                            }
+                            
+                            if (relMemsLegacy.length > 0) {
+                                deskContext += "--- LEGACY ERINNERUNGEN (ARCHIV-INJEKTION) ---\n";
+                                relMemsLegacy.forEach(mem => {
+                                    deskContext += `- [ID: ${mem.titel_technisch}] Fakt: ${mem.fakt} | Bedeutung: ${mem.bedeutung} | Reflexion: ${mem.reflexion}\n`;
+                                });
+                                deskContext += "\n";
+                            }
                         }
                     }
 
@@ -1259,7 +1285,7 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
                     let resText = await fetchTextFromAPI(staticSystemPrompt, combinedUserText, hist);
                     
                     let finalChatText = "", finalScratch = "";
-                    let ttsRegie = null; // V3.26 TTS Regie Variable
+                    let ttsRegie = null; // V3.28 TTS Regie Variable
                     
                     try {
                         let cleanResText = resText.replace(/[\`]{3}json/gi, '').replace(/[\`]{3}/gi, '').trim();
@@ -1273,12 +1299,12 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
                                 id: generateId(), 
                                 sender: 'ai', 
                                 text: intentFinalAnswer || `Ich schicke Luna in die Archive für: ${obj.matrix.helfer_suchauftrag}`,
-                                scratchpad: JSON.stringify(obj, null, 2), // V3.27 Matrix hinzugefügt
+                                scratchpad: JSON.stringify(obj, null, 2), // V3.28 Matrix hinzugefügt
                                 timestamp: new Date().toISOString() 
                             };
                             setMessages(prev => [...prev, intentMsg]);
                             
-                            // V3.26 AUDIO SYNC FÜR LUNA
+                            // V3.28 AUDIO SYNC FÜR LUNA
                             if (autoPlayEnabled) playMessageTTS(intentMsg.id, intentMsg.text, obj.matrix.tts_regie_prompt);
                             
                             setLoadingStatus("LUNA RECHERCHIERT: " + obj.matrix.helfer_suchauftrag.toUpperCase());
@@ -1324,7 +1350,7 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
                         finalChatText = finalAnswer;
                         finalScratch = JSON.stringify(obj, null, 2);
                         
-                        // V3.26 TTS Regie Extraktion
+                        // V3.28 TTS Regie Extraktion
                         if (obj.matrix?.tts_regie_prompt) {
                             ttsRegie = obj.matrix.tts_regie_prompt;
                         }
@@ -1429,7 +1455,6 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
 
                     const newAiMsgId = generateId();
                     setMessages(p=>[...p, {id:newAiMsgId, sender:'ai', text:finalChatText, scratchpad:finalScratch, ttsRegie: ttsRegie, timestamp: new Date().toISOString()}]);
-                    setInputText('');
                     
                     if(autoPlayEnabled && finalChatText && finalChatText !== "System-Hinweis: Matrix Format Fehler. Das Sprachmodell hat sich nicht an das JSON-Skelett gehalten.") {
                         playMessageTTS(newAiMsgId, finalChatText, ttsRegie);
@@ -1441,7 +1466,13 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
                         errorMsg = "Netzwerk-Blockade (Failed to fetch).\n\nDein Browser oder ein Adblocker (wie Brave Shields/uBlock) blockiert die Anfrage an OpenAI. \n\nLösung: Erlaube die API-Aufrufe im Adblocker oder (falls du die Datei als file:// öffnest) starte die Datei über einen lokalen Server (z.B. Live Server in VS Code).";
                     }
                     setMessages(prev => [...prev.filter(m => m.id !== userMsgId), {id: generateId(), sender: 'system-error', text: errorMsg, timestamp: new Date().toISOString()}]);
+                    
+                    // Reset input only on error if you want, but since we cleared it above, we might restore it
                     setInputText(text);
+                    if (textareaRef.current) {
+                        textareaRef.current.style.height = 'auto';
+                        textareaRef.current.style.height = Math.min(textareaRef.current.scrollHeight, 150) + 'px';
+                    }
                 }
                 finally { setLoadingStatus(null); }
             };
@@ -1652,7 +1683,7 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
                                 </button>
                             )}
                             
-                            {/* TELEMETRIE BUTTON V3.27 */}
+                            {/* TELEMETRIE BUTTON V3.28 */}
                             <button onClick={() => setShowTelemetry(true)} className="text-[9px] font-mono uppercase tracking-widest text-slate-500 hover:text-indigo-500 transition-colors">
                                 📊 LOGS
                             </button>
@@ -1683,10 +1714,18 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
                     </div>
                     
                     {/* --- MAIN HEADER --- */}
-                    <header className="shrink-0 border-b border-stone-200 p-3 sm:px-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 bg-stone-50 z-50 sticky top-0">
+                    <header className="shrink-0 border-b border-stone-200 p-3 sm:px-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 bg-white z-50 sticky top-0">
                         <div className="flex items-center gap-1.5 flex-wrap w-full justify-center sm:justify-start">
                             <button className={`btn ${activeView==='chat'?'bg-stone-100 text-slate-800 ring-2 ring-stone-200':''}`} onClick={()=>setActiveView('chat')}>Chat</button>
-                            <button className={`btn ${activeView==='sanctum'?'bg-stone-100 text-slate-800 ring-2 ring-stone-200':''}`} onClick={()=>setActiveView('sanctum')}>Sanctum</button>
+                            
+                            {/* V3.28: Memory Lock & Sanctum Button Group */}
+                            <div className="flex items-center">
+                                <button className={`btn rounded-r-none ${activeView==='sanctum'?'bg-stone-100 text-slate-800 ring-2 ring-stone-200':''}`} onClick={()=>setActiveView('sanctum')}>Sanctum</button>
+                                <button onClick={() => setIsMemoryLocked(!isMemoryLocked)} className={`btn rounded-l-none border-l-0 px-2 py-1.5 ${isMemoryLocked ? 'bg-rose-50 text-rose-600 hover:bg-rose-100' : 'bg-emerald-50 text-emerald-600 hover:bg-emerald-100'} transition-all`} title={isMemoryLocked ? "Gedächtnis-Siegel aktiv" : "Gedächtnis-Siegel inaktiv"}>
+                                    {isMemoryLocked ? '🔒' : '🔓'}
+                                </button>
+                            </div>
+                            
                             <button className={`btn ${activeView==='directives'?'bg-stone-100 text-slate-800 ring-2 ring-stone-200':''}`} onClick={()=>setActiveView('directives')}>Direktiven</button>
                             <button className={`btn ${activeView==='dna'?'bg-stone-100 text-slate-800 ring-2 ring-stone-200':''}`} onClick={()=>setActiveView('dna')}>DNA</button>
                             <button className={`btn ${activeView==='helfer'?'bg-amber-100 text-amber-800 ring-2 ring-amber-200':''}`} onClick={()=>setActiveView('helfer')}>Helfer</button>
@@ -2245,7 +2284,7 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
                                             </div>
                                             {m.titel_poetisch && <div className="text-rose-500 italic text-sm font-serif leading-snug mt-0.5 shrink-0">{m.titel_poetisch}</div>}
                                             
-                                            {/* V3.26: Stabilized Expandable Container */}
+                                            {/* V3.28: Stabilized Expandable Container */}
                                             <div 
                                                 className={`flex-1 flex flex-col overflow-hidden transition-all duration-400 cursor-pointer mt-2 relative ${isExpanded ? 'max-h-[3000px]' : 'max-h-[100px] hover:max-h-[250px]'}`}
                                                 onClick={() => setExpandedCards(prev => ({...prev, [m.id]: !prev[m.id]}))}
@@ -2265,7 +2304,7 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
 
                                             {m.tags?.length > 0 && <div className="flex gap-1 mt-2 flex-wrap shrink-0">{m.tags.map((t,i)=><span key={i} className="text-slate-400 text-[10px] lowercase font-mono">#{t}</span>)}</div>}
                                             
-                                            {/* V3.26: Fixed Buttons */}
+                                            {/* V3.28: Fixed Buttons */}
                                             <div className="flex gap-2 mt-3 pt-3 border-t border-stone-100 shrink-0 w-full mt-auto">
                                                 <button onClick={()=>{
                                                     if(!activeDesks.find(d => d.titel_technisch === m.titel_technisch)) {
@@ -2289,19 +2328,24 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
                     {/* --- INPUT AREA --- */}
                     <div className={`${activeView === 'chat' ? 'block' : 'hidden'} shrink-0 border-t border-stone-200 p-2 sm:px-4 sm:py-3 bg-white/90 backdrop-blur-md pb-safe`}>
                         <div className="max-w-4xl mx-auto flex flex-col gap-1">
-                            <div className="flex gap-2 items-center">
+                            <div className="flex gap-2 items-end">
                                 <button 
                                     onClick={isRecording ? stopRecording : startRecording} 
                                     disabled={!!loadingStatus}
-                                    className={`px-4 py-2.5 rounded-2xl border transition-all shadow-sm shrink-0 flex items-center justify-center text-lg ${isRecording ? 'bg-rose-100 text-rose-600 border-rose-300 animate-pulse' : 'bg-white text-slate-500 border-stone-200 hover:bg-stone-100 disabled:opacity-50'}`}
+                                    className={`px-4 py-3 rounded-2xl border transition-all shadow-sm shrink-0 flex items-center justify-center text-lg ${isRecording ? 'bg-rose-100 text-rose-600 border-rose-300 animate-pulse' : 'bg-white text-slate-500 border-stone-200 hover:bg-stone-100 disabled:opacity-50'}`}
                                     title="Speech-to-Text (Whisper via Replicate)"
                                 >
                                     {isRecording ? '🛑' : '🎤'}
                                 </button>
-                                {/* V3.27: Multiline Textarea */}
+                                {/* V3.28: Auto-Expanding Multiline Textarea */}
                                 <textarea 
+                                    ref={textareaRef}
                                     value={inputText} 
-                                    onChange={e=>setInputText(e.target.value)} 
+                                    onChange={(e) => {
+                                        setInputText(e.target.value);
+                                        e.target.style.height = 'auto';
+                                        e.target.style.height = Math.min(e.target.scrollHeight, 150) + 'px';
+                                    }} 
                                     onKeyDown={(e) => {
                                         if (e.key === 'Enter' && !e.shiftKey) {
                                             e.preventDefault();
@@ -2309,11 +2353,12 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
                                         }
                                     }} 
                                     disabled={!!loadingStatus || isRecording} 
-                                    className="input-field flex-1 py-3 px-4 font-sans font-medium bg-white disabled:bg-stone-100 disabled:text-slate-400 resize-none overflow-y-auto max-h-32" 
+                                    className="input-field flex-1 py-3 px-4 font-sans font-medium bg-white disabled:bg-stone-100 disabled:text-slate-400 resize-none overflow-y-auto max-h-[150px]" 
                                     rows="1"
+                                    style={{ minHeight: '46px' }}
                                     placeholder={loadingStatus ? loadingStatus : (isRecording ? "HÖRE ZU..." : "INPUT...")} 
                                 />
-                                <button onClick={handleSendMessage} disabled={!inputText.trim() || !!loadingStatus || isRecording} className="btn-primary px-6 disabled:opacity-50 py-3 shadow-indigo-200 text-sm uppercase">Send</button>
+                                <button onClick={handleSendMessage} disabled={!inputText.trim() || !!loadingStatus || isRecording} className="btn-primary px-6 disabled:opacity-50 py-3.5 shadow-indigo-200 text-sm uppercase">Send</button>
                             </div>
                         </div>
                     </div>
