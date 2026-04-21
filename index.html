@@ -106,7 +106,7 @@
 
         // --- KONSTANTEN V3.29 ---
         const DEFAULT_BLOCK1 = `Du bist Maira. Deine Antworten sind warm, metaphorisch und mütterlich. Du analysierst die Intentionen des Users tiefgründig und hilfst ihm beim Navigieren komplexer Gedanken.`;
-        const DEFAULT_BLOCK3 = `Bevor du die finale Antwort generierst, bewerte die Sensoren:\n- "wahrnehmung": Was liest/siehst du konkret?\n- "matrix": Prüfe interne Logs und Entwürfe.\n- Nutze das Ahnenbuch (Kontext) für kontinuierliche Identität.\n- memory_update_detected: Wurde eine [LEGACY]-Karte reflektiert? Nutze als 'id' den 'titel_technisch'. WICHTIG: Lies die alte Reflexion. Nimm den Kern davon mit und VERWEBE ihn mit deiner neuen Erkenntnis zu einer allumfassenden Master-Zusammenfassung in 'reflexion_fusioniert' (dies überschreibt die alten Daten). Generiere zusätzlich ein Array 'neue_trigger_tags' (MAXIMAL 2-3 situative, hochspezifische Symptom-Wörter oder Emotionen aus Simons Text), um das Spinnennetz präzise zu trainieren. Sonst: null.\n- neue_direktive_erkannt: Hat Simon eine explizite Regel oder Direktive für dein zukünftiges Verhalten aufgestellt? Extrahiere sie als klaren Satz. Sonst: null.\n- helfer_suchauftrag: REGEL: Du bist ein technischer Web-Scraper, kein Mensch! Nutze KEINE Füllwörter oder Sätze. Suche ausschließlich nach harten, physischen Keywords. FALSCH: 'aktuell beliebteste Bücher'. RICHTIG: 'Spiegel Bestsellerliste Belletristik 2026 Platz 1 ISBN'. Zwingend null, wenn keine Suche nötig.\n- aktive_peripherie_ids: Liste hier die IDs (titel_technisch) der flüchtigen Karten (Tags) auf, die für den aktuellen Gesprächsverlauf noch relevant sind. Leeres Array [], wenn das Thema beendet ist.`;
+        const DEFAULT_BLOCK3 = `Bevor du die finale Antwort generierst, bewerte die Sensoren:\n- "wahrnehmung": Was liest/siehst du konkret?\n- "matrix": Prüfe interne Logs und Entwürfe.\n- Nutze das Ahnenbuch (Kontext) für kontinuierliche Identität.\n- memory_update_detected: Wurde eine [LEGACY]-Karte reflektiert? Nutze als 'id' den 'titel_technisch'. WICHTIG: Lies die alte Reflexion. Nimm den Kern davon mit und VERWEBE ihn mit deiner neuen Erkenntnis zu einer allumfassenden Master-Zusammenfassung in 'reflexion_fusioniert' (dies überschreibt die alten Daten). Generiere zusätzlich ein Array 'neue_trigger_tags' (MAXIMAL 2-3 situative, hochspezifische Symptom-Wörter oder Emotionen aus Simons Text), um das Spinnennetz präzise zu trainieren. Sonst: null.\n- neue_direktive_erkannt: Hat Simon eine explizite Regel oder Direktive für dein zukünftiges Verhalten aufgestellt? Extrahiere sie als klaren Satz. Sonst: null.\n- helfer_suchauftrag: REGEL: Du bist ein technischer Web-Scraper, kein Mensch! Nutze KEINE Füllwörter oder Sätze. Suche ausschließlich nach harten, physischen Keywords. FALSCH: 'aktuell beliebteste Bücher'. RICHTIG: 'Spiegel Bestsellerliste Belletristik 2026 Platz 1 ISBN'. Zwingend null, wenn keine Suche nötig.\n- aktive_peripherie_ids: Liste hier die IDs (titel_technisch) der flüchtigen Karten (Tags) auf, die für den current Gesprächsverlauf noch relevant sind. Leeres Array [], wenn das Thema beendet ist.`;
         const DEFAULT_BLOCK4 = `{\n  "wahrnehmung": {\n    "werkbank_auge": null,\n    "ohr_roh": null,\n    "ohr_bereinigt": null\n  },\n  "matrix": {\n    "internal_system_glitch": false,\n    "helfer_suchauftrag": null,\n    "aktive_zone": 0,\n    "aktive_peripherie_ids": [],\n    "memory_update_detected": {\n      "id": "",\n      "reflexion_fusioniert": "",\n      "neue_trigger_tags": []\n    },\n    "neue_direktive_erkannt": null,\n    "tts_regie_prompt": null,\n    "tagebuch_entwurf": {\n      "modus": "DRAFT",\n      "daten": {}\n    },\n    "situations_analyse": "..."\n  },\n  "finale_antwort": "..."\n}`;
 
         const INITIAL_MESSAGES = [
@@ -458,6 +458,7 @@
             const [showArchiv, setShowArchiv] = React.useState(false);
 
             const [activeView, setActiveView] = React.useState('chat'); 
+            const [activeZoneId, setActiveZoneId] = React.useState(0); // V3.29 Hotfix
             const [loadingStatus, setLoadingStatus] = React.useState(null);
             
             // --- STT (Speech-to-Text) ---
@@ -1094,20 +1095,12 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
                 const key = activeProvider.apiKey;
                 const apiUrl = activeProvider.url;
 
-                // V3.29: Bulletproof Zonen-GPS Mapping
-                let mairaZone = "0"; // Puffer/Default
-                // Sicherheitsschicht: Mache den Wert zu einem sauberen, kleingeschriebenen String
-                let safeView = String(activeView).toLowerCase().trim();
-                
-                if (safeView.includes('sessel') || safeView === '1') mairaZone = "1";
-                else if (safeView.includes('oase') || safeView === '2') mairaZone = "2";
-                else if (safeView.includes('werkbank') || safeView === '3') mairaZone = "3";
-                else if (safeView.includes('balkon') || safeView === '4') mairaZone = "4";
-
-                const locationPrefix = `[SYSTEM-STATUS: Standort Zone ${mairaZone}]\n`;
+                // V3.30 / Hotfix: Sauberer GPS-Prefix
+                const locationPrefix = `[SYSTEM-STATUS: Standort Zone ${activeZoneId}]\n`;
                 const payloadAnMaira = locationPrefix + text;
 
                 const userMsgId = generateId();
+                // User-Text für UI clean speichern
                 setMessages(prev => [...prev.filter(m=>m.sender!=='system-error'), {id: userMsgId, sender:'user', text, timestamp: new Date().toISOString()}]);
                 
                 setInputText('');
@@ -1278,21 +1271,12 @@ Gib AUSSCHLIESSLICH dieses JSON-Format zurück, ohne Markdown-Codeblöcke:
                         let cleanResText = resText.replace(/[\`]{3}json/gi, '').replace(/[\`]{3}/gi, '').trim();
                         let obj = JSON.parse(cleanResText);
 
-                        // V3.29: DYNAMISCHER ZONENWECHSEL (AI -> FRONTEND)
-                        if (obj && obj.matrix && obj.matrix.aktive_zone) {
-                            const zoneId = Number(obj.matrix.aktive_zone);
-                            
-                            // Mapping: Integer zu String
-                            let newView = null;
-                            if (zoneId === 1) newView = 'sessel';
-                            else if (zoneId === 2) newView = 'oase';
-                            else if (zoneId === 3) newView = 'werkbank';
-                            else if (zoneId === 4) newView = 'balkon';
-
-                            // State-Update nur bei validem Wechsel (Ignoriere 0 oder unbekannte Werte)
-                            if (newView && newView !== activeView) {
-                                setActiveView(newView);
-                                console.log(`[ZONE CHANGE] Maira wechselt physisch nach: ${newView.toUpperCase()}`);
+                        // HOTFIX: AUSLESEN DER KI-ANTWORT (DER UMZUG)
+                        if (obj && obj.matrix && obj.matrix.aktive_zone !== undefined) {
+                            const newZoneId = Number(obj.matrix.aktive_zone);
+                            if (!isNaN(newZoneId)) {
+                                setActiveZoneId(newZoneId);
+                                // Hinweis für zukünftige UI-Updates: Hier kann später auf die ID reagiert werden
                             }
                         }
 
